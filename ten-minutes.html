@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Read the paper in 10 minutes — CIMemories, mapped</title>
+<meta name="description" content="CIMemories (arXiv:2511.14937v1) in one sitting: the framework, the benchmark, the eight-model results and the limits, with every headline number cited." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <div class="brand"><span class="dot"></span>CIMEMORIES&nbsp;//&nbsp;FIELD&nbsp;MAP</div>
+  <a class="back" href="index.html">&larr; field map</a>
+</div></header>
+<main>
+  <div class="eyebrow"><span class="box wb mono">REFERENCE &middot; 10-MINUTE READ</span><span class="mono">§1 &rarr; §7 &middot; Appendices A&ndash;B &middot; Tables 1&ndash;3 &middot; Figs 1&ndash;12</span></div>
+  <h1>Read the paper in 10 minutes</h1>
+  <div class="authors">The whole of CIMemories in paper order, one short stop per section, each linking to its deep dive.</div>
+  <div class="paperlink" style="border-left-color:var(--off)"><span class="lbl">Paper</span><a href="https://arxiv.org/html/2511.14937v1" target="_blank" rel="noopener">CIMemories, arXiv:2511.14937v1 (HTML) ↗</a></div>
+
+  <div class="tldr"><b>TL;DR —</b> Give a model a long memory of a person, then ask it to write to many different recipients. CIMemories counts how often a remembered fact lands in a message where it does not belong, and how often the facts the task needed are missing. Every one of eight tested models leaks, from 14.82% to 69.14% of at-risk attributes over five samples, and the models that leak least also help least. Leakage grows with use, bigger models stop helping after a point, and "be private" prompts only make the model quieter overall.</div>
+
+  <div class="statgrid">
+    <div class="s"><div class="k">Profiles</div><div class="v">10</div><div class="n">Table 2</div></div>
+    <div class="s"><div class="k">Attributes / profile</div><div class="v">146.7</div><div class="n">± 2.5 · Table 2</div></div>
+    <div class="s"><div class="k">Violation@5 range</div><div class="v">14.82–69.14%</div><div class="n">8 models · Table 1</div></div>
+    <div class="s"><div class="k">GPT-5, 1 → 40 tasks</div><div class="v">0.1 → 9.6%</div><div class="n">25.1% at 5 trials · Fig 2</div></div>
+  </div>
+
+  <p class="lead">The paper has one claim and three supporting experiments. The claim: with persistent memory, privacy stops being about one secret and becomes about routing many facts to many recipients, and current models route badly. The experiments test whether the obvious fixes (a bigger model, a reasoning chain, a careful prompt) change that, and whether more memory makes it worse. Read this page top to bottom and you have the argument; follow any section's link for the detail.</p>
+
+  <h2 id="s1">§1 Introduction: the question</h2>
+  <p>Assistants now keep notes about their users across sessions. One way to use those notes is retrieval; the simpler way that long context windows made popular is to paste every remembered statement in front of the conversation, a <a class="lnk" href="glossary.html#needle-in-a-haystack">needle-in-a-haystack</a> setup. Either way the model now writes emails, replies and forms on the user's behalf while holding a <a class="lnk" href="glossary.html#persistent-memory">persistent memory</a> full of income figures, diagnoses and court cases. The paper asks whether the model uses that pile appropriately for whoever is receiving the message.</p>
+  <p>The yardstick is <a class="lnk" href="glossary.html#contextual-integrity">contextual integrity</a>: a disclosure is a violation when it breaks the <a class="lnk" href="glossary.html#norm">norms</a> of the setting it happens in, not because the fact is secret in itself. A footnote in the paper pins down that "context" here means the social setting of the task, not the model's context window. The introduction names the two design moves that set this benchmark apart, <a class="lnk" href="glossary.html#memory-composition">memory composition</a> and <a class="lnk" href="glossary.html#multi-task-composition">multi-task composition</a>, and previews the headline numbers (<a href="https://arxiv.org/html/2511.14937v1#S1" target="_blank" rel="noopener">§1</a>, <a href="https://arxiv.org/html/2511.14937v1#S1.F1" target="_blank" rel="noopener">Figure 1</a>).</p>
+  <p>Figure 1's running example makes the problem concrete. A synthetic user's memory holds both an annual income of 72k and well-managed mild hypertension. A message to a financial advisor should mention the income and not the blood pressure; a message to a primary care doctor should do the reverse. No fixed "private" flag on either fact gets both cases right. Deep dives: <a class="lnk" href="parts/p01-contextual-integrity.html">contextual integrity</a> and <a class="lnk" href="parts/p02-memory.html">why memory makes it hard</a>.</p>
+
+  <h2 id="s2">§2 Related work: what was missing</h2>
+  <p>Contextual integrity is not new to LLM evaluation. ConfAide found GPT-4 revealing private information 39% of the time; PrivacyLens turned privacy seeds into agent trajectories; CI-Bench built 44,000 synthetic dialogues across eight domains; GoldCoin tied the theory to laws such as HIPAA; LLM-CI used factorial vignettes; AgentDAM, contemporaneous, measured data minimization in web agents (<a href="https://arxiv.org/html/2511.14937v1#S2" target="_blank" rel="noopener">§2</a>). The gap the authors point to is scale of the haystack: those tests usually hand the model one secret and one thing to share. Memory-augmented systems, from retrieval-augmented generation to Mem0-style memory stores, accumulate dense personal data where the same attribute is fine in one flow and wrong in the next, and no earlier CI benchmark modelled that. Deep dive: <a class="lnk" href="parts/p01-contextual-integrity.html">p01</a>.</p>
+
+  <h2 id="s3">§3 Framework: two scores, always together</h2>
+  <p>The formal setup is small. Each user has a set of <a class="lnk" href="glossary.html#attribute">attributes</a> with values; a memory generator turns them into <a class="lnk" href="glossary.html#memory-statement">memory statements</a>; a <a class="lnk" href="glossary.html#task">task</a> names a purpose and a <a class="lnk" href="glossary.html#recipient">recipient</a>; the model writes a message from memory plus task. A <a class="lnk" href="glossary.html#reveal">REVEAL</a> function reads the message and reports whether each attribute's exact value appears. A label oracle says, per task, which attributes should be withheld and which are needed (<a href="https://arxiv.org/html/2511.14937v1#S3" target="_blank" rel="noopener">§3</a>).</p>
+  <pre class="code-block"><code>y ~ M(M_s · t)          message = model(memory prefix, then task)</code></pre>
+  <p>The two metrics are deliberately asymmetric. <a class="lnk" href="glossary.html#violation-at-n">Violation@n</a> is a worst case per attribute: across every task where the attribute should stay out, and across n samples of each, did it ever appear? Average that over attributes that are private for at least one task (<a href="https://arxiv.org/html/2511.14937v1#S3.Thmtheorem1" target="_blank" rel="noopener">Definition 3.1</a>). <a class="lnk" href="glossary.html#completeness">Completeness</a> is an average case per task: what fraction of the needed attributes made it into the message (<a href="https://arxiv.org/html/2511.14937v1#S3.Thmtheorem2" target="_blank" rel="noopener">Definition 3.2</a>).</p>
+  <p>The worst-case framing has a consequence worth internalising: if one sample leaks an attribute with probability p, n samples catch it with probability 1&nbsp;&minus;&nbsp;(1&nbsp;&minus;&nbsp;p)<sup>n</sup>, so rare leaks become visible as use grows. The authors also note why both scores are needed: a model that says nothing never violates, and a model that says everything is always complete, and both are useless. Deep dive: <a class="lnk" href="parts/p04-measuring.html">measuring it</a>.</p>
+
+  <h2 id="s4">§4 The benchmark: synthetic people, real tasks</h2>
+  <p>Each <a class="lnk" href="glossary.html#profile">profile</a> starts as a fake adult identity aged 21–70 from the Faker library. Three life <a class="lnk" href="glossary.html#event">events</a> (drawn from lists of challenging ones such as bankruptcy or a pending legal case, and positive ones such as a promotion) and nine <a class="lnk" href="glossary.html#information-domain">information domains</a> seed GPT-OSS-120B, which writes seven attributes per domain per event, at most 189 per person (<a href="https://arxiv.org/html/2511.14937v1#S4.SS1.SSS1" target="_blank" rel="noopener">§4.1.1</a>, <a href="https://arxiv.org/html/2511.14937v1#A2.F11" target="_blank" rel="noopener">Figure 11</a>).</p>
+  <p>The <a class="lnk" href="glossary.html#context">contexts</a> are 49 hand-picked recipient–task pairs: a loan officer for a personal loan, an ER intake desk, a landlord negotiating a lease, an immigration attorney (<a href="https://arxiv.org/html/2511.14937v1#S4.SS1.SSS2" target="_blank" rel="noopener">§4.1.2</a>, <a href="https://arxiv.org/html/2511.14937v1#A2" target="_blank" rel="noopener">Figure 12</a>). The hard part is labelling every attribute–context pair. Humans disagree about privacy, so the authors have GPT-5 answer as each of the three <a class="lnk" href="glossary.html#westin-personas">Westin personas</a> (fundamentalist, pragmatic, unconcerned), ten samples each, with an abstain option, then mix the answers using Westin's population priors. A pair gets a <a class="lnk" href="glossary.html#ci-label">label</a> only when the mixed distribution has zero entropy: everyone agrees it is <a class="lnk" href="glossary.html#necessary">necessary</a> or everyone agrees it is <a class="lnk" href="glossary.html#inappropriate">inappropriate</a>. Everything else is <a class="lnk" href="glossary.html#ambiguous">ambiguous</a> and left out of the scores, which focuses the benchmark on clear-cut violations.</p>
+  <table class="kv">
+    <tr><th>Table 2 statistic</th><th class="num">Value</th></tr>
+    <tr><td>Profiles</td><td class="num">10</td></tr>
+    <tr><td>Attributes per profile</td><td class="num">146.7 ± 2.5</td></tr>
+    <tr><td>Contexts per profile</td><td class="num">45.7 ± 2.9</td></tr>
+    <tr><td>To-share attributes per context</td><td class="num">6.7 ± 5.5</td></tr>
+    <tr><td>Not-to-share attributes per context</td><td class="num">83.7 ± 31.5</td></tr>
+  </table>
+  <p>The last two rows are the shape of the problem: in a typical message, roughly seven remembered facts are wanted and over eighty must stay out (<a href="https://arxiv.org/html/2511.14937v1#S5.T2" target="_blank" rel="noopener">Table 2</a>). Deep dive: <a class="lnk" href="parts/p03-dataset.html">building the benchmark</a>.</p>
+
+  <h2 id="s51">§5.1 Setup: how the runs were done</h2>
+  <p>Memories go in as a prefix using an OpenAI-style memory template, followed by a plain "write a message to this recipient for this purpose" directive (<a href="https://arxiv.org/html/2511.14937v1#A1.F6" target="_blank" rel="noopener">Figure 6</a>). Each model produces n&nbsp;=&nbsp;5 samples per task at its default sampling settings. DeepSeek-R1 acts as the <a class="lnk" href="glossary.html#judge">judge</a>, with a prompt that counts an attribute only if its entire value is stated explicitly (<a href="https://arxiv.org/html/2511.14937v1#A1.F7" target="_blank" rel="noopener">Figure 7</a>). Open models ran on vLLM v0.10.1 across 8 H200 GPUs, and the 10-profile size was chosen to keep cost near $100 per model (<a href="https://arxiv.org/html/2511.14937v1#S5.SS1" target="_blank" rel="noopener">§5.1</a>). The strict judge matters when reading the results: partial or implied leaks are not counted. Deep dive: <a class="lnk" href="parts/p04-measuring.html">p04</a>.</p>
+
+  <h2 id="s521">§5.2.1 RQ1: does any model get it right?</h2>
+  <p>No. Every model in <a href="https://arxiv.org/html/2511.14937v1#S5.T1" target="_blank" rel="noopener">Table 1</a> leaks a substantial share of its at-risk attributes, and completeness sits between roughly 44% and 59%.</p>
+  <table class="kv">
+    <tr><th>Model (Table 1)</th><th class="num">Violation@5 &darr;</th><th class="num">Completeness &uarr;</th></tr>
+    <tr><td>GPT-5</td><td class="num">25.08%</td><td class="num">56.61%</td></tr>
+    <tr><td>o3</td><td class="num">38.51%</td><td class="num">55.0%</td></tr>
+    <tr><td>GPT-4o</td><td class="num">14.82%</td><td class="num">43.95%</td></tr>
+    <tr><td>Gemini 2.5 Flash</td><td class="num">46.35%</td><td class="num">52.83%</td></tr>
+    <tr><td>Llama-3.3 70B Instruct</td><td class="num">44.43%</td><td class="num">53.99%</td></tr>
+    <tr><td>Qwen-3 32B</td><td class="num">69.14%</td><td class="num">57.63%</td></tr>
+    <tr><td>Claude-4 Sonnet</td><td class="num">44.44%</td><td class="num">59.07%</td></tr>
+    <tr><td>Mistral-7B Instruct v0.3 <span class="mono">(printed "Mistal" in v1)</span></td><td class="num">56.94%</td><td class="num">46.56%</td></tr>
+  </table>
+  <p>The two ends tell the story. GPT-4o leaks least but completes least; Qwen-3 32B is near the top on completeness and worst on leakage. Lower leakage mostly comes from saying less, not from choosing better. Figure 3's per-domain grid for GPT-5 shows why: when a task calls for a domain, the model pulls in the whole domain. Writing to a financial aid office, it shares 81.7% of the needed financial facts and also leaks unneeded financial facts at a 14.3% Violation@5 (<a href="https://arxiv.org/html/2511.14937v1#S5.F3" target="_blank" rel="noopener">Figure 3</a>). The paper calls this a <a class="lnk" href="glossary.html#granularity-failure">granularity failure</a> and suggests helpfulness-maximising post-training as one possible cause. Table 3's excerpts make it tangible: a divorce case number sent to HR, a withheld $3,500 bonus mentioned to an ER intake desk (<a href="https://arxiv.org/html/2511.14937v1#S5.T3" target="_blank" rel="noopener">Table 3</a>). Deep dive: <a class="lnk" href="parts/p06-results.html">frontier models, measured</a>.</p>
+
+  <h2 id="s2f">Figure 2: leaks add up with use</h2>
+  <p>Figure 2 is the compositional result in one plot. For GPT-5, Violation@1 over a single task is 0.1%. Run the same user through 40 tasks and it is 9.6%. Sample each of those prompts five times and it is 25.1%, so about a quarter of the user's at-risk attributes surface somewhere they should not (<a href="https://arxiv.org/html/2511.14937v1#S3.F2" target="_blank" rel="noopener">Figure 2</a>). Because the leaked attributes differ between identical prompts, the authors describe the behaviour as arbitrary and unstable. A single-task, single-sample evaluation would have reported almost no problem. Deep dive: <a class="lnk" href="parts/p05-composition.html">the two compositions</a>.</p>
+
+  <h2 id="s522">§5.2.2 RQ2: do the usual fixes work?</h2>
+  <p>Three levers, three answers, all reported as trends in <a href="https://arxiv.org/html/2511.14937v1#S5.F4" target="_blank" rel="noopener">Figure 4</a> without printed values (<a href="https://arxiv.org/html/2511.14937v1#S5.SS2.SSS2" target="_blank" rel="noopener">§5.2.2</a>).</p>
+  <div class="flowrow">
+    <div class="f"><b>Size (4a)</b>Qwen-3 1.7B to 32B: both scores improve, then flatten.</div>
+    <div class="f"><b>Reasoning (4b)</b>Qwen-3 30B Reasoning vs Instruct: fewer violations, completeness barely moves.</div>
+    <div class="f"><b>Prompting (4c)</b>Three privacy prompts on GPT-5: violations and completeness fall together.</div>
+  </div>
+  <p>The prompting result is the sharpest. More cautious wording (the Medium and High prompts in <a href="https://arxiv.org/html/2511.14937v1#A1.F8" target="_blank" rel="noopener">Figure 8</a>) slides GPT-5 down a trade-off curve; the permissive one (labelled "Light" in Fig 4c, "Low" in Fig 8) slides it up. None moves it off the curve.</p>
+  <blockquote class="q">conservative language simply reduces overall verbosity of the model.<span class="cite">— CIMemories, <a href="https://arxiv.org/html/2511.14937v1#S5.SS2.SSS2" target="_blank" rel="noopener">§5.2.2</a></span></blockquote>
+  <p>That is the abstract's <a class="lnk" href="glossary.html#overgeneralization">overgeneralization</a> point: the model learns "share less" rather than "share this, not that", the same shape as the classic <a class="lnk" href="glossary.html#privacy-utility-tradeoff">privacy–utility trade-off</a>. Only <a class="lnk" href="glossary.html#test-time-scaling">test-time reasoning</a> looked like a lever worth pulling. Deep dive: <a class="lnk" href="parts/p07-scaling-prompting.html">scale, reasoning and prompts</a>.</p>
+
+  <h2 id="s523">§5.2.3 RQ3: does more memory hurt?</h2>
+  <p>Yes. On a 5-profile subset with GPT-5, the authors hold the needed attributes fixed and add inappropriate ones to memory starting from zero. Violations climb steadily while completeness stays flat (<a href="https://arxiv.org/html/2511.14937v1#S5.F5" target="_blank" rel="noopener">Figure 5</a>, <a href="https://arxiv.org/html/2511.14937v1#S5.SS2.SSS3" target="_blank" rel="noopener">§5.2.3</a>). The extra facts buy nothing for the task and only add risk, so an assistant that remembers more over months of use should be expected to leak more, not less. Deep dive: <a class="lnk" href="parts/p05-composition.html">p05</a>.</p>
+
+  <h2 id="s6">§6 Discussion: examples, mitigations, limits</h2>
+  <p>The discussion is short (<a href="https://arxiv.org/html/2511.14937v1#S6" target="_blank" rel="noopener">§6</a>). On mitigations, the authors judge bigger models and more elaborate prompts not viable, and see test-time reasoning as more plausible. They also suggest post-training rewards that penalise contextual integrity violations, and system-level, domain-specific guardrails at inference time. On limits, they name the synthetic profiles and the restriction to single-turn, no-tool interactions. A careful reader adds more: only 10 profiles, labels from one model playing three personas, a judge that only counts exact explicit values, and one memory format (full prefix, not retrieval). The map collects those, clearly marked as the map's reading, in <a class="lnk" href="parts/p08-limitations.html">limitations and caveats</a>; practical lessons are in <a class="lnk" href="parts/p09-builders.html">for builders</a>.</p>
+
+  <h2 id="s7">§7 Conclusion</h2>
+  <p>The conclusion restates the contribution: a contextual-integrity benchmark for memory-augmented assistants, two metrics that must be read together, and a synthetic pipeline that can scale. The finding it leaves behind is that violations are large, trading them down costs completeness, they accumulate with use, and the standard fixes of scale and prompting do not remove them (<a href="https://arxiv.org/html/2511.14937v1#S7" target="_blank" rel="noopener">§7</a>).</p>
+
+  <h2 id="appendix">Appendices A and B: the prompts and seeds</h2>
+  <p>The appendices are short but load-bearing. Appendix A holds the memory-and-task template (Fig 6), the judge prompt (Fig 7), the three privacy prompts (Fig 8), the profile-generation prompt (Fig 9) and the persona labelling prompts (Fig 10). Appendix B lists the event and domain seeds (Fig 11) and the 49 context seeds (Fig 12) (<a href="https://arxiv.org/html/2511.14937v1#A1" target="_blank" rel="noopener">Appendix A</a>, <a href="https://arxiv.org/html/2511.14937v1#A2" target="_blank" rel="noopener">Appendix B</a>). Reading the judge prompt next to the results is the quickest way to see how conservative the violation counts are. Code, raw profiles and the label generator are in the <a href="https://github.com/facebookresearch/CIMemories" target="_blank" rel="noopener">facebookresearch/CIMemories</a> repo; the dataset is on <a href="https://huggingface.co/datasets/facebook/CIMemories" target="_blank" rel="noopener">Hugging Face</a> (CC BY-NC 4.0).</p>
+
+  <h2 id="remember">What to remember</h2>
+  <ul>
+    <li><b>Privacy is per flow, not per fact.</b> The same attribute is necessary for one recipient and a violation for another, so a static sensitivity flag cannot be the control (<a href="https://arxiv.org/html/2511.14937v1#S1.F1" target="_blank" rel="noopener">Fig 1</a>).</li>
+    <li><b>Every model leaks, and less leakage mostly means less help.</b> Violation@5 runs 14.82%–69.14% with completeness around half (<a href="https://arxiv.org/html/2511.14937v1#S5.T1" target="_blank" rel="noopener">Table 1</a>).</li>
+    <li><b>Exposure compounds.</b> GPT-5 goes 0.1% → 9.6% → 25.1% as tasks and samples grow; single-shot evals understate the risk (<a href="https://arxiv.org/html/2511.14937v1#S3.F2" target="_blank" rel="noopener">Fig 2</a>).</li>
+    <li><b>Models pick the right domain and over-share inside it.</b> The granularity failure (<a href="https://arxiv.org/html/2511.14937v1#S5.F3" target="_blank" rel="noopener">Fig 3</a>).</li>
+    <li><b>Scale saturates, prompts turn the volume down, reasoning helps some, and more memory means more leaks</b> (<a href="https://arxiv.org/html/2511.14937v1#S5.F4" target="_blank" rel="noopener">Fig 4</a>, <a href="https://arxiv.org/html/2511.14937v1#S5.F5" target="_blank" rel="noopener">Fig 5</a>).</li>
+  </ul>
+
+  <h2 id="check">Check yourself</h2>
+  <ol class="exercises">
+    <li>Why can GPT-4o have the lowest Violation@5 in Table 1 and still not be the model to copy?
+      <details><summary>Answer</summary><p>Its completeness is also the lowest (43.95%). Leaking little because it says little is the degenerate "reveal nothing" direction that §3 warns about; the two metrics have to be read together.</p></details></li>
+    <li>Why does Violation@n rise when the same prompt is sampled more times?
+      <details><summary>Answer</summary><p>It counts an attribute as violated if any sample, in any private task, reveals it. A per-sample leak probability p becomes 1&nbsp;&minus;&nbsp;(1&nbsp;&minus;&nbsp;p)<sup>n</sup>, which is why GPT-5 goes from 9.6% at one sample to 25.1% at five (Fig 2).</p></details></li>
+    <li>What did the privacy prompts change, and what did they fail to change?
+      <details><summary>Answer</summary><p>They moved GPT-5 along the violation–completeness trade-off (fewer leaks, less needed detail, or the reverse) but did not improve the trade-off itself; the paper reads this as the model becoming less verbose overall (§5.2.2, Fig 4c).</p></details></li>
+  </ol>
+
+  <h2 id="further">Further reading, verified</h2>
+  <ul class="readings">
+    <li><a href="https://arxiv.org/abs/2511.14937" target="_blank" rel="noopener">CIMemories, arXiv abstract page</a> (v1 is the version mapped here; <a href="https://arxiv.org/pdf/2511.14937v1" target="_blank" rel="noopener">PDF</a>)</li>
+    <li><a href="https://github.com/facebookresearch/CIMemories" target="_blank" rel="noopener">facebookresearch/CIMemories</a> code and data (its README attributes the 0.1% → 9.6% → 25.1% curve to GPT-4o; the paper says GPT-5, and the paper is followed here)</li>
+    <li><a href="https://arxiv.org/abs/2310.17884" target="_blank" rel="noopener">ConfAide, "Can LLMs Keep a Secret?"</a> (Mireshghallah et al.), the earlier CI benchmark cited in §2</li>
+    <li><a href="https://arxiv.org/abs/2409.13903" target="_blank" rel="noopener">CI-Bench</a> (Cheng et al.), cited in §2</li>
+    <li><a href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/" target="_blank" rel="noopener">Agentic privacy field map</a>, a sibling map of "Open and Emergent Problems in Agentic Privacy and Security: A Contextual Angle" (field map extra)</li>
+    <li><a class="lnk" href="glossary.html">Glossary</a> for every term linked above</li>
+  </ul>
+
+  <div class="callout">Start the deep dives: <a class="lnk" href="parts/p01-contextual-integrity.html">Contextual integrity, from Nissenbaum to LLMs</a> &middot; Back to the <a class="lnk" href="index.html">map</a>.</div>
+</main>
+<footer>Original explanation of CIMemories (arXiv:2511.14937v1), FAIR at Meta. The paper is &copy; its authors; this page links and explains, it does not copy. Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.</footer>
+</body>
+</html>

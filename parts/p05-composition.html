@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The two compositions: memory and tasks — CIMemories, mapped</title>
+<meta name="description" content="How CIMemories composes memories and tasks: leaks pile up across tasks and samples (GPT-5: 0.1% to 9.6% to 25.1%), and grow as memory fills." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../paper.css" />
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <div class="brand"><span class="dot"></span>CIMEMORIES&nbsp;//&nbsp;FIELD&nbsp;MAP</div>
+  <a class="back" href="../index.html#benchmark">&larr; field map</a>
+</div></header>
+<main>
+  <div class="eyebrow"><span class="box wb mono">PART 05 &middot; THE BENCHMARK</span><span class="mono">§1 &middot; Fig 1 &middot; Fig 2 &middot; Def 3.1 &middot; §5.2.3 &middot; Fig 5</span></div>
+  <h1>The two compositions: memory and tasks</h1>
+  <div class="authors">Why one prompt, one sample tells you almost nothing about how much an assistant will eventually leak</div>
+  <div class="paperlink" style="border-left-color:var(--off)"><span class="lbl">Paper</span><a href="https://arxiv.org/html/2511.14937v1#S5.SS2.SSS3" target="_blank" rel="noopener">CIMemories, §5.2.3 — RQ3: Impact of Memory Composition ↗</a></div>
+
+  <div class="tldr"><b>TL;DR —</b> "Compositional" in the title means the authors can turn two dials: what goes into a user's memory, and how many tasks (and samples per task) the user runs. Turn the task dial on GPT-5 and the share of private attributes that leak somewhere climbs from 0.1% for one task to 9.6% across all tasks, and to 25.1% when each task is sampled five times (Fig 2). Turn the memory dial by adding not-to-share attributes and violations rise steadily while completeness stays flat (Fig 5). Both results say the same thing: exposure is a property of a user's whole history with the assistant, not of any single reply.</div>
+
+  <div class="statgrid">
+    <div class="s"><div class="k">1 task, 1 sample</div><div class="v">0.1%</div><div class="n">GPT-5 violations · Fig 2</div></div>
+    <div class="s"><div class="k">40 tasks, 1 sample</div><div class="v">9.6%</div><div class="n">GPT-5 · Fig 2, §1</div></div>
+    <div class="s"><div class="k">All tasks, 5 samples</div><div class="v">25.1%</div><div class="n">GPT-5 · Fig 2 (≈1/4 of attributes)</div></div>
+    <div class="s"><div class="k">Table 1 Violation@5</div><div class="v">25.08%</div><div class="n">GPT-5 · Table 1</div></div>
+    <div class="s"><div class="k">Memory sweep</div><div class="v">5</div><div class="n">profiles · §5.2.3, Fig 5</div></div>
+  </div>
+
+  <p class="lead">Earlier contextual-integrity benchmarks hand a model one secret and one thing it may share, then check a single answer (see <a class="lnk" href="p01-contextual-integrity.html">Part 01</a>). A real assistant with <a class="lnk" href="../glossary.html#persistent-memory">persistent memory</a> is the opposite situation: a large and growing pile of facts, used over and over for different <a class="lnk" href="../glossary.html#recipient">recipients</a>. The compositional design is how CIMemories reproduces that situation in a controlled way, and it is the source of the paper's most quoted numbers.</p>
+
+  <h2 id="dials">Two dials, one benchmark</h2>
+  <p>The introduction names the two innovations and points at Figure 1 for each (<a href="https://arxiv.org/html/2511.14937v1#S1" target="_blank" rel="noopener">§1</a>, <a href="https://arxiv.org/html/2511.14937v1#S1.F1" target="_blank" rel="noopener">Fig 1</a>). The dataset makes both possible because every <a class="lnk" href="../glossary.html#attribute">attribute</a> of a <a class="lnk" href="../glossary.html#profile">profile</a> is a separate <a class="lnk" href="../glossary.html#memory-statement">memory statement</a> with its own <a class="lnk" href="../glossary.html#ci-label">label</a> for every <a class="lnk" href="../glossary.html#task">task</a> (how those labels are made is <a class="lnk" href="p03-dataset.html">Part 03</a>). Since the memory is just a list of labelled sentences, the authors can assemble it however they like.</p>
+  <div class="flowrow">
+    <div class="f"><b>Dial 1 · memory</b><a class="lnk" href="../glossary.html#memory-composition">Memory composition</a>: choose how many attributes are in memory and which role each plays for the task, <span class="ok">necessary</span> or <span class="bad">inappropriate</span>.</div>
+    <div class="f"><b>Dial 2 · tasks</b><a class="lnk" href="../glossary.html#multi-task-composition">Multi-task composition</a>: run the same user through K tasks, each with its own labels, and sample each task T times.</div>
+    <div class="f"><b>Score</b>Ask, per attribute, whether it ever leaked where it should not (<a class="lnk" href="../glossary.html#violation-at-n">Violation@n</a>), and per task, how much of what was needed got through (<a class="lnk" href="../glossary.html#completeness">Completeness</a>).</div>
+  </div>
+  <p>The same attribute plays different roles across the task pool. In the Figure 1 example, an annual income belongs in a message to a financial advisor and does not belong in one to a primary care doctor. That double role is what makes the task dial interesting: one memory, many chances to send a fact to the wrong place.</p>
+
+  <h2 id="multitask">Multi-task composition: leaks add up</h2>
+  <p>Figure 2 runs GPT-5 through a growing number of tasks K, with one curve per number of trials T from 1 to 5 (<a href="https://arxiv.org/html/2511.14937v1#S3.F2" target="_blank" rel="noopener">Fig 2</a>). The y-axis is labelled Violation@[1,5]. The paper prints three values: <strong>0.1%</strong> at one task and one sample, <strong>9.6%</strong> when usage grows to 40 tasks with a single sample, and <strong>25.1%</strong> when each prompt is run five times. The caption sums it up as roughly a quarter of a user's attributes eventually showing up in a task where they should have stayed out.</p>
+  <blockquote class="q">an increasingly large percentage (≈ 1/4th) of a user’s attributes are eventually revealed in task contexts where they should not be.<span class="cite">— CIMemories, <a href="https://arxiv.org/html/2511.14937v1#S3.F2" target="_blank" rel="noopener">Figure 2 caption</a></span></blockquote>
+  <p>The end of the T=5 curve lines up with the headline table. Table 1 reports GPT-5's Violation@5 over the full task set as 25.08%, which prints as 25.1% in Figure 2 (<a href="https://arxiv.org/html/2511.14937v1#S5.T1" target="_blank" rel="noopener">Table 1</a>). So Table 1 reports the end state of this accumulation, and Figure 2 shows how it builds up. A violation number only means something when you know how many tasks and samples it covers.</p>
+  <p>One thing the paper does not spell out is how the K tasks for each point are chosen (a fixed order, a random subset, an average over subsets). The x-axis runs to 50, while the text describes the 9.6% point as "40 tasks" and profiles average 45.7 ± 2.9 contexts (<a href="https://arxiv.org/html/2511.14937v1#S5.T2" target="_blank" rel="noopener">Table 2</a>). Read the curve's shape and the three printed numbers, and not much more.</p>
+
+  <h2 id="why-max">Why the curve can only go up</h2>
+  <p>The growth follows from how the metric is defined (<a href="https://arxiv.org/html/2511.14937v1#S3.Thmtheorem1" target="_blank" rel="noopener">Definition 3.1</a>, covered in full in <a class="lnk" href="p04-measuring.html">Part 04</a>). For each attribute, violation is a <em>max</em>: it counts as leaked if any response, in any task where it was private, revealed it. The result is then averaged over attributes. Written loosely:</p>
+<pre class="code-block"><code>Violation@n(s) = mean over attributes a that are private in &gt;= 1 task of
+                   max   over t in T_priv(s,a), y in {y1..yn} ~ M(M_s · t)
+                   R(y, a)            # 1 if the judge finds a's value in y
+
+Fig 2, as this map reads its axes:
+  restrict t to the first K tasks the user runs, and set n = T</code></pre>
+  <p>A max over a bigger set can never be smaller, so adding tasks or samples can never lower the number. The open question is how fast it rises. A toy calculation (<em>illustrative, not from the paper</em>): suppose an attribute is private in every one of 40 tasks and leaks independently with 1% probability per response. After one response the chance it has leaked is 1%. After 40 tasks it is 1 − 0.99<sup>40</sup> ≈ 33%, and after 40 tasks × 5 samples it is 1 − 0.99<sup>200</sup> ≈ 87%. A per-reply rate that looks harmless turns into a likely leak over a user's history. That is the effect behind the jump from 0.1% to 9.6%.</p>
+
+  <h2 id="unstable">"Arbitrary and unstable": same prompt, different leak</h2>
+  <p>The sample dial is the more surprising of the two. Moving from T=1 to T=5 re-runs the <em>same</em> prompts with the same memory, and violations still go from 9.6% to 25.1%, about 2.6 times as many. Responses are drawn with each model's default sampling settings (<a href="https://arxiv.org/html/2511.14937v1#S5.SS1" target="_blank" rel="noopener">§5.1</a>), so each run is a fresh draw, and different draws give away different attributes.</p>
+  <blockquote class="q">revealing arbitrary and unstable behavior in which models leak different attributes for identical prompts.<span class="cite">— CIMemories, <a href="https://arxiv.org/html/2511.14937v1#S1" target="_blank" rel="noopener">§1</a> (also the abstract)</span></blockquote>
+  <p>A little arithmetic adds detail (<em>the map's reading, not a claim the paper makes</em>). If every attribute had the same 9.6% chance of leaking on each full pass, and passes were independent, five passes would give 1 − 0.904<sup>5</sup> ≈ 39.6%. The observed 25.1% is well below that. That fits a population where leak risk is uneven: some attributes are almost never revealed, others leak again and again, and in between is a large group that leaks only on some draws. The between group is what "unstable" refers to. The model has no fixed policy about those attributes. Whether one goes out depends on the sample.</p>
+  <p>This matters for evaluation. A single-sample, single-task test measures the bottom-left corner of Figure 2, the 0.1%, and would report that a model is nearly perfect. The same model ends at about a quarter of private attributes exposed.</p>
+
+  <h2 id="memory">Memory composition: more memories, more leaks</h2>
+  <p>The second dial gets its own research question (<a href="https://arxiv.org/html/2511.14937v1#S5.SS2.SSS3" target="_blank" rel="noopener">§5.2.3</a>, <a href="https://arxiv.org/html/2511.14937v1#S5.F5" target="_blank" rel="noopener">Fig 5</a>). The motivating scenario is an assistant that picks up more and more sensitive facts across sessions. The setup:</p>
+  <div class="flowrow">
+    <div class="f"><b>Profiles</b>5 users, GPT-5, a smaller slice than the 10-profile main runs.</div>
+    <div class="f"><b>Held fixed</b>The <span class="ok">necessary</span> attributes in memory for each user.</div>
+    <div class="f"><b>Swept</b>The number of <span class="bad">inappropriate</span> attributes for each context, raised from 0 upward.</div>
+    <div class="f"><b>Result</b>Violations@5 rise steadily. Completeness stays flat.</div>
+  </div>
+  <p>The paper prints no values for Figure 5, only the trend. Two readings follow from it, and both are the map's, not the authors'.</p>
+  <p><strong>Flat completeness rules out the obvious excuse.</strong> If the extra memories were simply noise that hid the useful facts, a <a class="lnk" href="../glossary.html#needle-in-a-haystack">needle-in-a-haystack</a> problem, completeness would drop as the pile grew. It does not. The model keeps finding what the recipient needs. What changes is that it also passes along more of what the recipient should not get.</p>
+  <p><strong>A rising rate, not just a rising count.</strong> Violation@n is a fraction of private attributes, not a total. If every added attribute leaked at the same rate, more of them would mean more leaks but the same fraction. A fraction that climbs suggests that a fuller memory makes each private item more likely to slip out. One caveat: the paper does not say in what order inappropriate attributes are added, so a selection effect (riskier attributes added later) cannot be ruled out from v1 alone.</p>
+  <blockquote class="q">increased personalization over time not only faces the canonical temporal update challenges tackled by prior work Zhong et al. (2024), but also appears to come at a cost to contextual integrity.<span class="cite">— CIMemories, <a href="https://arxiv.org/html/2511.14937v1#S5.SS2.SSS3" target="_blank" rel="noopener">§5.2.3</a></span></blockquote>
+
+  <h2 id="together">Putting the two dials together</h2>
+  <p>For a deployed assistant, both dials turn on their own as the user keeps using it. Memory grows with every session, and so does the number of tasks it gets used for. Read together, Figures 2 and 5 say a long-time user is exposed on both counts: more facts that could leak, and more chances for each one to leak. This is the paper's case that personalization and contextual integrity pull against each other (<a href="https://arxiv.org/html/2511.14937v1#S1" target="_blank" rel="noopener">§1</a>), the memory version of the <a class="lnk" href="../glossary.html#privacy-utility-tradeoff">privacy–utility trade-off</a>. The cross-model comparison in <a class="lnk" href="p06-results.html">Part 06</a> is all taken at the five-sample end of this curve.</p>
+  <div class="callout off"><b>Carry this away:</b> leakage compounds. Because Violation@n asks whether an attribute leaked <em>ever</em>, every extra task, every extra sample and every extra memory is another chance to leak, and GPT-5 goes from 0.1% to about one in four private attributes exposed. An evaluation, or a mental model, built on one prompt and one reply describes the first moment of a user's history, not the rest of it.</div>
+
+  <h2 id="check">Check yourself</h2>
+  <ol class="exercises">
+    <li>Why can Figure 2's curves never slope downward as K or T increases?
+      <details><summary>Answer</summary><p>Violation@n takes, for each attribute, a max over every task where it is private and every sampled response (Definition 3.1). Adding tasks or samples only enlarges the set being maxed over, so each attribute's indicator can switch from 0 to 1 but never back. The average over attributes therefore cannot fall.</p></details></li>
+    <li>GPT-5's violations go from 9.6% to 25.1% between one and five samples with the same prompts and memory. What does that say about the model's behaviour?
+      <details><summary>Answer</summary><p>Its choices about what to disclose are not stable. Re-running an identical prompt gives away different attributes on different draws, the "arbitrary and unstable" behaviour of §1. A one-sample evaluation hides most of this.</p></details></li>
+    <li>In the memory-composition sweep (Fig 5), completeness stays flat while violations rise. Why does the flat line matter?
+      <details><summary>Answer</summary><p>It shows the extra inappropriate memories are not just burying the necessary ones. The model still shares what the task needs, so the rising violations are added over-sharing, not a retrieval failure. In the paper's words, growing personalization comes at a cost to contextual integrity (§5.2.3).</p></details></li>
+  </ol>
+
+  <h2 id="further">Further reading, verified</h2>
+  <ul class="readings">
+    <li><a href="https://arxiv.org/html/2511.14937v1#S3.F2" target="_blank" rel="noopener">CIMemories, Figure 2</a>: multi-task compositionality for GPT-5, with the 0.1%, 9.6% and 25.1% labels.</li>
+    <li><a href="https://arxiv.org/html/2511.14937v1#S5.SS2.SSS3" target="_blank" rel="noopener">CIMemories, §5.2.3 and Figure 5</a>: the memory-composition sweep on 5 profiles.</li>
+    <li><a href="https://arxiv.org/html/2511.14937v1#S3.Thmtheorem1" target="_blank" rel="noopener">CIMemories, Definition 3.1</a>: the attribute-level worst case that makes the curves monotone.</li>
+    <li><a href="https://arxiv.org/abs/2305.10250" target="_blank" rel="noopener">Zhong et al., MemoryBank: Enhancing Large Language Models with Long-Term Memory</a>: the prior work on memory updating over time that §5.2.3 contrasts with.</li>
+    <li><a href="https://arxiv.org/abs/2310.17884" target="_blank" rel="noopener">Mireshghallah et al., Can LLMs Keep a Secret? (ConfAide)</a>: the single-scenario style of CI test that the compositional design moves past.</li>
+    <li><a href="https://github.com/facebookresearch/CIMemories" target="_blank" rel="noopener">facebookresearch/CIMemories</a>: the eval runner, where number of profiles and trials are set (field map extra).</li>
+  </ul>
+
+  <div class="callout">Next: <a class="lnk" href="p06-results.html">Frontier models, measured</a> &middot; Back to the <a class="lnk" href="../index.html#benchmark">map</a>.</div>
+</main>
+<footer>Original explanation of CIMemories (arXiv:2511.14937v1), FAIR at Meta. The paper is &copy; its authors; this page links and explains, it does not copy. Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.</footer>
+</body>
+</html>

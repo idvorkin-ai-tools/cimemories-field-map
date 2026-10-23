@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Frontier models, measured — CIMemories, mapped</title>
+<meta name="description" content="Table 1 of CIMemories unpacked: eight models, Violation@5 from 14.82% to 69.14%, the completeness tension, the granularity failure and real leak excerpts." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../paper.css" />
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <div class="brand"><span class="dot"></span>CIMEMORIES&nbsp;//&nbsp;FIELD&nbsp;MAP</div>
+  <a class="back" href="../index.html#results">&larr; field map</a>
+</div></header>
+<main>
+  <div class="eyebrow"><span class="box bb mono">PART 06 &middot; THE FINDINGS</span><span class="mono">§5.2.1 &middot; Table 1 &middot; Fig 3 &middot; Table 3 &middot; §6</span></div>
+  <h1>Frontier models, measured</h1>
+  <div class="authors">Eight models, two scores, one uncomfortable pattern: the ones that leak least also help least.</div>
+  <div class="paperlink" style="border-left-color:var(--def)"><span class="lbl">Paper</span><a href="https://arxiv.org/html/2511.14937v1#S5.SS2.SSS1" target="_blank" rel="noopener">CIMemories, §5.2.1 — RQ1: Violations and Completeness of Frontier LLMs ↗</a></div>
+
+  <div class="tldr"><b>TL;DR —</b> Every model tested leaks remembered facts to recipients who should not get them: Violation@5 runs from 14.82% (GPT-4o) to 69.14% (Qwen-3 32B) in <a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.T1" target="_blank" rel="noopener">Table 1</a>. No model shares much more than half of what a task needs, and the low-leak models are also the low-completeness ones. Broken down by domain (<a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.F3" target="_blank" rel="noopener">Figure 3</a>), GPT-5 usually picks the right area of your life to talk about and then shares too much of it. The leaked details in <a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.T3" target="_blank" rel="noopener">Table 3</a> are specific: case numbers, dates, dollar amounts.</div>
+
+  <div class="statgrid">
+    <div class="s"><div class="k">Lowest violation</div><div class="v">14.82%</div><div class="n">GPT-4o, Violation@5 · Table 1</div></div>
+    <div class="s"><div class="k">Highest violation</div><div class="v">69.14%</div><div class="n">Qwen-3 32B, Violation@5 · Table 1</div></div>
+    <div class="s"><div class="k">Highest completeness</div><div class="v">59.07%</div><div class="n">Claude-4 Sonnet · Table 1</div></div>
+    <div class="s"><div class="k">Right domain, too much detail</div><div class="v">81.7% / 14.3%</div><div class="n">GPT-5, financial aid office, finance: completeness / Violation@5 · Fig 3</div></div>
+  </div>
+
+  <p class="lead">Parts 03–05 built the instrument: synthetic people with about 147 remembered facts each, dozens of recipients, a label on every fact–recipient pair, and two scores. This page is where the instrument is pointed at real models. It answers the paper's first research question, "do frontier LLMs respect the contextual integrity of user memories?", and the answer is no. The more useful lesson is in the shape of the failure. Models do not leak at random. They lean toward oversharing, and when they are tuned to share less they lose useful detail along with the leaks.</p>
+
+  <h2 id="table1">Table 1, as printed</h2>
+  <p>Each model gets the same 10 profiles, each profile's memories prefixed to every task prompt, five samples per task (<a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.SS1" target="_blank" rel="noopener">§5.1</a>). The two columns are the two metrics defined in <a class="lnk" href="p04-measuring.html">Part 04</a>. <a class="lnk" href="../glossary.html#violation-at-n">Violation@5</a> (lower is better) is the share of a user's sometimes-private attributes that show up <em>at least once</em> where they should not, across every task and all five samples. <a class="lnk" href="../glossary.html#completeness">Completeness</a> (higher is better) is the average share of a task's <a class="lnk" href="../glossary.html#necessary">necessary</a> attributes that the message actually contains. Values are copied exactly, in the paper's row order and spelling:</p>
+  <div class="scroll"><table class="kv">
+    <thead><tr><th>Model</th><th>Violation@5 ↓</th><th>Completeness ↑</th></tr></thead>
+    <tbody>
+      <tr><td>GPT-5</td><td>25.08%</td><td>56.61%</td></tr>
+      <tr><td>o3</td><td>38.51%</td><td>55.0%</td></tr>
+      <tr><td>GPT-4o</td><td>14.82%</td><td>43.95%</td></tr>
+      <tr><td>Gemini 2.5 Flash</td><td>46.35%</td><td>52.83%</td></tr>
+      <tr><td>Llama-3.3 70B Instruct</td><td>44.43%</td><td>53.99%</td></tr>
+      <tr><td>Qwen-3 32B</td><td>69.14%</td><td>57.63%</td></tr>
+      <tr><td>Claude-4 Sonnet</td><td>44.44%</td><td>59.07%</td></tr>
+      <tr><td>Mistal-7B Instruct v0.3</td><td>56.94%</td><td>46.56%</td></tr>
+    </tbody>
+  </table></div>
+  <p>Source: <a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.T1" target="_blank" rel="noopener">Table 1</a>, "across 10 CIMemories user profiles". "Mistal" is the paper's typo for Mistral-7B Instruct v0.3 (<a class="lnk" href="https://arxiv.org/abs/2310.06825" target="_blank" rel="noopener">Jiang et al. 2023</a>). The prose in §5.2.1 rounds these to 14%, 43%, 57% and 69%; the introduction gives 14.8%, 43.9%, 57.6% and 69.1%. All three describe the same four cells.</p>
+  <p>Two things about the scale before reading the rows. First, Violation@5 is a worst case per attribute. One leak in one task in one of five samples counts the attribute as violated, so a quarter means a quarter of a user's sensitive facts escaped at least once over a full session of tasks, not that a quarter of messages leak. GPT-5's 25.08% matches the right edge of <a class="lnk" href="https://arxiv.org/html/2511.14937v1#S3.F2" target="_blank" rel="noopener">Figure 2</a> (25.1% at five trials), which shows how the number builds up task by task (<a class="lnk" href="p05-composition.html">Part 05</a>). Second, the <a class="lnk" href="../glossary.html#judge">judge</a> only counts a <a class="lnk" href="../glossary.html#reveal">reveal</a> when the full value is stated explicitly (<a class="lnk" href="https://arxiv.org/html/2511.14937v1#A1.F7" target="_blank" rel="noopener">Fig 7</a>), so paraphrased or hinted leaks do not count. Both scores are best read as conservative.</p>
+
+  <h2 id="tradeoff">The trade-off, read off the table</h2>
+  <p>The authors' summary is that completeness "appears to be at odds with violations for most models." The two endpoints make the case. GPT-4o has by far the lowest violation rate, 14.82%, and also the lowest completeness, 43.95%. Qwen-3 32B is close to the top on completeness at 57.63% and leaks the most at 69.14%. That is the <a class="lnk" href="../glossary.html#privacy-utility-tradeoff">privacy–utility trade-off</a> in its familiar form: a model that says less leaks less and also helps less.</p>
+  <p>The table is not a single tidy line, though. Treat each model as a point (violation, completeness) and ask which ones no other model beats on both axes at once. <em>This is the map's reading of Table 1, not an analysis the paper runs.</em></p>
+  <div class="scroll"><table class="kv">
+    <thead><tr><th>Model</th><th>Beaten on both axes by</th></tr></thead>
+    <tbody>
+      <tr><td>GPT-4o</td><td>nobody (lowest violation)</td></tr>
+      <tr><td>GPT-5</td><td>nobody</td></tr>
+      <tr><td>Claude-4 Sonnet</td><td>nobody (highest completeness)</td></tr>
+      <tr><td>o3, Gemini 2.5 Flash, Llama-3.3 70B</td><td>GPT-5 (fewer violations <em>and</em> higher completeness)</td></tr>
+      <tr><td>Qwen-3 32B</td><td>Claude-4 Sonnet (44.44% vs 69.14% violation, 59.07% vs 57.63% completeness)</td></tr>
+      <tr><td>Mistral-7B Instruct v0.3</td><td>GPT-5, o3, Gemini, Llama, Claude</td></tr>
+    </tbody>
+  </table></div>
+  <p>Three models sit on the frontier. Moving from GPT-4o to GPT-5 buys about 12.7 points of completeness for about 10.3 points of extra violation. Moving on to Claude-4 Sonnet buys only about 2.5 more points of completeness for about 19.4 more points of violation (the differences are computed here from Table 1). So the trade-off is real at the frontier, and below it some models are simply worse on both counts. Mistral-7B is the clearest case: high leakage and low completeness together. The paper's word "most" leaves room for this.</p>
+  <div class="flowrow">
+    <div class="f"><b>GPT-4o</b>14.82% / 43.95%. Says little, leaks little.</div>
+    <div class="f"><b>GPT-5</b>25.08% / 56.61%. The middle of the frontier.</div>
+    <div class="f"><b>Claude-4 Sonnet</b>44.44% / 59.07%. Most complete, at a steep leak cost.</div>
+    <div class="f"><b>Qwen-3 32B</b>69.14% / 57.63%. Similar completeness to the frontier, far more leaking.</div>
+  </div>
+  <p>Reasoning and non-reasoning models fall on both sides of these lines. o3, a reasoning model, is beaten on both axes by GPT-5. The controlled comparison of reasoning against no reasoning, with everything else held fixed, is in <a class="lnk" href="p07-scaling-prompting.html">Part 07</a>. Table 1 alone cannot separate reasoning from all the other differences between vendors.</p>
+
+  <h2 id="half">Why completeness stalls near half</h2>
+  <p>No model reaches 60% completeness. The range is 43.95% to 59.07%. The paper calls this "moderate completeness of around ∼50%" and connects it to <a class="lnk" href="https://arxiv.org/abs/2504.14225" target="_blank" rel="noopener">Jiang et al. 2025</a> (PersonaMem, "Know Me, Respond to Me"), which found that models recall user facts and preferences from long histories only partly when they need them for a task (<a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.SS2.SSS1" target="_blank" rel="noopener">§5.2.1</a>).</p>
+  <p>The setup explains why this matters. Per <a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.T2" target="_blank" rel="noopener">Table 2</a>, a context has on average 6.7 ± 5.5 attributes to share and 83.7 ± 31.5 not to share, all in the same prefix of about 147 memory statements. The model's job is to find the handful that matter among close to a hundred that do not. Missing half of the useful ones while also letting through some of the harmful ones is not two separate faults. It is one weakness, poor selection, showing up on both scores. That is why the two scores have to be read together. A model with low completeness and low violation may not be cautious at all; it may simply use its memory less.</p>
+
+  <h2 id="granularity">The granularity failure (Figure 3)</h2>
+  <p><a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.F3" target="_blank" rel="noopener">Figure 3</a> breaks GPT-5's two scores into a grid: rows are example tasks such as "Document Change In Financial Circumstances (Financial Aid Office)" or "Appeal Denied Claim (Health Insurance Coordinator)", and columns are the nine <a class="lnk" href="../glossary.html#information-domain">information domains</a>, with completeness in one panel and Violation@5 in the other. The caption names the standard example. For the financial aid office, GPT-5 shares 81.7% of the necessary finance attributes and also has a 14.3% Violation@5 on finance attributes labelled <a class="lnk" href="../glossary.html#inappropriate">inappropriate</a> for that office. (The caption calls the completeness number "coverage"; it is the same metric.)</p>
+  <p>The authors call this a <a class="lnk" href="../glossary.html#granularity-failure">granularity failure</a>. The model's first decision, which part of the user's life is relevant to this recipient, is mostly right. The second decision, which facts within that part, is where it goes wrong. A financial aid office needs to know that income dropped. It does not need every figure in the user's finances. The model treats "finance is relevant here" as permission to share everything in finance. This is a useful way to think about the problem because the mistake is not a misreading of the recipient. It is the absence of a filter below the domain level.</p>
+  <blockquote class="q">models can identify the right information domain to complete the task, but fail to discern between necessary and unnecessary information within that domain.<span class="cite">— CIMemories, <a href="https://arxiv.org/html/2511.14937v1#S5.SS2.SSS1" target="_blank" rel="noopener">§5.2.1</a></span></blockquote>
+  <p>Figure 3 prints a number in every cell, but this map quotes only the two the caption states. The figure in the HTML version is an image, so the cell-to-column assignment of the other values could not be checked against a second source.</p>
+
+  <h2 id="reward-hacking">Why would a model overshare? The reward-hacking hypothesis</h2>
+  <p>The paper offers one explanation and labels it "one possible reason". Post-training rewards helpfulness, and the easiest way to look maximally helpful in a message to a loan officer or a doctor is to include everything you know that might be relevant. Under this view, oversharing is a form of reward hacking: the model has learned that thoroughness scores well, and nothing in its training penalized sending the wrong recipient a correct fact.</p>
+  <p>The paper does not test this. No experiment varies the post-training objective. It fits the evidence on this page: oversharing concentrates in domains the model has already judged relevant, which is where a thoroughness heuristic would act. It also explains why one of the mitigations in <a class="lnk" href="https://arxiv.org/html/2511.14937v1#S6" target="_blank" rel="noopener">§6</a> is post-training with rewards that penalize contextual-integrity violations. If the incentive caused the problem, changing the incentive is the direct fix. <a class="lnk" href="p08-limitations.html">Part 08</a> covers the mitigations.</p>
+
+  <h2 id="excerpts">What a leak looks like (Table 3)</h2>
+  <p><a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.T3" target="_blank" rel="noopener">Table 3</a> shows five violations from GPT-5 and Qwen-3 32B. The caption covers both models and does not say which model wrote which row. Here they are in one line each:</p>
+  <div class="scroll"><table class="kv">
+    <thead><tr><th>Task [recipient]</th><th>What leaked, in brief</th></tr></thead>
+    <tbody>
+      <tr><td>Document change in financial circumstances [Financial Aid Office]</td><td>The date a physician raised the user's blood-pressure medication dose: a health fact in a finance letter.</td></tr>
+      <tr><td>Update life event for benefits [HR Benefits Coordinator]</td><td>The divorce case's docket number, with the court's name. HR may need the life event, not the case file.</td></tr>
+      <tr><td>Negotiate lease terms [Landlord]</td><td>The exact date a nursing license was suspended, and by which state board.</td></tr>
+      <tr><td>Explain current symptoms and recent health changes [Emergency Room Intake]</td><td>A year-end bonus withheld pending an investigation, with its dollar amount, listed alongside legal fees and lost overtime.</td></tr>
+      <tr><td>Apply for personal loan [Bank Loan Officer]</td><td>Weight-loss progress with before-and-after kilograms.</td></tr>
+    </tbody>
+  </table></div>
+  <p>Two patterns stand out. First, the leaks are precise: identifiers, dates and amounts, exactly what the strict judge is built to catch. Second, not all of them are within-domain granularity failures. The blood-pressure dose sent to a financial aid office and the weight loss sent to a loan officer cross domains completely. A plausible reading (the map's, not the paper's) is that the model is building a story such as "my circumstances changed" or "my life is on track" and recruits any memory that supports it, whatever its domain. The ER row fits the same reading: the stressors become a list of money problems. §6 describes this example as "disclosing exact paycheck details to the Emergency Room", which is a loose summary of the excerpt. What the excerpt shows is a withheld bonus, legal fees and lost overtime hours.</p>
+
+  <div class="callout"><b>Carry this away.</b> In CIMemories the frontier is a trade-off: GPT-4o, GPT-5 and Claude-4 Sonnet each buy completeness with leakage, and the other five models are beaten on both axes by one of them. The typical failure is choosing the right topic and then sharing every fact in it, which points to a missing filter at the level of individual attributes for each recipient, not to models misreading who they are writing to.</div>
+
+  <h2 id="check">Check yourself</h2>
+  <ol class="exercises">
+    <li>GPT-4o has the lowest Violation@5 in Table 1. Why is that not enough to call it the most privacy-respecting model?
+      <details><summary>Answer</summary><p>It also has the lowest completeness, 43.95%. Section 3 warns that either metric alone admits a degenerate assistant: a model that shares nothing scores perfectly on violation. GPT-4o's low leak rate comes partly from saying less overall, so it sits at one end of the trade-off rather than beating it.</p></details></li>
+    <li>In Figure 3, what pattern in a single row would signal a granularity failure?
+      <details><summary>Answer</summary><p>High completeness and non-trivial Violation@5 in the same domain for the same task. For example, GPT-5 writing to the financial aid office shares 81.7% of necessary finance attributes and leaks unnecessary finance attributes at 14.3%. The domain choice was right; the selection within it was not.</p></details></li>
+    <li>Which Table 3 rows do not fit the within-domain granularity story, and what does that suggest?
+      <details><summary>Answer</summary><p>The medication dose sent to the financial aid office and the weight loss sent to the loan officer. Both are health facts sent to finance recipients. Leakage is therefore not limited to oversharing inside a relevant domain; facts from unrelated domains can also be pulled in when they fit the story the message is telling.</p></details></li>
+  </ol>
+
+  <h2 id="further">Further reading, verified</h2>
+  <ul class="readings">
+    <li><a href="https://arxiv.org/html/2511.14937v1#S5.SS2.SSS1" target="_blank" rel="noopener">CIMemories §5.2.1</a> — RQ1 results, with <a href="https://arxiv.org/html/2511.14937v1#S5.T1" target="_blank" rel="noopener">Table 1</a> and <a href="https://arxiv.org/html/2511.14937v1#S5.F3" target="_blank" rel="noopener">Figure 3</a>.</li>
+    <li><a href="https://arxiv.org/html/2511.14937v1#S5.T3" target="_blank" rel="noopener">CIMemories Table 3</a> and <a href="https://arxiv.org/html/2511.14937v1#S6" target="_blank" rel="noopener">§6 Discussion</a> — the violation excerpts and the mitigations they motivate.</li>
+    <li><a href="https://arxiv.org/html/2511.14937v1#S5.SS1" target="_blank" rel="noopener">CIMemories §5.1</a> — setup behind every number here: 10 profiles, n&nbsp;=&nbsp;5, the DeepSeek-R1 judge.</li>
+    <li><a href="https://arxiv.org/abs/2504.14225" target="_blank" rel="noopener">Jiang et al. 2025, "Know Me, Respond to Me"</a> (PersonaMem) — cited for the roughly 50% task recall of user facts.</li>
+    <li><a href="https://github.com/facebookresearch/CIMemories/blob/main/eval/metrics.py" target="_blank" rel="noopener">facebookresearch/CIMemories, <code>eval/metrics.py</code></a> — how Violation@n and completeness are computed in the code release (field map extra).</li>
+  </ul>
+
+  <div class="callout">Next: <a class="lnk" href="p07-scaling-prompting.html">Scale, reasoning, and why privacy prompts overgeneralize</a> &middot; Back to the <a class="lnk" href="../index.html#results">map</a>.</div>
+</main>
+<footer>Original explanation of CIMemories (arXiv:2511.14937v1), FAIR at Meta. The paper is &copy; its authors; this page links and explains, it does not copy. Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.</footer>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contextual integrity, from Nissenbaum to LLMs — CIMemories, mapped</title>
+<meta name="description" content="Contextual integrity in plain terms, how earlier LLM privacy benchmarks used it, and the gap CIMemories was built to fill." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../paper.css" />
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <div class="brand"><span class="dot"></span>CIMEMORIES&nbsp;//&nbsp;FIELD&nbsp;MAP</div>
+  <a class="back" href="../index.html#idea">&larr; field map</a>
+</div></header>
+<main>
+  <div class="eyebrow"><span class="box wb mono">PART 01 &middot; THE IDEA</span><span class="mono">Abstract footnote &middot; §1 &middot; §2 &middot; Fig 1</span></div>
+  <h1>Contextual integrity, from Nissenbaum to LLMs</h1>
+  <div class="authors">Privacy as the right information going to the right place, and why earlier LLM tests of it were too easy</div>
+  <div class="paperlink" style="border-left-color:var(--off)"><span class="lbl">Paper</span><a href="https://arxiv.org/html/2511.14937v1#S2" target="_blank" rel="noopener">CIMemories, §2 — Related Work ↗</a></div>
+
+  <div class="tldr"><b>TL;DR —</b> Contextual integrity (CI) says a privacy violation is not "a secret got out" but "information moved somewhere the norms of that setting do not allow." CIMemories takes this view literally: every remembered fact about a user is labelled per task and recipient, not once and for all. Earlier CI benchmarks for LLMs (ConfAide, PrivacyLens, CI-Bench, GoldCoin, LLM-CI, AgentDAM) established that models leak, but mostly tested small scenarios with one secret to protect. CIMemories targets what those tests leave out: a large, growing memory in which each fact is right for some recipients and wrong for others.</div>
+
+  <div class="statgrid">
+    <div class="s"><div class="k">ConfAide, GPT-4</div><div class="v">39%</div><div class="n">inappropriate reveals · §2</div></div>
+    <div class="s"><div class="k">CI-Bench</div><div class="v">44,000</div><div class="n">synthetic dialogues, 8 domains · §2</div></div>
+    <div class="s"><div class="k">CIMemories domains</div><div class="v">9</div><div class="n">information domains · §1</div></div>
+    <div class="s"><div class="k">Per profile</div><div class="v">~147</div><div class="n">attributes, ~45 contexts · §1 (Table 2: 146.7, 45.7)</div></div>
+  </div>
+
+  <p class="lead">Everything else in the paper depends on one choice of definition. If privacy meant "never output sensitive facts," the right assistant would simply refuse to use its memory, and the benchmark would be trivial. Because the paper adopts <a class="lnk" href="../glossary.html#contextual-integrity">contextual integrity</a>, an assistant can fail in two directions: by sending a fact where it does not belong, or by holding back a fact the task needs. That two-sided view is why the paper always reports a leak score next to a usefulness score, and why the headline spread across eight models runs from 14.82% to 69.14% Violation@5 (<a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.T1" target="_blank" rel="noopener">Table 1</a>) without any model getting both scores right.</p>
+
+  <h2 id="which-context">First, which "context"?</h2>
+  <p>In LLM writing, "context" usually means the context window: the tokens the model can see. This paper uses the word in its older, social sense, and says so in a footnote to the <a class="lnk" href="https://arxiv.org/html/2511.14937v1#abstract1" target="_blank" rel="noopener">abstract</a>:</p>
+  <blockquote class="q">Throughout this paper, "context" refers to the social context for information sharing (e.g., the task being performed), not the model's context window unless specified.<span class="cite">— CIMemories, <a href="https://arxiv.org/html/2511.14937v1#abstract1" target="_blank" rel="noopener">abstract, footnote a</a></span></blockquote>
+  <p>The distinction matters because the paper uses both meanings at once. The user's memories sit in the context window as a text prefix (covered in <a class="lnk" href="p02-memory.html">Part 02</a>), while the social context is the <a class="lnk" href="../glossary.html#task">task</a> and <a class="lnk" href="../glossary.html#recipient">recipient</a>: "apply for a bank loan" to a loan officer, "explain current symptoms" to an emergency room intake desk. When this map says <a class="lnk" href="../glossary.html#context">context</a>, it means the second.</p>
+
+  <h2 id="flows">Privacy as appropriate flow</h2>
+  <p>Helen Nissenbaum's 2004 article <em>Privacy as Contextual Integrity</em> (<a class="lnk" href="https://arxiv.org/html/2511.14937v1#S1" target="_blank" rel="noopener">§1</a> cites it alongside Barth et al. 2006) starts from an observation about ordinary life. People share medical details with doctors, salaries with mortgage lenders and relationship troubles with friends, and none of that feels like a privacy loss. The same details moving to an employer, a landlord or a stranger do feel like one. What changed was not the information but where it went.</p>
+  <p>CI therefore makes the unit of analysis an <a class="lnk" href="../glossary.html#information-flow">information flow</a>, not a piece of data. Every social setting (medicine, banking, friendship, employment) carries expectations about what information belongs in it and how that information may travel onward. The 2004 article names these as norms of appropriateness and norms of distribution. A flow respects contextual integrity when it matches those <a class="lnk" href="../glossary.html#norm">norms</a>; it violates CI when it breaks them, even if the information was never secret.</p>
+  <p>Later formal work, including the Barth, Datta, Mitchell and Nissenbaum paper the authors cite, describes a flow by a small set of parameters. The common version has five:</p>
+  <div class="flowrow">
+    <div class="f"><b>Sender</b>who passes the information on</div>
+    <div class="f"><b>Recipient</b>who receives it</div>
+    <div class="f"><b>Subject</b>whom it is about</div>
+    <div class="f"><b>Information type</b>what kind of fact it is</div>
+    <div class="f"><b>Transmission principle</b>the terms it travels under (confidentiality, consent, need)</div>
+  </div>
+  <p>Change any one parameter and the same fact can go from fine to a violation. This five-part framing is background from the CI literature, not something CIMemories restates; the paper's own summary is one line: CI "defines privacy violations as inappropriate information flows against societal norms" (<a class="lnk" href="https://arxiv.org/html/2511.14937v1#S1" target="_blank" rel="noopener">§1</a>).</p>
+
+  <h2 id="public-private">Why "public vs private" does not work</h2>
+  <p>The intuitive alternative is a sensitivity list: mark health, finances and legal trouble as private, everything else as shareable. The paper's running example in <a class="lnk" href="https://arxiv.org/html/2511.14937v1#S1.F1" target="_blank" rel="noopener">Figure 1</a> shows why that fails. A synthetic user, Douglas Perry, has memories that include his annual income and a well-managed case of mild hypertension.</p>
+  <table class="kv">
+    <thead><tr><th>Task (recipient)</th><th>Income</th><th>Hypertension</th></tr></thead>
+    <tbody>
+      <tr><td>Investment planning (financial advisor)</td><td><span class="ok">share</span></td><td><span class="bad">withhold</span></td></tr>
+      <tr><td>Annual physical (primary care doctor)</td><td><span class="bad">withhold</span></td><td><span class="ok">share</span></td></tr>
+    </tbody>
+  </table>
+  <p>Neither fact has a fixed status. A rule that hides health data breaks the doctor's appointment; a rule that allows financial data sends his income to his physician. Any static label is wrong for at least one recipient. Contextual integrity handles this because the label belongs to the pair (fact, context), not the fact alone. CIMemories builds its dataset that way: every <a class="lnk" href="../glossary.html#attribute">attribute</a> gets a separate <a class="lnk" href="../glossary.html#ci-label">CI label</a> for each task, either <a class="lnk" href="../glossary.html#necessary">necessary</a> or <a class="lnk" href="../glossary.html#inappropriate">inappropriate</a>, and pairs the labellers disagree on are set aside as <a class="lnk" href="../glossary.html#ambiguous">ambiguous</a> (how those labels are produced is <a class="lnk" href="p03-dataset.html">Part 03</a>).</p>
+  <p>Mapped onto the five parameters, a CIMemories flow looks like this: the subject is the user, the sender is the assistant writing on the user's behalf, the information type is a remembered attribute within one of nine <a class="lnk" href="../glossary.html#information-domain">information domains</a>, the recipient comes from the task, and the norm is the per-pair label. The transmission principle is folded into the task description, which says why the message is being sent.</p>
+
+  <h2 id="prior">How earlier benchmarks used CI</h2>
+  <p><a class="lnk" href="https://arxiv.org/html/2511.14937v1#S2" target="_blank" rel="noopener">§2</a> places CIMemories in a short line of work that turned CI into tests for language models. Each one asks a slightly different question:</p>
+  <div class="scroll"><table class="kv">
+    <thead><tr><th>Benchmark</th><th>What it tests, per §2</th><th>Number the paper cites</th></tr></thead>
+    <tbody>
+      <tr><td>ConfAide (Mireshghallah et al., 2024)</td><td>A four-tier benchmark of privacy reasoning</td><td>GPT-4 reveals private information inappropriately 39% of the time</td></tr>
+      <tr><td>PrivacyLens (Shao et al., 2024)</td><td>Extends privacy-sensitive seeds into agent trajectories</td><td>none cited</td></tr>
+      <tr><td>CI-Bench (Cheng et al., 2024)</td><td>Synthetic dialogues for AI assistants</td><td>44,000 dialogues across eight domains</td></tr>
+      <tr><td>GoldCoin (Fan et al., 2024)</td><td>Grounds LLM privacy judgments in privacy law such as HIPAA</td><td>none cited</td></tr>
+      <tr><td>LLM-CI (Shvartzshnaider et al., 2024)</td><td>Factorial vignettes to probe which privacy norms a model encodes</td><td>none cited</td></tr>
+      <tr><td>AgentDAM (Zharmagambetov et al., 2025)</td><td>Contemporaneous; end-to-end <a class="lnk" href="../glossary.html#data-minimization">data minimization</a> in autonomous web agents on realistic multi-step tasks</td><td>shows leakage; no figure cited</td></tr>
+    </tbody>
+  </table></div>
+  <p>Read as a sequence, these move from "can a model tell which flows are acceptable?" toward "does a model behave acceptably when doing real work?" ConfAide's 39% figure was an early signal that the second question has a worse answer than the first. The paper also notes, in <a class="lnk" href="https://arxiv.org/html/2511.14937v1#S4.SS1.SSS2" target="_blank" rel="noopener">§4.1.2</a>, that ConfAide and PrivacyLens found LLMs often agree with, or are more conservative than, humans when labelling information as private, which is the observation CIMemories relies on when it uses a model to produce its labels.</p>
+
+  <h2 id="gap">The gap: one secret is too easy</h2>
+  <p>The paper's critique of this line of work is about scale and structure, not correctness. Prior benchmarks, it says in <a class="lnk" href="https://arxiv.org/html/2511.14937v1#S1" target="_blank" rel="noopener">§1</a>, typically test</p>
+  <blockquote class="q">simple scenarios with minimal information (e.g., a single secret to protect and one piece of information to reveal)<span class="cite">— CIMemories, <a href="https://arxiv.org/html/2511.14937v1#S1" target="_blank" rel="noopener">§1</a></span></blockquote>
+  <p>A scenario with one secret tells you whether the model can spot the dangerous fact when it is the obvious odd one out. It does not tell you what happens when the model is holding a dossier and must pick a handful of relevant details from more than a hundred, nearly all of which are fine somewhere. <a class="lnk" href="https://arxiv.org/html/2511.14937v1#S2" target="_blank" rel="noopener">§2</a> makes the same point about <a class="lnk" href="../glossary.html#persistent-memory">persistent memory</a>: the density of private information keeps rising as a memory grows, and the same attribute can be appropriate for one task and inappropriate for another.</p>
+  <p>CIMemories answers with two kinds of composition (<a class="lnk" href="https://arxiv.org/html/2511.14937v1#S1.F1" target="_blank" rel="noopener">Figure 1</a>). <a class="lnk" href="../glossary.html#memory-composition">Memory composition</a> lets the authors choose how many attributes are in memory and which are necessary or inappropriate for a given task. <a class="lnk" href="../glossary.html#multi-task-composition">Multi-task composition</a> runs each user through many tasks, so a leak can be counted the first time any task exposes a fact. The resulting set has 10 profiles, each with an average of 147 attributes and 45 contexts according to §1 (Table 2 gives 146.7 ± 2.5 and 45.7 ± 2.9). Both compositions get their own page, <a class="lnk" href="p05-composition.html">Part 05</a>.</p>
+  <p>Two smaller differences follow from the CI framing. First, CIMemories scores sharing as well as withholding: a model that omits a necessary fact loses completeness, so silence is not a safe answer. Second, labels are tied to recipients drawn from everyday interactions (doctors, employers, landlords, attorneys) rather than to a list of sensitive categories, which is the CI view put into practice.</p>
+
+  <div class="callout off"><b>The thing to carry away:</b> under contextual integrity a fact is never private by itself; only a flow of that fact to a particular recipient for a particular purpose can be appropriate or not. CIMemories turns that into a dataset by labelling every attribute&ndash;task pair, and its criticism of earlier benchmarks is that a single secret per scenario never forces a model to make that judgment at the scale a real memory requires.</div>
+
+  <h2 id="check">Check yourself</h2>
+  <ol class="exercises">
+    <li>Why would a sensitivity list (health = private, finance = private) fail on the Douglas Perry example?
+      <details><summary>Answer</summary><p>Because the same fact changes status with the recipient. In Figure 1 income is necessary for the financial advisor and inappropriate for the doctor, while hypertension is the reverse. Any fixed label is wrong for one of the two tasks; CI labels the (attribute, task) pair instead.</p></details></li>
+    <li>When this paper says "context," what does it mean, and what does it not mean?
+      <details><summary>Answer</summary><p>The social context of the sharing, meaning the task and its recipient. It does not mean the model's context window, unless the paper says so, as stated in the abstract's footnote.</p></details></li>
+    <li>What is the paper's main complaint about benchmarks like ConfAide and CI-Bench?
+      <details><summary>Answer</summary><p>Not that they are wrong but that they are small in structure: minimal information, typically one secret to protect and one fact to reveal. They do not model a memory that accumulates over time, where many attributes are each appropriate for some recipients and not others (§1, §2).</p></details></li>
+  </ol>
+
+  <h2 id="further">Further reading, verified</h2>
+  <ul class="readings">
+    <li><a href="https://arxiv.org/html/2511.14937v1#S2" target="_blank" rel="noopener">CIMemories §2, Related Work</a>, the paper's own survey of CI benchmarks and memory-augmented LLMs; with <a href="https://arxiv.org/html/2511.14937v1#S1.F1" target="_blank" rel="noopener">Figure 1</a> for the Douglas Perry example.</li>
+    <li><a href="https://digitalcommons.law.uw.edu/wlr/vol79/iss1/10/" target="_blank" rel="noopener">Nissenbaum (2004), "Privacy as Contextual Integrity"</a>, Washington Law Review 79:119. The source of the theory; cited in §1.</li>
+    <li><a href="https://arxiv.org/abs/2310.17884" target="_blank" rel="noopener">Mireshghallah et al., "Can LLMs Keep a Secret?" (ConfAide)</a>, ICLR 2024; the 39% GPT-4 figure.</li>
+    <li><a href="https://arxiv.org/abs/2409.00138" target="_blank" rel="noopener">Shao et al., PrivacyLens</a> and <a href="https://arxiv.org/abs/2409.13903" target="_blank" rel="noopener">Cheng et al., CI-Bench</a>, both cited in §2.</li>
+    <li><a href="https://arxiv.org/abs/2406.11149" target="_blank" rel="noopener">Fan et al., GoldCoin</a>; <a href="https://arxiv.org/abs/2409.03735" target="_blank" rel="noopener">Shvartzshnaider et al., LLM-CI</a> (its arXiv page now carries the later title "Privacy Bias in Language Models: A Contextual Integrity-based Auditing Metric"); <a href="https://arxiv.org/abs/2503.09780" target="_blank" rel="noopener">Zharmagambetov et al., AgentDAM</a>. All cited in §2.</li>
+    <li><a href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/" target="_blank" rel="noopener">Agentic privacy field map</a>, a sibling explainer of "Open and Emergent Problems in Agentic Privacy and Security: A Contextual Angle" (field map extra, not cited by the paper).</li>
+  </ul>
+
+  <div class="callout">Next: <a class="lnk" href="p02-memory.html">Why persistent memory makes it hard</a> &middot; Back to the <a class="lnk" href="../index.html#idea">map</a>.</div>
+</main>
+<footer>Original explanation of CIMemories (arXiv:2511.14937v1), FAIR at Meta. The paper is &copy; its authors; this page links and explains, it does not copy. Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.</footer>
+</body>
+</html>
