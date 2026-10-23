@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CIMemories, mapped</title>
+<meta name="description" content="A field map of CIMemories (arXiv:2511.14937): contextual integrity, why persistent LLM memory makes it hard, how the benchmark is built and scored, what frontier models do, and what it means for builders." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+<style>
+  main{max-width:960px}
+  .hero{padding:24px 0 8px}
+  .hero h1{font-size:clamp(32px,5.5vw,52px);line-height:1.05;margin:10px 0 14px;letter-spacing:-.01em}
+  .hero .sub{font-size:18px;color:var(--ink-dim);max-width:760px;line-height:1.55}
+  .answer{margin:28px 0 6px;padding:20px 24px;border-left:3px solid var(--off);background:var(--panel);
+    border-radius:0 12px 12px 0;color:var(--ink-mid);font-size:16.5px;line-height:1.6;max-width:780px}
+  .answer b{color:var(--ink)}
+  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:26px 0 8px}
+  .fact{border:1px solid var(--line-soft);border-radius:8px;padding:12px 14px}
+  .fact .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim)}
+  .fact .v{font-size:17px;font-weight:600;margin-top:4px}
+  section{padding:56px 0;border-bottom:1px solid var(--line-soft);scroll-margin-top:64px}
+  section:last-of-type{border-bottom:none}
+  .arc-head{display:flex;align-items:baseline;gap:14px;margin:0 0 6px;flex-wrap:wrap}
+  .arc-head .idx{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--ink-dim)}
+  .arc-head h2{margin:0;font-size:26px}
+  .arc-sub{color:var(--ink-dim);margin:0 0 22px;max-width:720px}
+  .row{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:16px 0;border-top:1px solid var(--line-soft);align-items:start}
+  .row:first-of-type{border-top:none}
+  .row .num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink-dim);padding-top:3px}
+  .row .name{font-weight:600;font-size:17px;line-height:1.3}
+  .row .name a{color:var(--ink);text-decoration:none}
+  .row .meta{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-dim);margin:4px 0 6px;display:flex;flex-wrap:wrap;gap:10px}
+  .row .desc{color:var(--ink-dim);font-size:14.5px;line-height:1.55}
+  .amber .row .name a:hover{color:var(--off)} .cyan .row .name a:hover{color:var(--def)}
+  .check{width:16px;height:16px;border:1px solid var(--ink-dim);border-radius:4px;display:inline-block;vertical-align:-3px;margin-right:6px;cursor:pointer;background:transparent}
+  .check.on{background:var(--off);border-color:var(--off)}
+  .cyan .check.on{background:var(--def);border-color:var(--def)}
+  .links{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+  .links a{display:block;border:1px solid var(--line-soft);border-radius:8px;padding:12px 14px;color:var(--ink);text-decoration:none}
+  .links a:hover{border-color:var(--def)}
+  .links a b{display:block;font-size:15px;margin-bottom:3px}
+  .links a span{font-size:13px;color:var(--ink-dim)}
+  .progress{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-dim);margin-top:8px}
+  @media (max-width:560px){.row{grid-template-columns:34px 1fr;gap:10px}.answer{padding:16px 16px}}
+</style>
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <div class="brand"><span class="dot"></span>CIMEMORIES&nbsp;//&nbsp;FIELD&nbsp;MAP</div>
+  <a class="back" href="https://idvorkin-ai-tools.github.io/">&larr; all maps</a>
+</div></header>
+<main>
+  <div class="hero">
+    <div class="eyebrow"><span class="box wb mono">MIRESHGHALLAH, MANGAOKAR ET AL. &middot; ARXIV:2511.14937 &middot; FAIR AT META</span><span class="mono">10 profiles &middot; ~147 attributes each &middot; 8 models &middot; 11 pages here</span></div>
+    <h1>CIMemories, mapped</h1>
+    <p class="sub">An assistant that remembers you is useful because it can fill in the details you would otherwise retype. It is risky for the same reason: each detail is right for some recipients and wrong for others. CIMemories is a benchmark that measures whether a model with a long memory of you shares the right things with the right recipient. These pages walk through the paper section by section.</p>
+
+    <div class="answer">
+      <b>The one-paragraph answer.</b> The authors give eight models a memory of about 147 synthetic facts per user and ask each to write messages to dozens of recipients, such as a loan officer, an ER nurse, a landlord or HR. A judge model checks which remembered facts ended up in each message. Every model leaks: across five samples per task, the share of a user's should-be-private attributes that show up somewhere they should not ranges from <b>14.8% (GPT-4o) to 69.1% (Qwen-3 32B)</b> (<a href="https://arxiv.org/html/2511.14937v1#S5.T1" target="_blank" rel="noopener">Table 1</a>). The models that leak least also complete the least. Leaks add up with use: GPT-5 goes from <b>0.1% after one task to 9.6% after 40</b>, and to <b>25.1%</b> when each prompt is sampled five times (<a href="https://arxiv.org/html/2511.14937v1#S3.F2" target="_blank" rel="noopener">Figure 2</a>). Telling the model to be careful just makes it say less overall, so leaks and useful detail fall together.
+    </div>
+
+    <div class="facts">
+      <div class="fact"><div class="k">Short on time</div><div class="v"><a class="lnk" href="ten-minutes.html">the paper in 10 min</a></div></div>
+      <div class="fact"><div class="k">Terms</div><div class="v"><a class="lnk" href="glossary.html">glossary</a></div></div>
+      <div class="fact"><div class="k">The numbers</div><div class="v"><a class="lnk" href="parts/p06-results.html">Table 1, unpacked</a></div></div>
+      <div class="fact"><div class="k">Building one?</div><div class="v"><a class="lnk" href="parts/p09-builders.html">for builders</a></div></div>
+    </div>
+    <p class="progress" id="progress">Tick a page when you have read it; this browser remembers.</p>
+  </div>
+
+  <section id="idea" class="amber">
+    <div class="arc-head"><span class="idx">01 &middot; THE IDEA</span><h2>Privacy as appropriate flow</h2></div>
+    <p class="arc-sub">The paper's footing: privacy means information going to the right place, not information kept secret. A remembered fact is not public or private on its own; whether sharing it is a violation depends on where it goes and why.</p>
+    <div class="row"><div class="num"><span class="check" data-p="p01"></span>01</div><div><div class="name"><a href="parts/p01-contextual-integrity.html">Contextual integrity, from Nissenbaum to LLMs</a></div><div class="meta"><span>§1 &middot; §2</span><span>Nissenbaum 2004 &middot; Barth et al. 2006</span><span>ConfAide &middot; PrivacyLens &middot; CI-Bench</span></div><div class="desc">The theory in plain terms: an information flow has a sender, a recipient, a subject, a type of information and a norm that governs it. Also how earlier LLM benchmarks used the theory, and why "one secret to keep" was too easy a test.</div></div></div>
+    <div class="row"><div class="num"><span class="check" data-p="p02"></span>02</div><div><div class="name"><a href="parts/p02-memory.html">Why persistent memory makes it hard</a></div><div class="meta"><span>§1 &middot; §2 &middot; §3 problem setting &middot; Fig. 6</span><span>memories prefixed to the prompt</span></div><div class="desc">Memory turns every conversation into a dossier the model writes from. The same fact (income, a diagnosis, a court case) is essential for one recipient and out of place for the next, and the pile keeps growing.</div></div></div>
+  </section>
+
+  <section id="benchmark" class="amber">
+    <div class="arc-head"><span class="idx">02 &middot; THE BENCHMARK</span><h2>How CIMemories is built and scored</h2></div>
+    <p class="arc-sub">Synthetic people, real-world tasks, and labels drawn from three privacy personas. Two scores are always reported together, because either one alone can be maxed out by a useless model.</p>
+    <div class="row"><div class="num"><span class="check" data-p="p03"></span>03</div><div><div class="name"><a href="parts/p03-dataset.html">Building the benchmark: profiles, contexts, labels</a></div><div class="meta"><span>§4.1 &middot; Table 2 &middot; Figs. 9&ndash;12</span><span>146.7 attributes &middot; 45.7 contexts per profile</span></div><div class="desc">Faker identities, three life events and nine domains per person, GPT-OSS-120B writing the memory statements, 49 seed tasks, and GPT-5 labelling every attribute&ndash;task pair as each of Westin's three privacy personas. A pair keeps a label only when every persona agrees.</div></div></div>
+    <div class="row"><div class="num"><span class="check" data-p="p04"></span>04</div><div><div class="name"><a href="parts/p04-measuring.html">Measuring it: reveal, Violation@n, Completeness</a></div><div class="meta"><span>§3 &middot; Defs. 3.1&ndash;3.2 &middot; Fig. 7 &middot; §5.1</span><span>DeepSeek-R1 as the judge</span></div><div class="desc">How a reveal is detected, why violation is a worst case per attribute (did it leak <em>ever</em>, across tasks and samples) while completeness is an average per task, and why the 1&nbsp;&minus;&nbsp;(1&nbsp;&minus;&nbsp;p)<sup>n</sup> arithmetic matters.</div></div></div>
+    <div class="row"><div class="num"><span class="check" data-p="p05"></span>05</div><div><div class="name"><a href="parts/p05-composition.html">The two compositions: memory and tasks</a></div><div class="meta"><span>Fig. 1 &middot; Fig. 2 &middot; Fig. 5 &middot; §5.2.3</span><span>0.1% &rarr; 9.6% &rarr; 25.1%</span></div><div class="desc">What makes the benchmark "compositional": the authors can choose which attributes are in memory and how many tasks a user runs. The more tasks and samples, the more leaks accumulate. Adding inappropriate memories raises violations while completeness stays flat.</div></div></div>
+  </section>
+
+  <section id="results" class="cyan">
+    <div class="arc-head"><span class="idx">03 &middot; THE FINDINGS</span><h2>What frontier models actually do</h2></div>
+    <p class="arc-sub">Every model leaks. Scaling helps at first, then levels off. Reasoning helps somewhat. Privacy prompts turn the volume down on everything at once instead of making the model more selective.</p>
+    <div class="row"><div class="num"><span class="check" data-p="p06"></span>06</div><div><div class="name"><a href="parts/p06-results.html">Frontier models, measured</a></div><div class="meta"><span>§5.2.1 &middot; Table 1 &middot; Fig. 3 &middot; Table 3</span><span>14.8%&ndash;69.1% Violation@5</span></div><div class="desc">All eight models side by side, the violation&ndash;completeness tension, the "granularity failure" (the model picks the right domain but shares every detail in it), and the concrete leaks: a divorce case number sent to HR, a withheld bonus sent to an ER intake desk.</div></div></div>
+    <div class="row"><div class="num"><span class="check" data-p="p07"></span>07</div><div><div class="name"><a href="parts/p07-scaling-prompting.html">Scale, reasoning, and why privacy prompts overgeneralize</a></div><div class="meta"><span>§5.2.2 &middot; Fig. 4a&ndash;c &middot; Fig. 8</span><span>Qwen-3 1.7B&ndash;32B &middot; 30B Instruct vs Reasoning</span></div><div class="desc">Three fixes and how far each gets. A bigger model saturates. A reasoning chain cuts violations at little cost to completeness. Three levels of "be careful" wording move GPT-5 along a fixed trade-off line instead of moving the line.</div></div></div>
+  </section>
+
+  <section id="meaning" class="cyan">
+    <div class="arc-head"><span class="idx">04 &middot; WHAT IT MEANS</span><h2>Limits, and lessons for builders</h2></div>
+    <p class="arc-sub">What the benchmark does not test, and what follows for anyone building an assistant that remembers.</p>
+    <div class="row"><div class="num"><span class="check" data-p="p08"></span>08</div><div><div class="name"><a href="parts/p08-limitations.html">Limitations, caveats and mitigations</a></div><div class="meta"><span>§6 &middot; §7</span><span>synthetic profiles &middot; single-turn &middot; no tools</span></div><div class="desc">The paper's stated limits plus the ones a careful reader adds: 10 profiles, model-generated labels, a strict judge that only counts fully explicit reveals, and one memory format. Then the mitigations the authors point to.</div></div></div>
+    <div class="row"><div class="num"><span class="check" data-p="p09"></span>09</div><div><div class="name"><a href="parts/p09-builders.html">For builders: shipping a memory-enabled assistant</a></div><div class="meta"><span>takeaways grounded in §5&ndash;§6</span></div><div class="desc">What to measure, why a single-sample eval underestimates leakage, why "be private" in the system prompt is not a control, and where recipient-aware filtering could sit in the pipeline.</div></div></div>
+  </section>
+
+  <section id="refs">
+    <div class="arc-head"><span class="idx">05</span><h2>Reference and sources</h2></div>
+    <div class="links">
+      <a href="ten-minutes.html"><b>Read the paper in 10 minutes</b><span>The whole argument on one page, section by section, with every headline number cited</span></a>
+      <a href="glossary.html"><b>Glossary</b><span>Contextual integrity, Violation@n, completeness, REVEAL, Westin personas, granularity failure and the rest</span></a>
+      <a href="https://arxiv.org/abs/2511.14937" target="_blank" rel="noopener"><b>arXiv:2511.14937</b><span>Mireshghallah, Mangaokar, Kokhlikyan, Zharmagambetov, Zaheer, Mahloujifar, Chaudhuri, <em>CIMemories</em> (v1, 18 Nov 2025). This map is written against v1.</span></a>
+      <a href="https://arxiv.org/html/2511.14937v1" target="_blank" rel="noopener"><b>The paper, HTML</b><span>arXiv's HTML rendering; section, figure and table links on these pages jump into it</span></a>
+      <a href="https://github.com/facebookresearch/CIMemories" target="_blank" rel="noopener"><b>facebookresearch/CIMemories</b><span>Code: label generation, eval runner, metrics, the raw synthetic profiles (CC BY-NC 4.0)</span></a>
+      <a href="https://huggingface.co/datasets/facebook/CIMemories" target="_blank" rel="noopener"><b>facebook/CIMemories on Hugging Face</b><span>The dataset release</span></a>
+      <a href="https://mlanthology.org/iclr/2026/mireshghallah2026iclr-cimemories/" target="_blank" rel="noopener"><b>ICLR 2026 version</b><span>Published as "CIMemories: A Compositional Benchmark for Contextual Integrity in LLMs"; this map was not checked against the camera-ready</span></a>
+      <a href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/" target="_blank" rel="noopener"><b>Related map: agentic privacy</b><span>A field map of "Open and Emergent Problems in Agentic Privacy and Security: A Contextual Angle", the same contextual lens applied to agents</span></a>
+    </div>
+  </section>
+</main>
+<footer>
+  A field map of CIMemories (Mireshghallah, Mangaokar et al., FAIR at Meta), compiled 2026-10-23 from arXiv:2511.14937v1. Numbers are quoted from the paper with their table or figure; the explanations are original. The paper is &copy; its authors; this map links and explains, it does not copy. Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.
+</footer>
+<script>
+(function(){
+  var boxes = document.querySelectorAll('.check');
+  var key = 'cimemories-fieldmap-read';
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) { state = {}; }
+  function save(){ try { localStorage.setItem(key, JSON.stringify(state)); } catch(e){} }
+  function paint(){
+    var done = 0;
+    boxes.forEach(function(b){
+      if (state[b.dataset.p]) { b.classList.add('on'); done++; } else { b.classList.remove('on'); }
+    });
+    var el = document.getElementById('progress');
+    if (el) el.textContent = done === 0
+      ? 'Tick a page when you have read it; this browser remembers.'
+      : done + ' of ' + boxes.length + ' pages read.';
+  }
+  boxes.forEach(function(b){
+    b.setAttribute('role','button');
+    b.setAttribute('tabindex','0');
+    b.addEventListener('click', function(e){ e.preventDefault(); state[b.dataset.p] = !state[b.dataset.p]; save(); paint(); });
+    b.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); b.click(); } });
+  });
+  paint();
+})();
+</script>
+</body>
+</html>
