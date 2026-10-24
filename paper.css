@@ -148,3 +148,38 @@ h2[id],h3[id]{scroll-margin-top:72px}
 dl.gloss dt{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--ink);margin-top:20px;scroll-margin-top:72px}
 dl.gloss dd{margin:4px 0 0;color:var(--ink-mid);max-width:68ch}
 @media (max-width:560px){main{padding:36px 16px 30px}.bar-in{padding:10px 16px}}
+
+/* figures: float beside text, click to enlarge (Igor's diagram feedback, 2026-10) */
+figure.fig{float:right;clear:right;width:min(46%,390px);margin:6px 0 18px 24px}
+figure.fig.wide{float:none;width:100%;max-width:720px;margin:20px auto 24px}
+figure.fig.hero-fig{width:min(34%,260px);margin:0 0 10px 22px}
+figure.fig .media{display:block;width:100%;padding:0;border:1px solid var(--line-soft);border-radius:10px;
+  background:var(--panel);cursor:zoom-in;color:inherit;font:inherit;text-align:left}
+figure.fig .media:hover{border-color:var(--def)}
+figure.fig.bare .media{border:none;background:none}
+figure.fig svg,figure.fig img{display:block;width:100%;height:auto}
+figure.fig figcaption{font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.5;color:var(--ink-dim);margin-top:7px}
+figure.fig figcaption a{color:var(--ink-dim)}
+svg.dg text{font-family:'IBM Plex Mono',monospace;fill:var(--ink-mid)}
+svg.dg .t-ink{fill:var(--ink)} svg.dg .t-dim{fill:var(--ink-dim)}
+svg.dg .t-off{fill:var(--off-bright)} svg.dg .t-def{fill:var(--def)} svg.dg .t-crit{fill:var(--crit)} svg.dg .t-ok{fill:#5BD68A}
+svg.dg .box{fill:var(--panel-2);stroke:var(--line)}
+svg.dg .box-off{fill:rgba(245,165,36,.08);stroke:var(--off)}
+svg.dg .box-def{fill:rgba(53,207,224,.08);stroke:var(--def)}
+svg.dg .box-crit{fill:rgba(229,72,77,.10);stroke:var(--crit)}
+svg.dg .box-ok{fill:rgba(91,214,138,.10);stroke:#5BD68A}
+svg.dg .ln{stroke:var(--ink-dim);fill:none;stroke-width:1.5}
+svg.dg .ln-off{stroke:var(--off);fill:none;stroke-width:1.5}
+svg.dg .ln-def{stroke:var(--def);fill:none;stroke-width:1.5}
+svg.dg .ln-crit{stroke:var(--crit);fill:none;stroke-width:1.5}
+svg.dg .ah{fill:var(--ink-dim)} svg.dg .ah-def{fill:var(--def)} svg.dg .ah-off{fill:var(--off)} svg.dg .ah-crit{fill:var(--crit)}
+svg.dg .grid{stroke:var(--line-soft);stroke-width:1}
+dialog.zoom{max-width:min(96vw,1100px);width:96vw;max-height:94vh;padding:18px;border:1px solid var(--line);
+  border-radius:12px;background:var(--panel);color:var(--ink);cursor:zoom-out;overflow:auto}
+dialog.zoom::backdrop{background:rgba(0,0,0,.78)}
+dialog.zoom svg,dialog.zoom img{display:block;width:100%;height:auto;max-height:80vh}
+dialog.zoom p{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink-dim);margin:10px 0 0;max-width:none}
+@media (max-width:700px){figure.fig,figure.fig.hero-fig{float:none;width:100%;max-width:440px;margin:16px auto 20px}
+  figure.fig.hero-fig{max-width:240px}}
+svg.dg .t-mid{fill:var(--ink-mid)}
+main h2,main table.kv,main .scroll,main pre.code-block,main .flowrow,main .statgrid,main blockquote.q,main .callout,main .answer{clear:both}
