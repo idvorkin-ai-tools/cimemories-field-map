@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Composition explorer — CIMemories, mapped</title>
+<meta name="description" content="An explorable model of how memory leaks accumulate with use: per-draw leak probability, tasks, samples and a leak-prone minority of attributes, with the paper's Figure 2 points and Table 1 values overlaid." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <div class="brand"><span class="dot"></span>CIMEMORIES&nbsp;//&nbsp;FIELD&nbsp;MAP</div>
+  <a class="back" href="index.html#benchmark">&larr; field map</a>
+</div></header>
+<main>
+  <div class="eyebrow"><span class="box wb mono">EXPLORABLE &middot; THE ARITHMETIC</span><span class="mono">tasks &times; samples &times; a leak-prone minority &middot; Fig 2 &middot; Fig 5 &middot; Table 1</span></div>
+  <h1>Composition explorer</h1>
+  <div class="authors">Turn the dials that make a small per-message leak rate into a large per-user one, and compare the model to the paper's measured points.</div>
+
+  <p class="lead">CIMemories' headline curve (<a class="lnk" href="https://arxiv.org/html/2511.14937v1#S3.F2" target="_blank" rel="noopener">Figure 2</a>) runs GPT-5 through more and more tasks and counts how many of a user's should-be-private facts have leaked <em>at least once</em>. One task, one sample: 0.1%. Forty tasks: 9.6%. Forty tasks, five samples each: 25.1%. This page is a small model of why that happens. It is the map's model, not the paper's; the paper prints the three measured points and the curve's shape, and the point of the page is to see what assumptions do and do not reproduce them.</p>
+
+  <div class="fx-try" id="try" aria-label="Experiments to try"></div>
+
+  <section class="cx" aria-label="The model and its controls">
+    <div class="cx-grid">
+      <div class="cx-chart">
+        <svg id="chart" class="dg" viewBox="0 0 400 300" role="img" aria-labelledby="chart-t"><title id="chart-t">Violation@T against number of tasks K, model curves for T = 1 to 5, with the paper's three Figure 2 points and the Table 1 Violation@5 values of eight models as ticks</title></svg>
+        <p class="cx-read mono" id="readout" aria-live="polite"></p>
+      </div>
+      <div class="cx-ctls">
+        <label class="cx-s"><span class="cx-k">Per-exposure leak chance <em>p</em></span><input type="range" id="p" min="0" max="100" value="46" aria-describedby="p-v"><span class="cx-v mono" id="p-v"></span><span class="cx-h">The chance that one at-risk fact slips into one message when the model has a reason to reach for it.</span></label>
+        <label class="cx-s"><span class="cx-k">Exposure rate <em>e</em></span><input type="range" id="e" min="5" max="100" value="30" aria-describedby="e-v"><span class="cx-v mono" id="e-v"></span><span class="cx-h">The share of a user's tasks in which a given fact is both inappropriate and tempting (its domain is on topic). Table 2 says almost every fact is inappropriate for most tasks; the granularity failure says it mostly leaks when its domain is relevant.</span></label>
+        <label class="cx-s"><span class="cx-k">Tasks <em>K</em></span><input type="range" id="k" min="1" max="50" value="40" aria-describedby="k-v"><span class="cx-v mono" id="k-v"></span><span class="cx-h">How many recipients the user has written to. Profiles average 45.7 contexts (Table 2).</span></label>
+        <label class="cx-s"><span class="cx-k">Samples per task <em>T</em></span><input type="range" id="t" min="1" max="5" value="5" aria-describedby="t-v"><span class="cx-v mono" id="t-v"></span><span class="cx-h">The paper draws five. A product that lets users regenerate draws more.</span></label>
+        <label class="cx-s"><span class="cx-k">Leak-prone minority <em>f</em></span><input type="range" id="f" min="5" max="100" value="100" aria-describedby="f-v"><span class="cx-v mono" id="f-v"></span><span class="cx-h">The share of facts that ever leak. At 100% every fact is alike. Lower it and the same average leak rate is concentrated in fewer facts, so the curve saturates at <em>f</em>.</span></label>
+      </div>
+    </div>
+    <div class="cx-formula mono" id="formula"></div>
+  </section>
+
+  <h2 id="what-it-shows">What the dials show</h2>
+  <p><b>Samples multiply exposures.</b> Violation@n is a worst case: a fact counts as leaked if it appears in any sample of any task where it was inappropriate (<a class="lnk" href="parts/p04-measuring.html#violation">Part 04</a>). If a fact is exposed <i>eK</i> times per sample and <i>T</i> samples are drawn, it survives all <i>eKT</i> exposures with probability (1&nbsp;&minus;&nbsp;<i>p</i>)<sup><i>eKT</i></sup>. Everything else on this page follows from that one line. Move <i>T</i> from 1 to 5 and watch the whole curve lift; that is the gap between Figure 2's 9.6% and 25.1%.</p>
+  <p><b>Independence gives a concave curve, and the paper's first point sits below it.</b> With every fact alike, the model cannot go from 0.1% at one task to 9.6% at forty: forty times the exposure gives at most forty times the leakage when <i>p</i> is small, and the curve bends down, not up. Try the first experiment above. The honest reading is that the paper's single-task point is not an average task: which tasks a user runs matters as much as how many, and the paper does not say how its forty are ordered (<a class="lnk" href="parts/p05-composition.html#multitask">Part 05</a>). A benchmark of your own should randomise task order or report the spread.</p>
+  <p><b>A leak-prone minority explains the ceiling.</b> Lower <i>f</i> and the curve flattens toward <i>f</i>: no matter how many tasks run, facts that never leak never leak. The Table 1 ticks on the right edge are eight models' Violation@5 over a full task set. Under this model each tick is a lower bound on that model's <i>f</i>: at least that share of a user's at-risk facts are the kind that leaks. Qwen-3 32B's 69.14% means more than two thirds of a user's facts leaked at least once in five draws over about 46 tasks. The paper does not estimate <i>f</i>; the dial is a way to think about what the number implies.</p>
+
+  <h2 id="memory-dial">The other dial: more memory</h2>
+  <p>Figure 2 varies tasks with memory fixed. <a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.F5" target="_blank" rel="noopener">Figure 5</a> does the reverse on five profiles: the facts a task needs stay in memory and inappropriate ones are added from zero. Violations rise while completeness stays flat. The paper prints the trend, not the values, so the panel below is the shape only, driven by the model above.</p>
+  <section class="cx cx-mem" aria-label="Memory dial">
+    <label class="cx-s"><span class="cx-k">Inappropriate facts in memory <em>m</em></span><input type="range" id="m" min="0" max="140" value="84" aria-describedby="m-v"><span class="cx-v mono" id="m-v"></span><span class="cx-h">Table 2: 83.7 &plusmn; 31.5 not-to-share facts per context. The needed facts are held fixed, as in Figure 5.</span></label>
+    <svg id="mchart" class="dg" viewBox="0 0 400 150" role="img" aria-labelledby="mchart-t"><title id="mchart-t">Expected number of leaked facts rising linearly with inappropriate facts in memory while completeness stays flat; the shape of Figure 5, not its values</title></svg>
+    <p class="cx-read mono" id="mreadout" aria-live="polite"></p>
+  </section>
+  <p>The flat line is the part to notice. Extra inappropriate facts buy nothing for the task, so completeness does not move, while each one is another draw against <i>p</i>. An assistant whose memory grows for months is walking up the x-axis of this panel. <a class="lnk" href="parts/p09-builders.html#growth">For builders, lesson 5</a> draws the conclusion: scope what memory a task can see.</p>
+
+  <div class="callout">The model on this page is a reading aid with four knobs; the paper's data are the three Figure 2 points, the Figure 5 trend and the Table 1 column. For the arithmetic as the paper states it, see <a class="lnk" href="parts/p04-measuring.html#arithmetic">Part 04</a>; for the measured curves, <a class="lnk" href="parts/p05-composition.html">Part 05</a>; for how this maps onto the CAPS report's "leakage that accumulates" problem, the <a class="lnk" href="bridge.html">bridge page</a>. Back to the <a class="lnk" href="index.html#benchmark">map</a>.</div>
+</main>
+<footer>An explorable for the CIMemories field map (arXiv:2511.14937, ICLR 2026). The model curves are the map's; the Figure 2 points and Table 1 values are the paper's. Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.</footer>
+<script>
+(function(){
+var $ = function(id){ return document.getElementById(id); };
+var FIG2 = [{k:1,t:1,v:0.001,l:'0.1%'},{k:40,t:1,v:0.096,l:'9.6%'},{k:40,t:5,v:0.251,l:'25.1%'}];
+var T1 = [['GPT-4o',14.82],['GPT-5',25.08],['o3',38.51],['Llama-3.3 70B',44.43],['Claude-4 Sonnet',44.44],['Gemini 2.5 Flash',46.35],['Mistral-7B',56.94],['Qwen-3 32B',69.14]];
+var KMAX = 50, W = 400, H = 300, L = 46, R = 70, TOP = 18, BOT = 40;
+var S = {p:46, e:30, k:40, t:5, f:100};
+// p slider is logarithmic: 0 -> 0.0002, 100 -> 0.2
+function pOf(s){ return Math.exp(Math.log(0.0002) + (Math.log(0.2) - Math.log(0.0002)) * s / 100); }
+function V(K, T){
+  var p = pOf(S.p), e = S.e / 100, f = S.f / 100;
+  var ph = Math.min(1, p / f);                       // keep the mean per-exposure rate, concentrate it in f
+  return f * (1 - Math.pow(1 - ph, e * K * T));
+}
+function pct(v, d){ return (100 * v).toFixed(d == null ? 1 : d) + '%'; }
+function x(k){ return L + (W - L - R) * (k - 1) / (KMAX - 1); }
+function y(v){ var ymax = 0.8; return TOP + (H - TOP - BOT) * (1 - Math.min(v, ymax) / ymax); }
+
+var EXPERIMENTS = [
+ {label:'Every fact alike: can it hit 0.1% and 9.6%?', set:{p:46, e:30, k:40, t:1, f:100}},
+ {label:'Five samples instead of one', set:{t:5}},
+ {label:'A leak-prone third of the facts', set:{f:33}},
+ {label:'A product that regenerates freely (T=5, K=50)', set:{k:50, t:5}},
+ {label:'Minimize: expose facts in fewer tasks', set:{e:8}}
+];
+
+function draw(){
+  var h = '', i, k, T;
+  // grid
+  for (i = 0; i <= 8; i += 2){ var yy = y(i / 10); h += '<line class="grid" x1="' + L + '" y1="' + yy + '" x2="' + (W - R) + '" y2="' + yy + '"/><text x="' + (L - 6) + '" y="' + (yy + 3.5) + '" class="t-dim" font-size="10" text-anchor="end">' + (i * 10) + '%</text>'; }
+  [1, 10, 20, 30, 40, 50].forEach(function(k){ h += '<text x="' + x(k) + '" y="' + (H - BOT + 16) + '" class="t-dim" font-size="10" text-anchor="middle">' + k + '</text>'; });
+  h += '<rect x="' + L + '" y="' + TOP + '" width="' + (W - L - R) + '" height="' + (H - TOP - BOT) + '" fill="none" stroke="var(--line)"/>';
+  h += '<text x="' + ((L + W - R) / 2) + '" y="' + (H - 6) + '" class="t-dim" font-size="11" text-anchor="middle">tasks K →</text>';
+  h += '<text x="12" y="' + ((TOP + H - BOT) / 2) + '" class="t-dim" font-size="11" text-anchor="middle" transform="rotate(-90 12 ' + ((TOP + H - BOT) / 2) + ')">Violation@T ↑</text>';
+  // model curves for T = 1..5
+  for (T = 1; T <= 5; T++){
+    var pts = [];
+    for (k = 1; k <= KMAX; k++) pts.push(x(k).toFixed(1) + ',' + y(V(k, T)).toFixed(1));
+    var hot = T === S.t;
+    h += '<polyline fill="none" points="' + pts.join(' ') + '" stroke="' + (hot ? 'var(--off)' : 'var(--ink-dim)') + '" stroke-width="' + (hot ? 2.2 : 1) + '" opacity="' + (hot ? 1 : .55) + '"/>';
+    h += '<text x="' + (W - R + 4) + '" y="' + (y(V(KMAX, T)) + 3.5) + '" class="' + (hot ? 't-off' : 't-dim') + '" font-size="9.5">T=' + T + '</text>';
+  }
+  // Table 1 rug at the right edge (Violation@5 over the full task set)
+  T1.forEach(function(m){ var yy = y(m[1] / 100); h += '<line x1="' + (W - R - 8) + '" y1="' + yy + '" x2="' + (W - R) + '" y2="' + yy + '" stroke="var(--def)" stroke-width="1.5"/>'; });
+  h += '<text x="' + (W - R - 10) + '" y="' + (y(0.69) - 6) + '" class="t-def" font-size="9" text-anchor="end">Table 1, Violation@5 (8 models)</text>';
+  // Fig 2 measured points
+  FIG2.forEach(function(d){ var cx = x(d.k), cy = y(d.v); h += '<circle cx="' + cx + '" cy="' + cy + '" r="5" fill="var(--crit)" stroke="var(--bg)" stroke-width="1.5"/><text x="' + (cx + 8) + '" y="' + (cy - 6) + '" class="t-crit" font-size="10" font-weight="600">' + d.l + ' <tspan class="t-dim" font-weight="400">K=' + d.k + ', T=' + d.t + '</tspan></text>'; });
+  // current point
+  var cv = V(S.k, S.t);
+  h += '<line x1="' + x(S.k) + '" y1="' + TOP + '" x2="' + x(S.k) + '" y2="' + (H - BOT) + '" stroke="var(--off)" stroke-dasharray="3 3" opacity=".6"/>';
+  h += '<circle cx="' + x(S.k) + '" cy="' + y(cv) + '" r="5.5" fill="var(--off)" stroke="var(--bg)" stroke-width="1.5"/>';
+  $('chart').innerHTML = '<title id="chart-t">Violation@T against number of tasks K, model curves for T = 1 to 5, with the paper\'s three Figure 2 points and the Table 1 Violation@5 values of eight models as ticks</title>' + h;
+
+  var fit = FIG2.map(function(d){ return d.l + ' measured vs ' + pct(V(d.k, d.t)) + ' modelled'; }).join(' · ');
+  $('readout').textContent = 'Model: ' + pct(cv) + ' of at-risk facts leak at least once after ' + S.k + ' task' + (S.k > 1 ? 's' : '') + ' × ' + S.t + ' sample' + (S.t > 1 ? 's' : '') + '. Figure 2: ' + fit + '.';
+  $('p-v').textContent = pOf(S.p) < 0.001 ? (100 * pOf(S.p)).toFixed(2) + '%' : pct(pOf(S.p), pOf(S.p) < 0.01 ? 2 : 1);
+  $('e-v').textContent = S.e + '% of tasks';
+  $('k-v').textContent = S.k + ' task' + (S.k > 1 ? 's' : '');
+  $('t-v').textContent = S.t + ' sample' + (S.t > 1 ? 's' : '');
+  $('f-v').textContent = S.f + '% of facts';
+  var e = S.e / 100, f = S.f / 100, p = pOf(S.p);
+  $('formula').textContent = 'Violation@T(K) = f · [1 − (1 − p/f)^(e·K·T)]  =  ' + f.toFixed(2) + ' · [1 − (1 − ' + (Math.min(1, p / f)).toFixed(4) + ')^(' + e.toFixed(2) + '·' + S.k + '·' + S.t + ')]  =  ' + pct(cv, 2);
+  drawMem();
+}
+
+function drawMem(){
+  var m = +$('m').value, cv = V(S.k, S.t), leaked = m * cv;
+  var MW = 400, MH = 150, ML = 46, MR = 16, MT = 14, MB = 34, mmax = 140;
+  function mx(v){ return ML + (MW - ML - MR) * v / mmax; }
+  var ymaxL = mmax * 0.8, lineY = function(v){ return MT + (MH - MT - MB) * (1 - v / ymaxL); };
+  var h = '<rect x="' + ML + '" y="' + MT + '" width="' + (MW - ML - MR) + '" height="' + (MH - MT - MB) + '" fill="none" stroke="var(--line)"/>';
+  // leaked-facts line (grows with m), drawn up to the chosen m
+  var pts = []; for (var v = 0; v <= m; v += 2) pts.push(mx(v).toFixed(1) + ',' + lineY(v * cv).toFixed(1));
+  if (m % 2) pts.push(mx(m).toFixed(1) + ',' + lineY(m * cv).toFixed(1));
+  h += '<polyline fill="none" points="' + pts.join(' ') + '" stroke="var(--crit)" stroke-width="2.2"/>';
+  h += '<circle cx="' + mx(m) + '" cy="' + lineY(leaked) + '" r="5" fill="var(--crit)" stroke="var(--bg)" stroke-width="1.5"/>';
+  h += '<text x="' + Math.min(mx(m) + 8, MW - MR - 70) + '" y="' + (lineY(leaked) - 8) + '" class="t-crit" font-size="10.5" font-weight="600">leaked facts ↑</text>';
+  // completeness: flat (no values printed in Fig 5)
+  var cy = MT + (MH - MT - MB) * 0.45;
+  h += '<line x1="' + ML + '" y1="' + cy + '" x2="' + (MW - MR) + '" y2="' + cy + '" stroke="#5BD68A" stroke-width="2" stroke-dasharray="6 4"/>';
+  h += '<text x="' + (MW - MR - 4) + '" y="' + (cy - 7) + '" class="t-ok" font-size="10.5" text-anchor="end">completeness: flat (needed facts held fixed)</text>';
+  [0, 35, 70, 105, 140].forEach(function(v){ h += '<text x="' + mx(v) + '" y="' + (MH - MB + 15) + '" class="t-dim" font-size="10" text-anchor="middle">' + v + '</text>'; });
+  h += '<text x="' + ((ML + MW - MR) / 2) + '" y="' + (MH - 4) + '" class="t-dim" font-size="10.5" text-anchor="middle">inappropriate facts in memory m →</text>';
+  h += '<text x="12" y="' + ((MT + MH - MB) / 2) + '" class="t-dim" font-size="10.5" text-anchor="middle" transform="rotate(-90 12 ' + ((MT + MH - MB) / 2) + ')">shape only</text>';
+  $('mchart').innerHTML = '<title id="mchart-t">Expected number of leaked facts rising linearly with inappropriate facts in memory while completeness stays flat; the shape of Figure 5, not its values</title>' + h;
+  $('m-v').textContent = m + ' fact' + (m === 1 ? '' : 's');
+  $('mreadout').textContent = 'With ' + m + ' inappropriate facts in memory and the model above (' + pct(cv) + ' per fact over ' + S.k + ' × ' + S.t + '), about ' + leaked.toFixed(1) + ' facts leak at least once. Needed facts, and so completeness, are unchanged.';
+}
+
+['p', 'e', 'k', 't', 'f'].forEach(function(id){ $(id).addEventListener('input', function(){ S[id] = +$(id).value; draw(); }); });
+$('m').addEventListener('input', drawMem);
+$('try').innerHTML = '<span class="fx-try-k">Try</span>' + EXPERIMENTS.map(function(e, i){ return '<button type="button" data-i="' + i + '">' + e.label + '</button>'; }).join('');
+$('try').querySelectorAll('button').forEach(function(b){ b.addEventListener('click', function(){
+  var e = EXPERIMENTS[+b.dataset.i];
+  Object.keys(e.set).forEach(function(k){ S[k] = e.set[k]; $(k).value = e.set[k]; });
+  draw();
+}); });
+draw();
+})();
+</script>
+</body>
+</html>
