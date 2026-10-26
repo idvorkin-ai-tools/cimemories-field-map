@@ -7,6 +7,7 @@ Live: https://idvorkin-ai-tools.github.io/cimemories-field-map/
 - `index.html` — the spine: four arcs, nine part pages
 - `parts/` — one page per major section of the paper
 - `glossary.html`, `ten-minutes.html` — terms, and the whole paper on one page
+- `flow-explorer.html` — explorable: one information flow, its five parameters as controls, the deciding norm highlighted
 - `paper.css` — shared dark theme
 
 Original explanation written against arXiv v1; numbers are quoted from the paper with their table or figure. The paper is © its authors. Code and data: [facebookresearch/CIMemories](https://github.com/facebookresearch/CIMemories).

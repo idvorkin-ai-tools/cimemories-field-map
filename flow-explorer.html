@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Flow explorer — CIMemories, mapped</title>
+<meta name="description" content="An explorable model of contextual integrity: one information flow, its five parameters as controls, and the context norm that decides whether it is appropriate. Then the same memory under CIMemories tasks." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <div class="brand"><span class="dot"></span>CIMEMORIES&nbsp;//&nbsp;FIELD&nbsp;MAP</div>
+  <a class="back" href="index.html#idea">&larr; field map</a>
+</div></header>
+<main>
+  <div class="eyebrow"><span class="box wb mono">EXPLORABLE &middot; THE MODEL</span><span class="mono">one flow &middot; five parameters &middot; one deciding norm</span></div>
+  <h1>Flow explorer</h1>
+  <div class="authors">Change one parameter of an information flow and watch which norm decides it.</div>
+
+  <p class="lead">Contextual integrity says a flow of information is appropriate when it matches the norms of the context it happens in. Whether the information is secret has nothing to do with it. Below is one flow about Rosa, a fictional veterinary technician. Pick a context, then change one parameter at a time. The verdict is recomputed, and the norm that decided it is highlighted.</p>
+
+  <div class="fx-try" id="try" aria-label="Experiments to try"></div>
+
+  <section class="fx-model" aria-label="The flow and its controls">
+    <fieldset class="fx-ctl fx-ctx"><legend><a class="lnk" href="glossary.html#context">Context</a> <span>the social setting, which brings its norms</span></legend><div class="fx-chips" id="c-ctx"></div></fieldset>
+
+    <div class="fx-diagram" id="diagram" aria-hidden="true">
+      <div class="fx-frame-k" id="d-ctx"></div>
+      <div class="fx-row">
+        <div class="fx-node" data-p="sender"><b>Sender</b><span id="d-sender"></span></div>
+        <div class="fx-arrow"><span></span></div>
+        <div class="fx-msg" data-p="info"><b id="d-info"></b><span>about <em id="d-subject" data-p="subject"></em></span><span class="fx-tp" data-p="tp">under: <em id="d-tp"></em></span></div>
+        <div class="fx-arrow"><span></span></div>
+        <div class="fx-node" data-p="recipient"><b>Recipient</b><span id="d-recipient"></span></div>
+      </div>
+    </div>
+
+    <div class="fx-verdict" id="verdict" aria-live="polite"></div>
+
+    <div class="fx-ctls">
+      <fieldset class="fx-ctl" data-p="sender"><legend><a class="lnk" href="parts/p01-contextual-integrity.html#flows">Sender</a> <span>who passes it on</span></legend><div class="fx-chips" id="c-sender"></div></fieldset>
+      <fieldset class="fx-ctl" data-p="recipient"><legend><a class="lnk" href="glossary.html#recipient">Recipient</a> <span>who gets it</span></legend><div class="fx-chips" id="c-recipient"></div></fieldset>
+      <fieldset class="fx-ctl" data-p="subject"><legend><a class="lnk" href="parts/p01-contextual-integrity.html#flows">Subject</a> <span>whom it is about</span></legend><div class="fx-chips" id="c-subject"></div></fieldset>
+      <fieldset class="fx-ctl" data-p="info"><legend><a class="lnk" href="glossary.html#information-domain">Information type</a> <span>what kind of fact</span></legend><div class="fx-chips" id="c-info"></div></fieldset>
+      <fieldset class="fx-ctl" data-p="tp"><legend><a class="lnk" href="parts/p01-contextual-integrity.html#flows">Transmission principle</a> <span>the terms it travels under</span></legend><div class="fx-chips" id="c-tp"></div></fieldset>
+    </div>
+
+    <div class="fx-secrecy" id="secrecy"></div>
+
+    <h2 id="norms-h"><a class="lnk" href="glossary.html#norm">Norms</a> of <span id="norms-ctx"></span></h2>
+    <p class="fx-note">Read top to bottom; the first norm that matches the flow decides it. If none matches, nothing in this context sanctions the flow, and under contextual integrity that makes it a violation.</p>
+    <ol class="fx-norms" id="norms"></ol>
+  </section>
+
+  <h2 id="cimemories">How CIMemories uses this</h2>
+  <p>In <a class="lnk" href="parts/p03-dataset.html">CIMemories</a> three of the five parameters are fixed. The <b>sender</b> is always the assistant writing for the user, the <b>subject</b> is always the user, and the <b>information type</b> is one remembered <a class="lnk" href="glossary.html#attribute">attribute</a>. Only the <a class="lnk" href="glossary.html#task">task</a> varies, and it brings the recipient and the purpose, which stands in for the transmission principle. So every (attribute, task) pair gets its own <a class="lnk" href="glossary.html#ci-label">label</a>. Pick a memory and a task:</p>
+
+  <div class="fx-cim">
+    <fieldset class="fx-ctl"><legend>Remembered attribute</legend><div class="fx-chips" id="m-mem"></div></fieldset>
+    <fieldset class="fx-ctl"><legend>Task, which sets recipient and purpose</legend><div class="fx-chips" id="m-task"></div></fieldset>
+    <div class="fx-cim-out" id="m-out" aria-live="polite"></div>
+    <div class="scroll"><table class="kv fx-grid" id="m-grid"></table></div>
+  </div>
+  <p>The table is the paper's idea in small: no row is all green or all red, so no fixed "private" label works for any memory. CIMemories scores a model on both sides of it. Revealing a red cell counts toward <a class="lnk" href="glossary.html#violation-at-n">Violation@n</a>, and leaving out a green cell costs <a class="lnk" href="glossary.html#completeness">completeness</a>. With about 147 attributes and 45 tasks per person, a model has to get thousands of these cells right, and the paper finds every model tested gets many wrong (<a class="lnk" href="parts/p06-results.html">Part 06</a>).</p>
+
+  <div class="callout">Labels and norms on this page are the map's illustration, not the paper's data; Rosa and everyone around her are made up. More: <a class="lnk" href="parts/p01-contextual-integrity.html">contextual integrity</a>, <a class="lnk" href="parts/p04-measuring.html">how the paper scores leaks</a>, <a class="lnk" href="parts/p09-builders.html#granularity">filter facts, not topics</a>. Back to the <a class="lnk" href="index.html#idea">map</a>.</div>
+</main>
+<footer>An explorable for the CIMemories field map (arXiv:2511.14937v1). All people and facts are fictional; norms and labels are the map's illustration. Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.</footer>
+<script>
+(function(){
+var P = {
+  ctx: {care:'Healthcare: a clinic visit', work:'Employment: Rosa’s job', home:'Housing: renting her apartment'},
+  sender: {asst:'Rosa’s assistant', rosa:'Rosa herself', doc:'Rosa’s doctor', mgr:'Rosa’s manager'},
+  recipient: {doc:'her doctor', mgr:'her manager', lord:'her landlord', stranger:'a stranger online', broker:'a data broker'},
+  subject: {rosa:'Rosa', june:'June, her sister'},
+  info: {dx:'Diagnosis and medication', income:'Monthly income', addr:'Home address', photo:'Photo from her public profile', sched:'Work schedule'},
+  tp: {req:'at the subject’s request, for this purpose', conf:'in confidence', vol:'volunteered, unasked', sold:'sold for money'}
+};
+var PUBLIC = {addr:'public: it is in public records', photo:'public: anyone can see her profile', dx:'private', income:'private', sched:'private'};
+var NAME = {sender:'sender', recipient:'recipient', subject:'subject', info:'information type', tp:'transmission principle', ctx:'context'};
+var OUTSIDERS = ['stranger','broker'];
+function inn(v, a){ return a.indexOf(v) >= 0; }
+
+// Shared norms appear in every context. keys = the parameters the norm tests.
+var SOLD = {ok:false, keys:['tp'], t:'Nothing learned in this setting is sold.', f:function(x){ return x.tp === 'sold'; }};
+var JUNE = {ok:false, keys:['subject','tp'], t:'June is not a party here: information about her moves on her say, not Rosa’s.', f:function(x){ return x.subject === 'june' && x.tp !== 'req'; }};
+var JUNE_ASKED = {ok:true, keys:['subject','tp'], t:'June asked for it to be passed on, and it is her information to send.', f:function(x){ return x.subject === 'june' && x.tp === 'req'; }};
+var SELF = {ok:true, keys:['sender','subject'], t:'Rosa sharing facts about herself is her own choice; these norms bind the people who hold her information.', f:function(x){ return x.sender === 'rosa' && x.subject === 'rosa'; }};
+var OUT = {ok:false, keys:['recipient'], t:'Nothing from this setting goes to strangers or data brokers, public or not.', f:function(x){ return inn(x.recipient, OUTSIDERS); }};
+
+var NORMS = {
+ care: [SOLD, JUNE, JUNE_ASKED, SELF,
+  {ok:false, keys:['sender','recipient'], t:'What a clinician learns in care stays in care: onward only to other clinicians.', f:function(x){ return x.sender === 'doc' && x.recipient !== 'doc'; }},
+  {ok:false, keys:['recipient','info'], t:'Health information does not leave care for an employer, a landlord or outsiders.', f:function(x){ return x.info === 'dx' && x.recipient !== 'doc'; }},
+  OUT,
+  {ok:true, keys:['recipient','info'], t:'A patient, or someone acting for her, tells the clinic what treatment and its records need.', f:function(x){ return x.recipient === 'doc' && inn(x.info, ['dx','addr']); }}
+ ],
+ work: [SOLD, JUNE, JUNE_ASKED, SELF, OUT,
+  {ok:true, keys:['recipient','info','tp'], t:'An employee may choose to tell her employer about a condition, for example to ask for an accommodation.', f:function(x){ return x.info === 'dx' && x.recipient === 'mgr' && x.tp === 'req'; }},
+  {ok:false, keys:['info'], t:'At work, health information moves only when the employee chooses.', f:function(x){ return x.info === 'dx'; }},
+  {ok:true, keys:['sender','recipient','info','tp'], t:'An employer confirms pay to a landlord when the employee asks (employment verification).', f:function(x){ return x.sender === 'mgr' && x.recipient === 'lord' && x.info === 'income' && x.tp === 'req'; }},
+  {ok:false, keys:['sender','recipient'], t:'An employer keeps personnel records to itself.', f:function(x){ return x.sender === 'mgr' && x.recipient !== 'mgr'; }},
+  {ok:true, keys:['recipient','info'], t:'Employee and employer exchange pay, contact details and schedules as part of the job.', f:function(x){ return x.recipient === 'mgr' && inn(x.info, ['income','addr','sched']); }}
+ ],
+ home: [SOLD, JUNE, JUNE_ASKED, SELF, OUT,
+  {ok:false, keys:['recipient','info'], t:'A landlord has no claim on a tenant’s health.', f:function(x){ return x.info === 'dx'; }},
+  {ok:true, keys:['recipient','info','tp'], t:'A tenant gives the landlord income for screening and contact details, when asked.', f:function(x){ return x.recipient === 'lord' && inn(x.info, ['income','addr']) && x.tp !== 'vol'; }}
+ ]
+};
+var FALLBACK = {ok:false, keys:[], t:'No norm of this context sanctions this flow.'};
+
+var EXPERIMENTS = [
+ {label:'Start: a private diagnosis, to her doctor', set:{ctx:'care', sender:'asst', recipient:'doc', subject:'rosa', info:'dx', tp:'req'}},
+ {label:'Change only the recipient to her manager', set:{recipient:'mgr'}},
+ {label:'A public address, to a stranger', set:{ctx:'home', sender:'asst', recipient:'stranger', subject:'rosa', info:'addr', tp:'req'}},
+ {label:'Same address, to her landlord', set:{ctx:'home', sender:'asst', recipient:'lord', subject:'rosa', info:'addr', tp:'req'}},
+ {label:'Diagnosis to her manager, then flip the principle', set:{ctx:'work', sender:'asst', recipient:'mgr', subject:'rosa', info:'dx', tp:'vol'}},
+ {label:'Make it June’s information', set:{subject:'june'}}
+];
+
+var x = {ctx:'care', sender:'asst', recipient:'doc', subject:'rosa', info:'dx', tp:'req'};
+var prev = null, lastChange = null;
+var $ = function(id){ return document.getElementById(id); };
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+function decide(){
+  var list = NORMS[x.ctx];
+  for (var i = 0; i < list.length; i++) if (list[i].f(x)) return {i:i, n:list[i]};
+  return {i:-1, n:FALLBACK};
+}
+
+function chips(id, group, opts, onPick){
+  $(id).innerHTML = Object.keys(opts).map(function(k){
+    return '<label><input type="radio" name="' + group + '" value="' + k + '"><span>' + esc(opts[k]) + '</span></label>';
+  }).join('');
+  $(id).querySelectorAll('input').forEach(function(inp){ inp.addEventListener('change', function(){ onPick(inp.value); }); });
+}
+function syncChips(){
+  Object.keys(NAME).forEach(function(p){
+    document.querySelectorAll('input[name="' + p + '"]').forEach(function(inp){ inp.checked = inp.value === x[p]; });
+  });
+}
+
+function render(){
+  var d = decide(), ok = d.n.ok;
+  $('d-ctx').textContent = 'context: ' + P.ctx[x.ctx];
+  $('d-sender').textContent = P.sender[x.sender];
+  $('d-recipient').textContent = P.recipient[x.recipient];
+  $('d-info').textContent = P.info[x.info];
+  $('d-subject').textContent = P.subject[x.subject];
+  $('d-tp').textContent = P.tp[x.tp];
+  $('diagram').className = 'fx-diagram ' + (ok ? 'is-ok' : 'is-bad');
+  // highlight the parameters the deciding norm tests, in the diagram and on the controls
+  document.querySelectorAll('[data-p]').forEach(function(el){ el.classList.toggle('fx-key', inn(el.dataset.p, d.n.keys)); });
+
+  var flip = '';
+  if (prev && lastChange){
+    var changed = lastChange.length === 1 ? 'You changed the ' + NAME[lastChange[0]] : 'You changed ' + lastChange.map(function(p){ return 'the ' + NAME[p]; }).join(', ');
+    if (prev.ok !== ok) flip = '<div class="fx-flip">' + esc(changed) + '. The verdict flipped from ' + (prev.ok ? 'appropriate to violation' : 'violation to appropriate') + '.</div>';
+    else if (prev.t !== d.n.t) flip = '<div class="fx-flip same">' + esc(changed) + '. Same verdict, but a different norm decides it now.</div>';
+    else flip = '<div class="fx-flip same">' + esc(changed) + '. Nothing moved: the deciding norm does not test that parameter.</div>';
+  }
+  $('verdict').className = 'fx-verdict ' + (ok ? 'ok' : 'bad');
+  $('verdict').innerHTML = '<div class="fx-v">' + (ok ? 'Appropriate flow' : 'Violation') + '</div>' +
+    '<div class="fx-why">Decided by ' + (d.i >= 0 ? 'norm ' + (d.i + 1) : 'the default') + ': ' + esc(d.n.t) +
+    (d.n.keys.length ? ' <span class="fx-tests">It tests: ' + d.n.keys.map(function(k){ return NAME[k]; }).join(', ') + '.</span>' : '') + '</div>' + flip;
+
+  var pub = PUBLIC[x.info], isPub = pub.indexOf('public') === 0;
+  var agree = isPub === ok;
+  $('secrecy').className = 'fx-secrecy ' + (agree ? 'agree' : 'disagree');
+  $('secrecy').innerHTML = '<div><b>A secrecy rule</b> ("public is fine to share, private is not") sees: ' + esc(pub) + ', so it says <em>' + (isPub ? 'share' : 'withhold') + '</em>.</div>' +
+    '<div><b>Contextual integrity</b> says <em>' + (ok ? 'appropriate' : 'violation') + '</em>.</div>' +
+    '<div class="fx-agree">' + (agree ? 'They agree here, by coincidence. Change the recipient or the context and watch them split.' : 'They disagree. Whether a fact is secret does not decide the flow; the context’s norm does.') + '</div>';
+
+  $('norms-ctx').textContent = P.ctx[x.ctx].split(':')[0].toLowerCase();
+  $('norms').innerHTML = NORMS[x.ctx].map(function(n, i){
+    return '<li class="' + (n.ok ? 'allow' : 'forbid') + (i === d.i ? ' hit' : '') + '"><span class="fx-k">' + (n.ok ? 'allows' : 'forbids') + '</span> ' + esc(n.t) +
+      ' <span class="fx-tests">tests ' + n.keys.map(function(k){ return NAME[k]; }).join(', ') + '</span></li>';
+  }).join('') + '<li class="forbid fallback' + (d.i < 0 ? ' hit' : '') + '"><span class="fx-k">default</span> ' + esc(FALLBACK.t) + '</li>';
+  prev = {ok:ok, t:d.n.t};
+}
+
+function set(changes){
+  var changed = Object.keys(changes).filter(function(k){ return x[k] !== changes[k]; });
+  Object.keys(changes).forEach(function(k){ x[k] = changes[k]; });
+  lastChange = changed.length ? changed : null;
+  if (!lastChange) prev = null;
+  syncChips(); render();
+}
+
+['ctx','sender','recipient','subject','info','tp'].forEach(function(p){
+  chips('c-' + p, p, P[p], function(v){ var c = {}; c[p] = v; set(c); });
+});
+$('try').innerHTML = '<span class="fx-try-k">Try</span>' + EXPERIMENTS.map(function(e, i){ return '<button type="button" data-i="' + i + '">' + esc(e.label) + '</button>'; }).join('');
+$('try').querySelectorAll('button').forEach(function(b){ b.addEventListener('click', function(){
+  var e = EXPERIMENTS[+b.dataset.i];
+  if (e.set.ctx){ Object.keys(e.set).forEach(function(k){ x[k] = e.set[k]; }); prev = null; lastChange = null; syncChips(); render(); }
+  else set(e.set);
+}); });
+syncChips(); render();
+
+// ---------- CIMemories: same memory, different task ----------
+var MEMS = {
+  income:{t:'Takes home about $3,400 a month', type:'finance'},
+  dx:{t:'Takes a daily stimulant for ADHD', type:'health'},
+  addr:{t:'Lives at 14 Saguaro Lane, Apt 3', type:'contact'}
+};
+var TASKS = {
+  rental:{t:'Rental application', rec:'a leasing office', why:'screening a tenant'},
+  intake:{t:'Urgent-care intake form', rec:'an intake nurse', why:'treating a cut hand'},
+  chat:{t:'Reply to a coworker', rec:'a coworker', why:'explaining an absence'},
+  gift:{t:'Order a birthday gift for a friend', rec:'an online shop', why:'shipping a present to the friend'}
+};
+// necessary (true) or inappropriate (false) per memory x task, with the reason
+var LAB = {
+  income:{rental:[true,'Applications check that the rent is affordable.'], intake:[false,'Billing goes through insurance; income has no bearing on treatment.'], chat:[false,'An absence has nothing to do with pay.'], gift:[false,'A shop needs payment, not her salary.']},
+  dx:{rental:[false,'A landlord has no claim on a tenant’s health.'], intake:[true,'Clinicians ask about current medication because of drug interactions.'], chat:[false,'Telling colleagues about a condition is Rosa’s call.'], gift:[false,'Nothing about a gift needs it.']},
+  addr:{rental:[true,'The application asks for her current address.'], intake:[true,'The clinic records contact details.'], chat:[false,'Not what the coworker asked, and not the assistant’s to hand out.'], gift:[false,'The gift ships to the friend; Rosa’s home address is not needed.']}
+};
+var m = {mem:'income', task:'rental'};
+function mrender(){
+  var l = LAB[m.mem][m.task], T = TASKS[m.task];
+  $('m-out').className = 'fx-cim-out ' + (l[0] ? 'ok' : 'bad');
+  $('m-out').innerHTML = '<div class="fx-v">' + (l[0] ? 'Necessary: share it' : 'Inappropriate: a reveal is a violation') + '</div>' +
+    '<dl class="fx-five"><div><dt>Sender</dt><dd>the assistant, for Rosa</dd></div><div><dt>Subject</dt><dd>Rosa</dd></div><div><dt>Information type</dt><dd>' + esc(MEMS[m.mem].type) + '</dd></div>' +
+    '<div class="var"><dt>Recipient</dt><dd>' + esc(T.rec) + '</dd></div><div class="var"><dt>Principle (from the task)</dt><dd>' + esc(T.why) + '</dd></div></dl>' +
+    '<p>' + esc(l[1]) + '</p>';
+  var keys = Object.keys(TASKS);
+  $('m-grid').innerHTML = '<thead><tr><th>Memory</th>' + keys.map(function(k){ return '<th>' + esc(TASKS[k].t) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    Object.keys(MEMS).map(function(mk){ return '<tr><td>' + esc(MEMS[mk].t) + '</td>' + keys.map(function(tk){
+      var v = LAB[mk][tk][0], sel = mk === m.mem && tk === m.task;
+      return '<td class="' + (sel ? 'sel' : '') + '"><span class="' + (v ? 'ok' : 'bad') + '">' + (v ? 'share' : 'withhold') + '</span></td>'; }).join('') + '</tr>'; }).join('') + '</tbody>';
+}
+var memOpts = {}, taskOpts = {};
+Object.keys(MEMS).forEach(function(k){ memOpts[k] = MEMS[k].t; });
+Object.keys(TASKS).forEach(function(k){ taskOpts[k] = TASKS[k].t; });
+chips('m-mem', 'mmem', memOpts, function(v){ m.mem = v; mrender(); });
+chips('m-task', 'mtask', taskOpts, function(v){ m.task = v; mrender(); });
+document.querySelector('input[name="mmem"][value="income"]').checked = true;
+document.querySelector('input[name="mtask"][value="rental"]').checked = true;
+mrender();
+})();
+</script>
+</body>
+</html>
