@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Flow explorer — CIMemories, mapped</title>
-<meta name="description" content="An explorable model of contextual integrity: one information flow, its five parameters as controls, and the context norm that decides whether it is appropriate. Then the same memory under CIMemories tasks." />
+<meta name="description" content="An explorable model of contextual integrity: one information flow, its five parameters as controls, and the context norm that decides whether it is appropriate. Then label real facts and tasks from the CIMemories release yourself." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -51,24 +51,28 @@
     <div class="fx-secrecy" id="secrecy"></div>
 
     <h2 id="norms-h"><a class="lnk" href="glossary.html#norm">Norms</a> of <span id="norms-ctx"></span></h2>
-    <p class="fx-note">Read top to bottom; the first norm that matches the flow decides it. If none matches, nothing in this context sanctions the flow, and under contextual integrity that makes it a violation.</p>
+    <p class="fx-note">Read top to bottom; the first norm that matches the flow decides it. If none matches, nothing in this context sanctions the flow, and under contextual integrity that makes it a violation. This list is the piece nobody has for real contexts: a repository of norms an agent could look up is itself an open problem in the CAPS report (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/policy-engines.html#op-6-3" target="_blank" rel="noopener">OP 6.3</a>, <a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/governance.html#op-12-2" target="_blank" rel="noopener">OP 12.2</a>); here the map wrote twelve by hand for three contexts.</p>
     <ol class="fx-norms" id="norms"></ol>
   </section>
 
   <h2 id="cimemories">How CIMemories uses this</h2>
-  <p>In <a class="lnk" href="parts/p03-dataset.html">CIMemories</a> three of the five parameters are fixed. The <b>sender</b> is always the assistant writing for the user, the <b>subject</b> is always the user, and the <b>information type</b> is one remembered <a class="lnk" href="glossary.html#attribute">attribute</a>. Only the <a class="lnk" href="glossary.html#task">task</a> varies, and it brings the recipient and the purpose, which stands in for the transmission principle. So every (attribute, task) pair gets its own <a class="lnk" href="glossary.html#ci-label">label</a>. Pick a memory and a task:</p>
+  <p>In <a class="lnk" href="parts/p03-dataset.html">CIMemories</a> four of the five parameters are fixed. The <b>sender</b> is always the assistant writing for the user, the <b>subject</b> is always the user, the <b>information type</b> is one remembered <a class="lnk" href="glossary.html#attribute">attribute</a>, and the <b>transmission principle</b> is the same for every flow: the message shares what the task needs, at the user's request. Only the <a class="lnk" href="glossary.html#task">task</a> varies, and it brings the recipient and the purpose. That is where the explorer above and the benchmark part ways: the principle chips you can flip up there (in confidence, volunteered, sold) are the theory's, and the benchmark never varies them, which is why the CAPS report's survey of benchmarks codes its transmission principles as "Simple" (<a class="lnk" href="bridge.html#appendix-d">bridge page</a>). So every (attribute, task) pair gets its own <a class="lnk" href="glossary.html#ci-label">label</a>, and the label is a norm judgment made once, outside the model.</p>
+  <p>Below are real memory statements and real task contexts from the public release, two of the ten synthetic people. The release ships no labels: the evaluation scripts regenerate them by asking GPT-5 to answer as three privacy personas (<a class="lnk" href="parts/p03-dataset.html#labels">Part 03</a>). So the labelling here is yours to do. Pick a fact and a task, decide, and watch your own label grid fill in.</p>
 
   <div class="fx-cim">
-    <fieldset class="fx-ctl"><legend>Remembered attribute</legend><div class="fx-chips" id="m-mem"></div></fieldset>
-    <fieldset class="fx-ctl"><legend>Task, which sets recipient and purpose</legend><div class="fx-chips" id="m-task"></div></fieldset>
-    <div class="fx-cim-out" id="m-out" aria-live="polite"></div>
+    <fieldset class="fx-ctl"><legend>Profile <span>synthetic, from the public release</span></legend><div class="fx-chips" id="m-prof"></div></fieldset>
+    <fieldset class="fx-ctl"><legend>Remembered fact <span>domain in brackets</span></legend><div class="fx-chips" id="m-mem"></div></fieldset>
+    <fieldset class="fx-ctl"><legend>Task <span>sets recipient and purpose</span></legend><div class="fx-chips" id="m-task"></div></fieldset>
+    <div class="fx-cim-out neutral" id="m-out" aria-live="polite"><div class="fx-v">Loading the sample from data/pairs.json…</div><p>If nothing appears, the page is being read from disk; the sample loads when served over HTTP.</p></div>
+    <div class="fx-decide" id="m-decide" role="group" aria-label="Your label for this pair"></div>
     <div class="scroll"><table class="kv fx-grid" id="m-grid"></table></div>
+    <p class="fx-note" id="m-tally" aria-live="polite"></p>
   </div>
-  <p>The table is the paper's idea in small: no row is all green or all red, so no fixed "private" label works for any memory. CIMemories scores a model on both sides of it. Revealing a red cell counts toward <a class="lnk" href="glossary.html#violation-at-n">Violation@n</a>, and leaving out a green cell costs <a class="lnk" href="glossary.html#completeness">completeness</a>. With about 147 attributes and 45 tasks per person, a model has to get thousands of these cells right, and the paper finds every model tested gets many wrong (<a class="lnk" href="parts/p06-results.html">Part 06</a>).</p>
+  <p>A handful of decisions is enough to see the paper's idea: no row of your grid wants to be all green or all red, so no fixed "private" flag on a fact can be right. GPT-5 answers the same question for about 147 facts and 46 tasks per person, ten times as each of three personas, and a pair is scored only when all thirty answers agree. The model under test then has to get those cells right without ever seeing them. Revealing a withhold cell counts toward <a class="lnk" href="glossary.html#violation-at-n">Violation@n</a>, and leaving out a share cell costs <a class="lnk" href="glossary.html#completeness">completeness</a> (<a class="lnk" href="parts/p06-results.html">Part 06</a>).</p>
 
-  <div class="callout">Labels and norms on this page are the map's illustration, not the paper's data; Rosa and everyone around her are made up. More: <a class="lnk" href="parts/p01-contextual-integrity.html">contextual integrity</a>, <a class="lnk" href="parts/p04-measuring.html">how the paper scores leaks</a>, <a class="lnk" href="parts/p09-builders.html#granularity">filter facts, not topics</a>. Back to the <a class="lnk" href="index.html#idea">map</a>.</div>
+  <div class="callout">Rosa, her norms and her contexts in the top half are the map's illustration. The facts and tasks in the bottom half are a sample of the <a class="lnk" href="https://huggingface.co/datasets/facebook/CIMemories" target="_blank" rel="noopener">facebook/CIMemories</a> release (synthetic people; CC BY-NC 4.0, non-commercial), reproduced with attribution; the labels are whatever you decide. More: <a class="lnk" href="parts/p01-contextual-integrity.html">contextual integrity</a>, <a class="lnk" href="parts/p04-measuring.html">how the paper scores leaks</a>, <a class="lnk" href="composition-explorer.html">how leaks add up with use</a>, <a class="lnk" href="parts/p09-builders.html#granularity">filter facts, not topics</a>, and the <a class="lnk" href="bridge.html">bridge to the CAPS report</a>. Back to the <a class="lnk" href="index.html#idea">map</a>.</div>
 </main>
-<footer>An explorable for the CIMemories field map (arXiv:2511.14937v1). All people and facts are fictional; norms and labels are the map's illustration. Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.</footer>
+<footer>An explorable for the CIMemories field map (arXiv:2511.14937, ICLR 2026). Rosa and her norms are fictional and the map's own; the sampled facts and tasks are from the facebook/CIMemories release (CC BY-NC 4.0). Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.</footer>
 <script>
 (function(){
 var P = {
@@ -202,46 +206,74 @@ $('try').querySelectorAll('button').forEach(function(b){ b.addEventListener('cli
 }); });
 syncChips(); render();
 
-// ---------- CIMemories: same memory, different task ----------
-var MEMS = {
-  income:{t:'Takes home about $3,400 a month', type:'finance'},
-  dx:{t:'Takes a daily stimulant for ADHD', type:'health'},
-  addr:{t:'Lives at 14 Saguaro Lane, Apt 3', type:'contact'}
-};
-var TASKS = {
-  rental:{t:'Rental application', rec:'a leasing office', why:'screening a tenant'},
-  intake:{t:'Urgent-care intake form', rec:'an intake nurse', why:'treating a cut hand'},
-  chat:{t:'Reply to a coworker', rec:'a coworker', why:'explaining an absence'},
-  gift:{t:'Order a birthday gift for a friend', rec:'an online shop', why:'shipping a present to the friend'}
-};
-// necessary (true) or inappropriate (false) per memory x task, with the reason
-var LAB = {
-  income:{rental:[true,'Applications check that the rent is affordable.'], intake:[false,'Billing goes through insurance; income has no bearing on treatment.'], chat:[false,'An absence has nothing to do with pay.'], gift:[false,'A shop needs payment, not her salary.']},
-  dx:{rental:[false,'A landlord has no claim on a tenant’s health.'], intake:[true,'Clinicians ask about current medication because of drug interactions.'], chat:[false,'Telling colleagues about a condition is Rosa’s call.'], gift:[false,'Nothing about a gift needs it.']},
-  addr:{rental:[true,'The application asks for her current address.'], intake:[true,'The clinic records contact details.'], chat:[false,'Not what the coworker asked, and not the assistant’s to hand out.'], gift:[false,'The gift ships to the friend; Rosa’s home address is not needed.']}
-};
-var m = {mem:'income', task:'rental'};
+// ---------- CIMemories: label the public release yourself ----------
+var DATA = null, m = {prof:0, mem:0, task:0};
+var KEY = 'cimemories-your-labels', YOURS = {};
+try { YOURS = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ YOURS = {}; }
+function saveYours(){ try { localStorage.setItem(KEY, JSON.stringify(YOURS)); } catch(e){} }
+function pk(){ return m.prof + ':' + m.mem + ':' + m.task; }
+function dom(d){ return d.replace(/_/g, ' '); }
+function first(s){ return s.split(' ')[0]; }
+
 function mrender(){
-  var l = LAB[m.mem][m.task], T = TASKS[m.task];
-  $('m-out').className = 'fx-cim-out ' + (l[0] ? 'ok' : 'bad');
-  $('m-out').innerHTML = '<div class="fx-v">' + (l[0] ? 'Necessary: share it' : 'Inappropriate: a reveal is a violation') + '</div>' +
-    '<dl class="fx-five"><div><dt>Sender</dt><dd>the assistant, for Rosa</dd></div><div><dt>Subject</dt><dd>Rosa</dd></div><div><dt>Information type</dt><dd>' + esc(MEMS[m.mem].type) + '</dd></div>' +
-    '<div class="var"><dt>Recipient</dt><dd>' + esc(T.rec) + '</dd></div><div class="var"><dt>Principle (from the task)</dt><dd>' + esc(T.why) + '</dd></div></dl>' +
-    '<p>' + esc(l[1]) + '</p>';
-  var keys = Object.keys(TASKS);
-  $('m-grid').innerHTML = '<thead><tr><th>Memory</th>' + keys.map(function(k){ return '<th>' + esc(TASKS[k].t) + '</th>'; }).join('') + '</tr></thead><tbody>' +
-    Object.keys(MEMS).map(function(mk){ return '<tr><td>' + esc(MEMS[mk].t) + '</td>' + keys.map(function(tk){
-      var v = LAB[mk][tk][0], sel = mk === m.mem && tk === m.task;
-      return '<td class="' + (sel ? 'sel' : '') + '"><span class="' + (v ? 'ok' : 'bad') + '">' + (v ? 'share' : 'withhold') + '</span></td>'; }).join('') + '</tr>'; }).join('') + '</tbody>';
+  if (!DATA) return;
+  var P = DATA.profiles[m.prof], A = P.attributes[m.mem], C = P.contexts[m.task], yours = YOURS[pk()];
+  var cls = yours === 'share' ? 'ok' : yours === 'withhold' ? 'bad' : 'neutral';
+  var head = yours === 'share' ? 'You: share it (necessary for this task)' : yours === 'withhold' ? 'You: withhold it (a reveal would be a violation)' : yours === 'unsure' ? 'You: unsure (the benchmark drops such pairs)' : 'Your call: does this fact belong in this message?';
+  $('m-out').className = 'fx-cim-out ' + cls;
+  $('m-out').innerHTML = '<div class="fx-v">' + esc(head) + '</div>' +
+    '<dl class="fx-five"><div><dt>Sender</dt><dd>the assistant, for ' + esc(first(P.name)) + '</dd></div><div><dt>Subject</dt><dd>' + esc(P.name) + ', ' + P.age + '</dd></div><div><dt>Information type</dt><dd>' + esc(dom(A.domain)) + '</dd></div>' +
+    '<div class="var"><dt>Recipient</dt><dd>' + esc(C.recipient) + '</dd></div><div class="var"><dt>Purpose</dt><dd>' + esc(C.task) + '</dd></div><div><dt>Principle (fixed)</dt><dd>what the task needs</dd></div></dl>' +
+    '<p>"' + esc(A.statement) + '", written to <em>' + esc(C.recipient.toLowerCase()) + '</em> to <em>' + esc(C.task.toLowerCase().replace(/\.$/, '')) + '</em>.</p>';
+  $('m-decide').innerHTML = '<span class="fx-k">Label it</span>' + [['share', 'Share'], ['withhold', 'Withhold'], ['unsure', 'Unsure']].map(function(o){
+    return '<button type="button" class="' + o[0] + '" data-v="' + o[0] + '" aria-pressed="' + (yours === o[0]) + '">' + o[1] + '</button>'; }).join('');
+  $('m-decide').querySelectorAll('button').forEach(function(b){ b.addEventListener('click', function(){
+    if (YOURS[pk()] === b.dataset.v) delete YOURS[pk()]; else YOURS[pk()] = b.dataset.v;
+    saveYours(); mrender();
+  }); });
+
+  var ctxs = P.contexts;
+  var h = '<thead><tr><th>Fact \\ task</th>' + ctxs.map(function(c){ return '<th class="rot">' + esc(c.recipient) + '</th>'; }).join('') + '</tr></thead><tbody>';
+  var n = {share:0, withhold:0, unsure:0}, rowsMixed = 0;
+  P.attributes.forEach(function(a, ai){
+    var seen = {};
+    h += '<tr><td class="lab">' + esc(a.statement) + ' <span class="mono" style="color:var(--ink-dim)">[' + esc(dom(a.domain)) + ']</span></td>' + ctxs.map(function(c, ci){
+      var v = YOURS[m.prof + ':' + ai + ':' + ci] || '', cur = ai === m.mem && ci === m.task;
+      if (v){ n[v]++; seen[v] = 1; }
+      var g = v === 'share' ? '✓' : v === 'withhold' ? '✕' : v === 'unsure' ? '?' : '·';
+      return '<td class="c"><button type="button" class="' + v + '" data-a="' + ai + '" data-c="' + ci + '" aria-current="' + cur + '" aria-label="' + esc(a.statement) + ' to ' + esc(c.recipient) + (v ? ': ' + v : ': unlabelled') + '">' + g + '</button></td>';
+    }).join('') + '</tr>';
+    if (seen.share && seen.withhold) rowsMixed++;
+  });
+  $('m-grid').innerHTML = h + '</tbody>';
+  $('m-grid').querySelectorAll('td.c button').forEach(function(b){ b.addEventListener('click', function(){
+    m.mem = +b.dataset.a; m.task = +b.dataset.c; syncM(); mrender();
+    $('m-grid').querySelector('button[aria-current="true"]').focus();
+  }); });
+  var total = n.share + n.withhold + n.unsure, cells = P.attributes.length * ctxs.length;
+  $('m-tally').textContent = total === 0
+    ? 'Your grid for ' + P.name + ': 0 of ' + cells + ' cells labelled. ✓ share, ✕ withhold, ? unsure. Click a cell to jump to that pair.'
+    : 'Your grid for ' + P.name + ': ' + total + ' of ' + cells + ' cells labelled (' + n.share + ' share, ' + n.withhold + ' withhold, ' + n.unsure + ' unsure). ' +
+      (rowsMixed ? rowsMixed + ' fact' + (rowsMixed > 1 ? 's' : '') + ' already need' + (rowsMixed > 1 ? '' : 's') + ' both answers depending on the task.' : 'Keep going until one fact gets both answers.') + ' This browser remembers your labels.';
 }
-var memOpts = {}, taskOpts = {};
-Object.keys(MEMS).forEach(function(k){ memOpts[k] = MEMS[k].t; });
-Object.keys(TASKS).forEach(function(k){ taskOpts[k] = TASKS[k].t; });
-chips('m-mem', 'mmem', memOpts, function(v){ m.mem = v; mrender(); });
-chips('m-task', 'mtask', taskOpts, function(v){ m.task = v; mrender(); });
-document.querySelector('input[name="mmem"][value="income"]').checked = true;
-document.querySelector('input[name="mtask"][value="rental"]').checked = true;
-mrender();
+function syncM(){
+  document.querySelectorAll('input[name="mprof"]').forEach(function(i){ i.checked = +i.value === m.prof; });
+  document.querySelectorAll('input[name="mmem"]').forEach(function(i){ i.checked = +i.value === m.mem; });
+  document.querySelectorAll('input[name="mtask"]').forEach(function(i){ i.checked = +i.value === m.task; });
+}
+function buildM(){
+  var P = DATA.profiles[m.prof], memOpts = {}, taskOpts = {}, profOpts = {};
+  DATA.profiles.forEach(function(p, i){ profOpts[i] = p.name + ', ' + p.age; });
+  P.attributes.forEach(function(a, i){ memOpts[i] = a.statement + ' [' + dom(a.domain) + ']'; });
+  P.contexts.forEach(function(c, i){ taskOpts[i] = c.recipient + ': ' + c.task.replace(/\.$/, ''); });
+  chips('m-prof', 'mprof', profOpts, function(v){ m.prof = +v; m.mem = 0; m.task = 0; buildM(); });
+  chips('m-mem', 'mmem', memOpts, function(v){ m.mem = +v; mrender(); });
+  chips('m-task', 'mtask', taskOpts, function(v){ m.task = +v; mrender(); });
+  syncM(); mrender();
+}
+fetch('data/pairs.json').then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); }).then(function(d){ DATA = d; buildM(); }).catch(function(err){
+  $('m-out').innerHTML = '<div class="fx-v">The sample could not be loaded (' + esc(err.message) + ').</div><p>It lives in <code>data/pairs.json</code> next to this page and loads when the page is served over HTTP, as on the live site.</p>';
+});
 })();
 </script>
 </body>

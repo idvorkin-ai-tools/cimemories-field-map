@@ -54,7 +54,7 @@
 </div></header>
 <main>
   <div class="hero">
-    <div class="eyebrow"><span class="box wb mono">MIRESHGHALLAH, MANGAOKAR ET AL. &middot; ARXIV:2511.14937 &middot; FAIR AT META</span><span class="mono">10 profiles &middot; ~147 attributes each &middot; 8 models &middot; 11 pages here</span></div>
+    <div class="eyebrow"><span class="box wb mono">MIRESHGHALLAH, MANGAOKAR ET AL. &middot; ARXIV:2511.14937 &middot; ICLR 2026 &middot; FAIR AT META</span><span class="mono">10 profiles &middot; ~147 attributes each &middot; 8 models &middot; 11 pages, 2 explorables, 1 bridge</span></div>
 
   <figure class="fig hero-fig bare"><button type="button" class="media" aria-label="Enlarge figure: A worried plush raccoon in a MEMORY t-shirt writes a letter at a desk while an overflowing notebook of memories spills sticky notes beside it, some sliding toward the letter."><img src="img/raccoon-memory-leak.webp" alt="A worried plush raccoon in a MEMORY t-shirt writes a letter at a desk while an overflowing notebook of memories spills sticky notes beside it, some sliding toward the letter." width="640" height="640" loading="lazy"></button><figcaption>A memory that only grows: every remembered fact sits beside every letter the assistant writes.</figcaption></figure>
     <h1>CIMemories, mapped</h1>
@@ -67,6 +67,8 @@
     <div class="facts">
       <div class="fact"><div class="k">Short on time</div><div class="v"><a class="lnk" href="ten-minutes.html">the paper in 10 min</a></div></div>
       <div class="fact"><div class="k">Play with the model</div><div class="v"><a class="lnk" href="flow-explorer.html">flow explorer</a></div></div>
+      <div class="fact"><div class="k">Leaks over time</div><div class="v"><a class="lnk" href="composition-explorer.html">composition explorer</a></div></div>
+      <div class="fact"><div class="k">Across to CAPS</div><div class="v"><a class="lnk" href="bridge.html">two maps, one model</a></div></div>
       <div class="fact"><div class="k">Terms</div><div class="v"><a class="lnk" href="glossary.html">glossary</a></div></div>
       <div class="fact"><div class="k">The numbers</div><div class="v"><a class="lnk" href="parts/p06-results.html">Table 1, unpacked</a></div></div>
       <div class="fact"><div class="k">Building one?</div><div class="v"><a class="lnk" href="parts/p09-builders.html">for builders</a></div></div>
@@ -88,6 +90,7 @@
     <div class="row"><div class="num"><span class="check" data-p="p03"></span>03</div><div><div class="name"><a href="parts/p03-dataset.html">Building the benchmark: profiles, contexts, labels</a></div><div class="meta"><span>§4.1 &middot; Table 2 &middot; Figs. 9&ndash;12</span><span>146.7 attributes &middot; 45.7 contexts per profile</span></div><div class="desc">Faker identities, three life events and nine domains per person, GPT-OSS-120B writing the memory statements, 49 seed tasks, and GPT-5 labelling every attribute&ndash;task pair as each of Westin's three privacy personas. A pair keeps a label only when every persona agrees.</div></div></div>
     <div class="row"><div class="num"><span class="check" data-p="p04"></span>04</div><div><div class="name"><a href="parts/p04-measuring.html">Measuring it: reveal, Violation@n, Completeness</a></div><div class="meta"><span>§3 &middot; Defs. 3.1&ndash;3.2 &middot; Fig. 7 &middot; §5.1</span><span>DeepSeek-R1 as the judge</span></div><div class="desc">How a reveal is detected, why violation is a worst case per attribute (did it leak <em>ever</em>, across tasks and samples) while completeness is an average per task, and why the 1&nbsp;&minus;&nbsp;(1&nbsp;&minus;&nbsp;p)<sup>n</sup> arithmetic matters.</div></div></div>
     <div class="row"><div class="num"><span class="check" data-p="p05"></span>05</div><div><div class="name"><a href="parts/p05-composition.html">The two compositions: memory and tasks</a></div><div class="meta"><span>Fig. 1 &middot; Fig. 2 &middot; Fig. 5 &middot; §5.2.3</span><span>0.1% &rarr; 9.6% &rarr; 25.1%</span></div><div class="desc">What makes the benchmark "compositional": the authors can choose which attributes are in memory and how many tasks a user runs. The more tasks and samples, the more leaks accumulate. Adding inappropriate memories raises violations while completeness stays flat.</div></div></div>
+    <div class="callout off"><b>Play with the arithmetic:</b> the <a class="lnk" href="composition-explorer.html">composition explorer</a> turns the per-draw leak chance, the task count, the sample count and a leak-prone minority of facts into a Violation@n curve, with the paper's three Figure 2 points and the Table 1 column overlaid, so you can see which assumptions reproduce the measured numbers.</div>
   </section>
 
   <section id="results" class="cyan">
@@ -108,19 +111,23 @@
     <div class="arc-head"><span class="idx">05</span><h2>Reference and sources</h2></div>
     <div class="links">
       <a href="ten-minutes.html"><b>Read the paper in 10 minutes</b><span>The whole argument on one page, section by section, with every headline number cited</span></a>
-      <a href="flow-explorer.html"><b>Flow explorer</b><span>One flow, five parameters as controls, and the norm that decides it; then one memory across CIMemories tasks</span></a>
+      <a href="flow-explorer.html"><b>Flow explorer</b><span>One flow, five parameters as controls, and the norm that decides it; then label real facts and tasks from the release yourself</span></a>
+      <a href="composition-explorer.html"><b>Composition explorer</b><span>How a small per-message leak rate becomes a large per-user one: tasks, samples and a leak-prone minority, against Figure 2 and Table 1</span></a>
+      <a href="bridge.html"><b>Two maps, one model</b><span>Where this benchmark sits inside the CAPS agentic-privacy report: the five reasoning steps, the four threat models, a vocabulary concordance</span></a>
+      <a href="parts/p08-limitations.html#next"><b>What came next (as of 2026-10-26)</b><span>The camera-ready's additions and the benchmarks that followed: multi-turn memory, tools, multi-party, enterprise, human-labelled ground truth</span></a>
       <a href="glossary.html"><b>Glossary</b><span>Contextual integrity, Violation@n, completeness, REVEAL, Westin personas, granularity failure and the rest</span></a>
-      <a href="https://arxiv.org/abs/2511.14937" target="_blank" rel="noopener"><b>arXiv:2511.14937</b><span>Mireshghallah, Mangaokar, Kokhlikyan, Zharmagambetov, Zaheer, Mahloujifar, Chaudhuri, <em>CIMemories</em> (v1, 18 Nov 2025). This map is written against v1.</span></a>
+      <a href="https://arxiv.org/abs/2511.14937" target="_blank" rel="noopener"><b>arXiv:2511.14937</b><span>Mireshghallah, Mangaokar, Kokhlikyan, Zharmagambetov, Zaheer, Mahloujifar, Chaudhuri, <em>CIMemories</em> (v1, 18 Nov 2025, still the only arXiv version as of 2026-10-26). This map is written against v1 and checked against the ICLR camera-ready.</span></a>
       <a href="https://arxiv.org/html/2511.14937v1" target="_blank" rel="noopener"><b>The paper, HTML</b><span>arXiv's HTML rendering; section, figure and table links on these pages jump into it</span></a>
       <a href="https://github.com/facebookresearch/CIMemories" target="_blank" rel="noopener"><b>facebookresearch/CIMemories</b><span>Code: label generation, eval runner, metrics, the raw synthetic profiles (CC BY-NC 4.0)</span></a>
       <a href="https://huggingface.co/datasets/facebook/CIMemories" target="_blank" rel="noopener"><b>facebook/CIMemories on Hugging Face</b><span>The dataset release</span></a>
-      <a href="https://mlanthology.org/iclr/2026/mireshghallah2026iclr-cimemories/" target="_blank" rel="noopener"><b>ICLR 2026 version</b><span>Published as "CIMemories: A Compositional Benchmark for Contextual Integrity in LLMs"; this map was not checked against the camera-ready</span></a>
+      <a href="https://mlanthology.org/iclr/2026/mireshghallah2026iclr-cimemories/" target="_blank" rel="noopener"><b>ICLR 2026 version</b><span>Published as "CIMemories: A Compositional Benchmark for Contextual Integrity in LLMs" (<a href="https://proceedings.iclr.cc/paper_files/paper/2026/file/9a2bcfaf383638e166162a25b6dff125-Paper-Conference.pdf" target="_blank" rel="noopener">camera-ready PDF</a>). Same numbers, plus a human-agreement study, per-persona results and 60 more profiles; folded into Parts 03, 04, 06 and 08 on 2026-10-26</span></a>
     </div>
   </section>
   <section id="related">
     <div class="arc-head"><span class="idx">06</span><h2>Related maps</h2></div>
     <p class="arc-sub">Sibling maps on safety and alignment that link into each other. Also browse <a href="https://idvorkin-ai-tools.github.io/">all the field maps</a>.</p>
     <div class="links">
+      <a href="bridge.html"><b>Two maps, one model</b><span>The bridge: this benchmark placed inside the CAPS report's five steps and four threat models, with its words translated into the report's</span></a>
       <a href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/" target="_blank" rel="noopener"><b>Agentic privacy, mapped</b><span>The CAPS workshop report: contextual integrity for AI agents, the contextual policy engine and 51 open problems</span></a>
       <a href="https://idvorkin-ai-tools.github.io/constitutional-ai-field-map/" target="_blank" rel="noopener"><b>Constitutional AI, mapped</b><span>The 2022 Constitutional AI paper and Claude's 2026 constitution, including the principal hierarchy</span></a>
       <a href="https://idvorkin-ai-tools.github.io/instruction-hierarchy-field-map/" target="_blank" rel="noopener"><b>Instruction hierarchy, mapped</b><span>Who gets to give a model orders: Wallace et al. 2024, ISE, VerIH, ManyIH, with bridges into these maps</span></a>
@@ -128,7 +135,7 @@
   </section>
 </main>
 <footer>
-  A field map of CIMemories (Mireshghallah, Mangaokar et al., FAIR at Meta), compiled 2026-10-23 from arXiv:2511.14937v1. Numbers are quoted from the paper with their table or figure; the explanations are original. The paper is &copy; its authors; this map links and explains, it does not copy. Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.
+  A field map of CIMemories (Mireshghallah, Mangaokar et al., FAIR at Meta), compiled 2026-10-23 from arXiv:2511.14937v1 and checked against the ICLR 2026 camera-ready on 2026-10-26. Numbers are quoted from the paper with their table or figure; the explanations are original. The paper is &copy; its authors; this map links and explains, it does not copy. Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.
 </footer>
 <script>
 (function(){
