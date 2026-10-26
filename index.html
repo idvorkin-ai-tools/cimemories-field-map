@@ -66,6 +66,7 @@
 
     <div class="facts">
       <div class="fact"><div class="k">Short on time</div><div class="v"><a class="lnk" href="ten-minutes.html">the paper in 10 min</a></div></div>
+      <div class="fact"><div class="k">Play with the model</div><div class="v"><a class="lnk" href="flow-explorer.html">flow explorer</a></div></div>
       <div class="fact"><div class="k">Terms</div><div class="v"><a class="lnk" href="glossary.html">glossary</a></div></div>
       <div class="fact"><div class="k">The numbers</div><div class="v"><a class="lnk" href="parts/p06-results.html">Table 1, unpacked</a></div></div>
       <div class="fact"><div class="k">Building one?</div><div class="v"><a class="lnk" href="parts/p09-builders.html">for builders</a></div></div>
@@ -78,6 +79,7 @@
     <p class="arc-sub">The paper's footing: privacy means information going to the right place, not information kept secret. A remembered fact is not public or private on its own; whether sharing it is a violation depends on where it goes and why.</p>
     <div class="row"><div class="num"><span class="check" data-p="p01"></span>01</div><div><div class="name"><a href="parts/p01-contextual-integrity.html">Contextual integrity, from Nissenbaum to LLMs</a></div><div class="meta"><span>§1 &middot; §2</span><span>Nissenbaum 2004 &middot; Barth et al. 2006</span><span>ConfAide &middot; PrivacyLens &middot; CI-Bench</span></div><div class="desc">The theory in plain terms: an information flow has a sender, a recipient, a subject, a type of information and a norm that governs it. Also how earlier LLM benchmarks used the theory, and why "one secret to keep" was too easy a test.</div></div></div>
     <div class="row"><div class="num"><span class="check" data-p="p02"></span>02</div><div><div class="name"><a href="parts/p02-memory.html">Why persistent memory makes it hard</a></div><div class="meta"><span>§1 &middot; §2 &middot; §3 problem setting &middot; Fig. 6</span><span>memories prefixed to the prompt</span></div><div class="desc">Memory turns every conversation into a dossier the model writes from. The same fact (income, a diagnosis, a court case) is essential for one recipient and out of place for the next, and the pile keeps growing.</div></div></div>
+    <div class="callout off"><b>Play with the model:</b> the <a class="lnk" href="flow-explorer.html">flow explorer</a> draws one information flow with its five parameters as controls. Change one at a time and watch the verdict flip, with the context norm that flipped it highlighted, and see a secrecy rule get it wrong.</div>
   </section>
 
   <section id="benchmark" class="amber">
@@ -106,6 +108,7 @@
     <div class="arc-head"><span class="idx">05</span><h2>Reference and sources</h2></div>
     <div class="links">
       <a href="ten-minutes.html"><b>Read the paper in 10 minutes</b><span>The whole argument on one page, section by section, with every headline number cited</span></a>
+      <a href="flow-explorer.html"><b>Flow explorer</b><span>One flow, five parameters as controls, and the norm that decides it; then one memory across CIMemories tasks</span></a>
       <a href="glossary.html"><b>Glossary</b><span>Contextual integrity, Violation@n, completeness, REVEAL, Westin personas, granularity failure and the rest</span></a>
       <a href="https://arxiv.org/abs/2511.14937" target="_blank" rel="noopener"><b>arXiv:2511.14937</b><span>Mireshghallah, Mangaokar, Kokhlikyan, Zharmagambetov, Zaheer, Mahloujifar, Chaudhuri, <em>CIMemories</em> (v1, 18 Nov 2025). This map is written against v1.</span></a>
       <a href="https://arxiv.org/html/2511.14937v1" target="_blank" rel="noopener"><b>The paper, HTML</b><span>arXiv's HTML rendering; section, figure and table links on these pages jump into it</span></a>
