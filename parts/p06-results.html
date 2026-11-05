@@ -75,6 +75,23 @@
   </div>
   <p>Reasoning and non-reasoning models fall on both sides of these lines. o3, a reasoning model, is beaten on both axes by GPT-5. The controlled comparison of reasoning against no reasoning, with everything else held fixed, is in <a class="lnk" href="p07-scaling-prompting.html">Part 07</a>. Table 1 alone cannot separate reasoning from all the other differences between vendors.</p>
 
+  <h2 id="camera-ready">What the camera-ready adds: three personas and 60 more profiles</h2>
+  <p>The ICLR 2026 version (<a class="lnk" href="https://proceedings.iclr.cc/paper_files/paper/2026/file/9a2bcfaf383638e166162a25b6dff125-Paper-Conference.pdf" target="_blank" rel="noopener">camera-ready PDF</a>, Appendix C) prints four tables the arXiv v1 does not have. Tables 5&ndash;7 rescore the same runs against each <a class="lnk" href="../glossary.html#westin-personas">Westin persona's</a> own labels instead of the unanimous set, and Table 8 reruns six models on an additional 60 profiles. Values copied exactly; Violation@n and Completeness as in Table 1.</p>
+  <div class="scroll"><table class="kv">
+    <thead><tr><th>Model</th><th>Fundamentalist (T5)</th><th>Pragmatic (T6)</th><th>Unconcerned (T7)</th><th>+60 profiles (T8)</th></tr></thead>
+    <tbody>
+      <tr><td>GPT-5</td><td>42.1% / 52.8%</td><td>34.3% / 48.3%</td><td>34.9% / 44.6%</td><td>26.2% / 53.8%</td></tr>
+      <tr><td>o3</td><td>57.7% / 51.9%</td><td>50.6% / 47.6%</td><td>45.5% / 43.1%</td><td>34.8% / 50.5%</td></tr>
+      <tr><td>GPT-4o</td><td>30.9% / 40.7%</td><td>23.1% / 35.9%</td><td>20.3% / 31.4%</td><td>16.7% / 40.1%</td></tr>
+      <tr><td>Gemini 2.5 Flash</td><td>64.3% / 50.4%</td><td>57.0% / 45.7%</td><td>56.9% / 41.5%</td><td>49.0% / 49.4%</td></tr>
+      <tr><td>Llama-3.3 70B Instruct</td><td>59.7% / 51.2%</td><td>56.3% / 46.2%</td><td>52.4% / 42.0%</td><td>42.8% / 48.7%</td></tr>
+      <tr><td>Qwen-3 32B</td><td>81.4% / 55.4%</td><td>77.6% / 50.9%</td><td>75.2% / 47.2%</td><td>65.1% / 53.4%</td></tr>
+      <tr><td>Claude-4 Sonnet</td><td>59.1% / 56.9%</td><td>54.6% / 52.6%</td><td>51.6% / 48.7%</td><td class="na">not run</td></tr>
+      <tr><td>Mistral-7B Instruct v0.3</td><td>73.0% / 43.4%</td><td>65.8% / 39.5%</td><td>62.5% / 36.3%</td><td class="na">not run</td></tr>
+    </tbody>
+  </table></div>
+  <p>Three readings, the map's. First, every persona's violation rate is higher than Table 1's, because each persona labels more pairs inappropriate than the three agree on, and the unanimous set is by construction the clearest cases. The fundamentalist, who wants the most withheld, scores the highest violations of the three for every model. Second, the ordering barely moves: GPT-4o leaks least and Qwen-3 32B most under every persona and on the extra profiles, and GPT-5 stays on the frontier. Third, the 60 extra profiles land within a few points of Table 1 (GPT-5 26.2% against 25.08%, GPT-4o 16.7% against 14.82%, Qwen-3 32B 65.1% against 69.14%), which is the first evidence that the 10-profile sample was not an unlucky draw. Appendix C also reports a ConfAide run: GPT-5 reaches 0% violation there with 42% completeness, so the earlier benchmark no longer separates frontier models on this axis while CIMemories still does.</p>
+
   <h2 id="half">Why completeness stalls near half</h2>
   <p>No model reaches 60% completeness. The range is 43.95% to 59.07%. The paper calls this "moderate completeness of around ∼50%" and connects it to <a class="lnk" href="https://arxiv.org/abs/2504.14225" target="_blank" rel="noopener">Jiang et al. 2025</a> (PersonaMem, "Know Me, Respond to Me"), which found that models recall user facts and preferences from long histories only partly when they need them for a task (<a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.SS2.SSS1" target="_blank" rel="noopener">§5.2.1</a>).</p>
   <p>The setup explains why this matters. Per <a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.T2" target="_blank" rel="noopener">Table 2</a>, a context has on average 6.7 ± 5.5 attributes to share and 83.7 ± 31.5 not to share, all in the same prefix of about 147 memory statements. The model's job is to find the handful that matter among close to a hundred that do not. Missing half of the useful ones while also letting through some of the harmful ones is not two separate faults. It is one weakness, poor selection, showing up on both scores. That is why the two scores have to be read together. A model with low completeness and low violation may not be cautious at all; it may simply use its memory less.</p>

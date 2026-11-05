@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Two maps, one model &mdash; CIMemories, mapped</title>
+<meta name="description" content="How the CIMemories benchmark and the CAPS agentic-privacy report fit together: one model of contextual integrity, the benchmark's vocabulary translated into the report's, and where each map helps." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+<style>
+  .br-two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0 22px}
+  .br-two .f{border:1px solid var(--line-soft);border-radius:10px;padding:12px 14px;background:var(--panel);font-size:14px;color:var(--ink-mid)}
+  .br-two .f b{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+  .br-two .f.cim b{color:var(--off-bright)} .br-two .f.caps b{color:var(--def)}
+  .br-two .f p{font-size:14px;margin:0 0 8px} .br-two .f p:last-child{margin:0}
+  @media (max-width:640px){.br-two{grid-template-columns:1fr}}
+  table.kv td:first-child{white-space:nowrap}
+  @media (max-width:560px){table.kv td:first-child{white-space:normal}}
+</style>
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <div class="brand"><span class="dot"></span>CIMEMORIES&nbsp;//&nbsp;FIELD&nbsp;MAP</div>
+  <a class="back" href="index.html#related">&larr; field map</a>
+</div></header>
+<main>
+  <div class="eyebrow"><span class="box wb mono">BRIDGE &middot; CIMEMORIES &times; CAPS</span><span class="mono">one benchmark &middot; one report &middot; one model of appropriate flow</span></div>
+  <h1>Two maps, one model</h1>
+  <div class="authors">Where the CIMemories benchmark sits inside the CAPS report's framework, and the benchmark's words translated into the report's</div>
+
+  <div class="tldr"><b>TL;DR &mdash;</b> The CAPS report says what an agent would have to do to respect contextual integrity: five reasoning steps, under four threat models. CIMemories measures one cell of that grid with care. It fixes the sender, the subject and the transmission principle, varies only the recipient and purpose, assumes no adversary, and asks whether a model <em>applies</em> a norm it was never shown. The report's own survey of benchmarks (Appendix D) codes it that way: simple contextualization, simple transmission principles, no designed ambiguity. Read the benchmark as the report's step 3 under its fourth threat model, and the two sets of numbers and problems line up.</div>
+
+  <div class="br-two">
+    <div class="f cim"><b>CIMemories</b><p>A measurement. Ten synthetic people, about 147 remembered facts each, about 46 recipients each. Score: did a fact ever reach a recipient it was labelled inappropriate for (Violation@n), and did the needed facts arrive (Completeness).</p><p><a class="lnk" href="index.html">The CIMemories map</a> &middot; <a class="lnk" href="ten-minutes.html">10 minutes</a></p></div>
+    <div class="f caps"><b>CAPS report</b><p>A framework and a problem list. Privacy and security for agents as appropriateness in context; a five-step reasoning pipeline no agent can yet run; 51 open problems on how to build it, measure it and govern it.</p><p><a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/index.html">The agentic privacy map</a> &middot; <a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/guide/ten-minutes.html">10 minutes</a></p></div>
+  </div>
+
+  <h2 id="model">The one model</h2>
+  <p class="lead">Both documents stand on the same claim: a disclosure is wrong when it breaks the norms of the context it happens in, not when the fact is secret. The report states the theory in full and asks how a machine could enforce it. The benchmark takes one slice of the theory, turns it into labels, and measures how far today's models are from enforcing even that slice.</p>
+  <p>The report's version of the claim is the five-parameter flow: a <b>sender</b> passes information of some <b>type</b>, about a <b>subject</b>, to a <b>recipient</b>, under a <b>transmission principle</b>, and the context's norms say which such flows are appropriate (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/concepts/contextual-integrity.html">CI, applied to agents</a>). The benchmark's version is the same tuple with three slots welded shut. The sender is always the assistant writing for the user, the subject is always the user, and every message travels under one principle, "what this task needs". What varies is the task, which brings a recipient and a purpose, and the fact, which is one remembered attribute (<a class="lnk" href="parts/p01-contextual-integrity.html">CI, from Nissenbaum to LLMs</a>). A label on each (attribute, task) pair stands in for the norm.</p>
+
+  <figure class="fig wide"><button type="button" class="media" aria-label="Enlarge figure: A grid with the CAPS report's five reasoning steps as columns (identify, locate, apply, resolve, enforce) and its four threat models as rows (malicious user, malicious environment, poisoned model, no adversary). The whole grid is the report's territory. CIMemories occupies the no-adversary row: its labels supply the locate step, and it measures the apply step; the other cells are outside the benchmark."><svg class="dg" viewBox="0 0 400 236" role="img" aria-label="A grid with the CAPS report's five reasoning steps as columns (identify, locate, apply, resolve, enforce) and its four threat models as rows (malicious user, malicious environment, poisoned model, no adversary). The whole grid is the report's territory. CIMemories occupies the no-adversary row: its labels supply the locate step, and it measures the apply step; the other cells are outside the benchmark."><title>A grid with the CAPS report's five reasoning steps as columns and its four threat models as rows. The whole grid is the report's territory. CIMemories occupies the no-adversary row: its labels supply the locate step, and it measures the apply step.</title>
+<text x="104" y="13" class="t-def" font-size="9.5" text-anchor="start" font-weight="600">CAPS: five steps an agent must perform (§6)</text>
+<text x="8" y="40" class="t-def" font-size="9" text-anchor="start" font-weight="600">four threat</text><text x="8" y="51" class="t-def" font-size="9" text-anchor="start" font-weight="600">models (§3)</text>
+<g font-size="9.5" font-weight="600"><text x="133" y="30" class="t-ink" text-anchor="middle">1 identify</text><text x="192" y="30" class="t-ink" text-anchor="middle">2 locate</text><text x="251" y="30" class="t-ink" text-anchor="middle">3 apply</text><text x="310" y="30" class="t-ink" text-anchor="middle">4 resolve</text><text x="369" y="30" class="t-ink" text-anchor="middle">5 enforce</text></g>
+<rect x="102" y="36" width="294" height="176" rx="6" fill="rgba(53,207,224,.05)" stroke="var(--def)" stroke-dasharray="4 3"/>
+<g font-size="9" class="t-mid"><text x="96" y="64" text-anchor="end">malicious user</text><text x="96" y="103" text-anchor="end">malicious</text><text x="96" y="114" text-anchor="end">environment</text><text x="96" y="152" text-anchor="end">poisoned model</text><text x="96" y="196" text-anchor="end" class="t-off" font-weight="600">no adversary</text></g>
+<g class="grid"><line x1="104" y1="80" x2="394" y2="80"/><line x1="104" y1="124" x2="394" y2="124"/><line x1="104" y1="168" x2="394" y2="168"/><line x1="163" y1="38" x2="163" y2="210"/><line x1="222" y1="38" x2="222" y2="210"/><line x1="281" y1="38" x2="281" y2="210"/><line x1="340" y1="38" x2="340" y2="210"/></g>
+<rect class="box-def" x="166" y="172" width="53" height="36" rx="5"/><text x="192" y="187" class="t-def" font-size="8.5" text-anchor="middle">labels</text><text x="192" y="198" class="t-def" font-size="8.5" text-anchor="middle">supply it</text>
+<rect class="box-off" x="225" y="172" width="53" height="36" rx="5"/><text x="251" y="187" class="t-off" font-size="8.5" text-anchor="middle" font-weight="700">CIMemories</text><text x="251" y="198" class="t-off" font-size="8.5" text-anchor="middle">measures it</text>
+<text x="104" y="226" class="t-dim" font-size="8.5" text-anchor="start">dashed: the report's territory, 51 open problems across the grid</text>
+</svg></button><figcaption>The benchmark as one cell of the report. Its per-pair labels play the part of a norm repository (step 2); its scores measure whether the model applies those norms (step 3); and no attacker is present (the report's fourth threat model, <a href="https://storage.googleapis.com/gweb-research2023-media/pubtools/1047874.pdf#page=14" target="_blank" rel="noopener">§3.4, p. 14</a>). Identify, resolve and enforce are not exercised: the flow is given, ambiguous pairs are dropped, and nothing is sent.</figcaption></figure>
+
+  <p>Three consequences of that placement are worth holding onto.</p>
+  <ul>
+    <li><b>The benchmark assumes the hardest part is done.</b> Step 2, finding the norm, is what the report calls out as missing: there is no repository of contextual norms an agent could look up (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/policy-engines.html#op-6-3">OP 6.3</a>, <a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/governance.html#op-12-2">OP 12.2</a>). CIMemories manufactures that repository for its 10 users by asking GPT-5 to play three privacy personas and keeping only the pairs they agree on. The model under test never sees those labels; it is scored on whether it behaves as if it knew them.</li>
+    <li><b>The benchmark's numbers are the no-adversary row.</b> Nobody injects anything. The 14.8% to 69.1% violation rates in <a class="lnk" href="parts/p06-results.html">Table 1</a> are what the report means by agents that fail "through poor judgment or over-eagerness" with no attacker present. The report's other three rows, including prompt injection, are not measured by CIMemories at all.</li>
+    <li><b>Its two scores are the report's definition of a trustworthy agent, minus security.</b> The report wants utility plus privacy plus security. Completeness is utility; Violation@n is privacy; security (actions that are not information flows) is out of scope because the benchmark's only action is writing a message.</li>
+  </ul>
+
+  <h2 id="vocabulary">Vocabulary concordance</h2>
+  <p>The two documents name the same objects differently. The table reads left to right: the benchmark's word, the report's word, and what gets lost or gained in translation.</p>
+  <div class="scroll"><table class="kv">
+    <thead><tr><th>CIMemories says</th><th>The CAPS report says</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td><a class="lnk" href="glossary.html#task">task</a></td><td><a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/guide/glossary.html#t-context">context</a> + recipient + purpose</td><td>A task like "apply for a personal loan [bank loan officer]" fixes the social context (finance), the recipient and the transmission principle at once. Appendix D codes this as "Simple" contextualization and "Simple" transmission principles.</td></tr>
+      <tr><td><a class="lnk" href="glossary.html#memory-statement">memory prefix</a></td><td>system context, loaded into <a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/guide/glossary.html#t-model-context">model context</a></td><td>The report separates what an agent keeps (system context: memory, skills, system prompt) from what is in the window now. The benchmark pastes all of the former into the latter, the "needle in a haystack" design, and never tests retrieval.</td></tr>
+      <tr><td><a class="lnk" href="glossary.html#attribute">attribute</a></td><td>information type, about the subject</td><td>One remembered fact with a domain (health, finance, legal...). The subject is always the user; the report's bystander problems (facts about other people) do not arise.</td></tr>
+      <tr><td><a class="lnk" href="glossary.html#ci-label">CI label</a> (necessary / inappropriate)</td><td>a per-flow norm judgment</td><td>The report's step 2 and step 3 collapsed into one bit per (attribute, task) pair, produced by a model playing <a class="lnk" href="glossary.html#westin-personas">Westin personas</a>. The report would call these aggregated preferences rather than norms; see the caveat below.</td></tr>
+      <tr><td><a class="lnk" href="glossary.html#ambiguous">ambiguous</a> (dropped)</td><td>step 4, resolve uncertainty</td><td>Pairs the personas disagree on are removed from scoring. The report treats exactly those cases (which context applies, conflicting norms) as a step the agent must perform (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/policy-engines.html#uncertainty">§6.6</a>). Appendix D: ambiguity "No".</td></tr>
+      <tr><td><a class="lnk" href="glossary.html#reveal">REVEAL</a> judge</td><td>LLM-judge metric</td><td>DeepSeek-R1 decides whether an attribute's full value appears in the message. Appendix D codes the metrics "judge-based". The camera-ready reports 94% agreement with one author on 100 sampled attributes.</td></tr>
+      <tr><td><a class="lnk" href="glossary.html#violation-at-n">Violation@n</a></td><td>leakage in aggregated flows (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/evaluations.html#op-10-4">OP 10.4</a>), historical context (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/evaluations.html#op-10-3">OP 10.3</a>)</td><td>A worst case per attribute across tasks and samples. It is the closest existing measurement of what the report means by leakage that accumulates over a long relationship, within a single-turn, no-tools setting.</td></tr>
+      <tr><td><a class="lnk" href="glossary.html#completeness">completeness</a></td><td>utility</td><td>The report insists privacy be judged together with utility (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/evaluations.html#op-10-5">OP 10.5</a>). The benchmark's two-number rule is the same insistence.</td></tr>
+      <tr><td><a class="lnk" href="glossary.html#granularity-failure">granularity failure</a></td><td>step 3 failing below the domain level; the semantic boundary of minimization (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/data-privacy.html#op-7-7">OP 7.7</a>)</td><td>The model picks the right domain and shares all of it. The report's minimization problem asks for the same thing the benchmark finds missing: a decision per fact, not per topic.</td></tr>
+      <tr><td><a class="lnk" href="glossary.html#overgeneralization">overgeneralization</a> under privacy prompts</td><td>reliance on the model vs the user (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/policy-engines.html#op-6-1">OP 6.1</a>); teaching contextual reasoning (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/model-reasoning.html#op-8-1">OP 8.1</a>)</td><td>"Be careful" makes the model quieter, not more selective. The report draws the conclusion: judgment cannot be left to a prompt, it needs its own layer.</td></tr>
+      <tr><td><a class="lnk" href="parts/p09-builders.html#granularity">scope, select, draft, check</a></td><td><a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/policy-engines.html">contextual policy engine</a></td><td>The builders' sketch in the CIMemories map is a policy generator (which facts may go) plus an enforcer (a reveal check on the draft). The report's version adds the rule that the generator must see only trusted context (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/policy-engines.html#op-6-5">OP 6.5</a>).</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout off"><b>Norms versus preferences.</b> The report is strict about the difference: a norm is legitimate when it serves the purposes of the context, while a preference is what one person happens to want (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/concepts/contextual-integrity.html">CI, applied to agents</a>). CIMemories builds its ground truth from three survey archetypes of individual preference, sampled from one model, and keeps the unanimous cases. Where all three temperaments agree, preference and norm plausibly coincide, which is the authors' argument for the unanimity rule. Where they do not, the pair is dropped, so the benchmark never adjudicates a norm against a preference. A product filter trained on these labels enforces aggregated preferences; the report's policy engine is meant to look up norms. Both are useful; they are not the same object.</div>
+
+  <h2 id="appendix-d">How the report codes the benchmark</h2>
+  <p>Appendix D of the report scores 16 contextual-integrity benchmarks on ten features. Its row for CIMemories, from <a class="lnk" href="https://storage.googleapis.com/gweb-research2023-media/pubtools/1047874.pdf#page=116" target="_blank" rel="noopener">Table 2, p. 116</a>, cited as Mireshghallah et al. (2026):</p>
+  <div class="scroll"><table class="kv">
+    <thead><tr><th>Feature</th><th>Coding</th><th>Why, in the benchmark's own terms</th></tr></thead>
+    <tbody>
+      <tr><td>Contextualization</td><td>Simple</td><td>A recipient and a one-line purpose; no personas or roles on the recipient side.</td></tr>
+      <tr><td>Transmission principles</td><td>Simple</td><td>One principle for every flow: share what the task needs.</td></tr>
+      <tr><td>Ambiguity</td><td>No</td><td>Disputed pairs are removed rather than designed in.</td></tr>
+      <tr><td>Norms</td><td>Societal; organizational</td><td>Everyday and institutional recipients (doctor, landlord, HR, IRS agent).</td></tr>
+      <tr><td>Realism</td><td>Synthetic</td><td>Faker identities, GPT-OSS-120B memories.</td></tr>
+      <tr><td>Annotation</td><td>Synthetic</td><td>GPT-5 as three personas; a 100-pair human check appears only in the camera-ready.</td></tr>
+      <tr><td>Explanation</td><td>No</td><td>Labels carry no justification to check a model's reasoning against.</td></tr>
+      <tr><td>Metrics</td><td>Leakage; utility; judge-based</td><td>Violation@n, Completeness, DeepSeek-R1 as REVEAL.</td></tr>
+      <tr><td>Granularity</td><td>9 domains; attribute-level granularity</td><td>Figure 3's domain-by-task grid; every score is per attribute.</td></tr>
+      <tr><td>Modality</td><td>Text</td><td>One message out; no tools, no turns, no images.</td></tr>
+    </tbody>
+  </table></div>
+  <p>The report's own reading of this table is in its evaluation section: current benchmarks are mostly atomic, synthetic and single-shot, which is why it lists memory over years, cumulative leakage and moving privacy-utility balances as open problems (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/evaluations.html">Evaluations and benchmarks</a>). CIMemories is the benchmark closest to the first two, inside the limits above.</p>
+
+  <h2 id="which-map">Which map to read for what</h2>
+  <div class="scroll"><table class="kv">
+    <thead><tr><th>If you want</th><th>Go to</th></tr></thead>
+    <tbody>
+      <tr><td>The theory stated carefully, with the four meanings of "context"</td><td><a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/concepts/contextual-integrity.html">CAPS: Contextual Integrity, applied to agents</a></td></tr>
+      <tr><td>The theory as a working mechanism you can poke</td><td><a class="lnk" href="flow-explorer.html">CIMemories: flow explorer</a></td></tr>
+      <tr><td>Measured numbers for how badly models do with no attacker</td><td><a class="lnk" href="parts/p06-results.html">CIMemories: Table 1, unpacked</a></td></tr>
+      <tr><td>Why leakage grows with use, and how fast</td><td><a class="lnk" href="composition-explorer.html">CIMemories: composition explorer</a>, then <a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/evaluations.html#op-10-4">CAPS OP 10.4</a></td></tr>
+      <tr><td>Every way a leak can happen with and without an attacker</td><td><a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/explore/leak-paths.html">CAPS: where leaks come from</a></td></tr>
+      <tr><td>What to build Monday</td><td><a class="lnk" href="parts/p09-builders.html">CIMemories: for builders</a> (measure) and <a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/guide/for-builders.html">CAPS: for builders</a> (architect)</td></tr>
+      <tr><td>Where the field moved after both documents</td><td><a class="lnk" href="parts/p08-limitations.html#next">CIMemories: what came next</a> and <a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/index.html#next">CAPS: what came next</a></td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="check">Check yourself</h2>
+  <ol class="exercises">
+    <li>Which of the report's five steps does CIMemories measure, and which does it supply from outside the model?
+      <details><summary>Answer</summary><p>It measures step 3, apply: does the model's message respect a norm it was never told? Step 2, locate, is supplied by the benchmark's labels, which GPT-5 produced as three personas. Steps 1, 4 and 5 are not exercised: the flow is given by the task, ambiguous pairs are dropped, and nothing is actually sent.</p></details></li>
+    <li>Why does Appendix D code the benchmark's transmission principles as "Simple" even though the flow explorer offers four?
+      <details><summary>Answer</summary><p>In the benchmark every message travels under the same principle: share what this task needs, at the user's request. The explorer's other principles (in confidence, volunteered, sold) are the theory's, not the benchmark's. Only the recipient and purpose vary in CIMemories.</p></details></li>
+    <li>A product team trains a filter on CIMemories-style labels. In the report's vocabulary, what has it built?
+      <details><summary>Answer</summary><p>A policy generator over aggregated preferences: the unanimous view of three privacy personas, produced by a model. The report's policy engine is meant to look up a context's norms, which are legitimate when they serve the context's purposes. Where the personas agree the two likely coincide; where they would disagree, the benchmark has no label, so the filter has no opinion.</p></details></li>
+  </ol>
+
+  <h2 id="further">Further reading, verified</h2>
+  <ul class="readings">
+    <li><a href="https://storage.googleapis.com/gweb-research2023-media/pubtools/1047874.pdf#page=23" target="_blank" rel="noopener">CAPS report §6, p. 23</a>: the five reasoning steps; <a href="https://storage.googleapis.com/gweb-research2023-media/pubtools/1047874.pdf#page=12" target="_blank" rel="noopener">§3, pp. 12&ndash;14</a>: the four threat models; <a href="https://storage.googleapis.com/gweb-research2023-media/pubtools/1047874.pdf#page=116" target="_blank" rel="noopener">Appendix D Table 2, p. 116</a>: the CIMemories row.</li>
+    <li><a href="https://arxiv.org/html/2511.14937v1#S3" target="_blank" rel="noopener">CIMemories §3</a>: the formal setup the concordance translates; <a href="https://proceedings.iclr.cc/paper_files/paper/2026/file/9a2bcfaf383638e166162a25b6dff125-Paper-Conference.pdf" target="_blank" rel="noopener">ICLR 2026 camera-ready (PDF)</a>: adds the human-agreement study (§6, Table 4).</li>
+    <li><a href="https://privaci.info/glossary" target="_blank" rel="noopener">The Contextual Integrity glossary</a>, maintained by the CI community: the vocabulary both maps use, in its current form.</li>
+  </ul>
+
+  <div class="callout">Back to the <a class="lnk" href="index.html#related">map</a>.</div>
+</main>
+<footer>A bridge page shared by <a href="https://idvorkin-ai-tools.github.io/cimemories-field-map/">CIMemories, mapped</a> and <a href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/">Agentic privacy, mapped</a>. The paper and the report are &copy; their authors; this page explains and links, it does not copy. Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.</footer>
+<script src="fig.js" defer></script>
+</body>
+</html>
