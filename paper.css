@@ -220,6 +220,7 @@ fieldset.fx-ctl.fx-key legend::after{content:" \25C2 decides";color:var(--off-br
 .fx-verdict{border-left:3px solid;border-radius:0 10px 10px 0;padding:11px 14px;margin:0 0 14px}
 .fx-verdict.ok,.fx-cim-out.ok{border-color:#5BD68A;background:rgba(91,214,138,.07)}
 .fx-verdict.bad,.fx-cim-out.bad{border-color:var(--crit);background:rgba(229,72,77,.07)}
+.fx-verdict.gap{border-color:var(--off)}
 .fx-v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:17px}
 .ok .fx-v{color:#5BD68A}.bad .fx-v{color:var(--crit)}
 .fx-why{font-size:14.5px;color:var(--ink-mid);margin-top:3px}
@@ -297,3 +298,18 @@ table.fx-grid td.lab{font-size:12.5px;max-width:260px}
 .fx-cim-out.neutral .fx-v{color:var(--ink)}
 .fx-cim-out dl.fx-five{grid-template-columns:repeat(6,1fr)}
 @media (max-width:640px){.fx-cim-out dl.fx-five{grid-template-columns:1fr 1fr}}
+
+/* Shared terms (assets/terms.js): Plain / Technical / ELI5 blocks, and the
+   definitions list, whose own "Definitions" label repeats the h2 above it. */
+html:is([data-tech="on"],[data-eli5="on"]) .plain-only,html:not([data-tech="on"]) .tech-only,html:not([data-eli5="on"]) .eli5-only,html[data-tech="on"] .no-tech{display:none!important}
+.gl-list .gl-list-h{display:none}
+
+/* widgets/model-scatter.js (p06) */
+.ms-models{display:flex;flex-wrap:wrap;gap:4px 14px;margin:4px 0 8px;font-size:13px;color:var(--ink-mid)}
+.ms-models label{display:inline-flex;align-items:center;gap:5px;min-height:28px;cursor:pointer}
+.ms-models input{accent-color:var(--def);margin:0}
+.ms-focus{font-size:13.5px;color:var(--ink-mid);margin:4px 0}
+.ms-focus select{font:inherit;color:var(--ink);background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 6px;min-height:32px;margin:0 4px;max-width:100%}
+.lab-pre button[aria-pressed="true"]{border-color:var(--def);color:var(--ink)}
+/* phones: the mode control joins the top bar, so the brand takes its own row */
+@media (max-width:560px){.bar-in:has(.modesel){flex-wrap:wrap;row-gap:6px}.bar-in:has(.modesel) .brand{flex-basis:100%}}
