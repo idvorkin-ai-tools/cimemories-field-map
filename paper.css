@@ -298,3 +298,8 @@ table.fx-grid td.lab{font-size:12.5px;max-width:260px}
 .fx-cim-out.neutral .fx-v{color:var(--ink)}
 .fx-cim-out dl.fx-five{grid-template-columns:repeat(6,1fr)}
 @media (max-width:640px){.fx-cim-out dl.fx-five{grid-template-columns:1fr 1fr}}
+
+/* Shared terms (assets/terms.js): Plain / Technical / ELI5 blocks, and the
+   definitions list, whose own "Definitions" label repeats the h2 above it. */
+html:is([data-tech="on"],[data-eli5="on"]) .plain-only,html:not([data-tech="on"]) .tech-only,html:not([data-eli5="on"]) .eli5-only,html[data-tech="on"] .no-tech{display:none!important}
+.gl-list .gl-list-h{display:none}

@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="paper.css" />
+<script>try{var m=localStorage.getItem('aitools-mode')||localStorage.getItem('llm-judges-mode');if(m==='tech'||m==='eli5')document.documentElement.setAttribute('data-'+m,'on')}catch(e){}</script>
 </head>
 <body>
 <header class="bar"><div class="bar-in">
@@ -21,7 +22,11 @@
   <div class="authors">Every term the map uses, what it means in this paper, and where to read more</div>
   <div class="paperlink" style="border-left-color:var(--off)"><span class="lbl">Paper</span><a href="https://arxiv.org/html/2511.14937v1#S3" target="_blank" rel="noopener">CIMemories, §3 — Contextual Integrity in Memory-Augmented Settings ↗</a></div>
 
-  <div class="tldr"><b>TL;DR —</b> CIMemories borrows its idea of privacy from contextual integrity: a fact is neither public nor private on its own, and what matters is whether a particular flow to a particular recipient fits the norms of that setting. The benchmark turns that idea into data (profiles of remembered attributes, tasks with recipients, a share-or-withhold label per pair) and into two numbers (Violation@n and Completeness). The terms below are grouped in that order: the theory, the memory setup, the dataset, the metrics, and the findings. Each entry points to the paper section that defines the term and to the page of this map that explains it.</div>
+  <div class="tldr plain-only"><b>TL;DR —</b> CIMemories borrows its idea of privacy from <span class="term" data-term="contextual-integrity">contextual integrity</span>: a fact is neither public nor private on its own, and what matters is whether a particular flow to a particular recipient fits the <span class="term" data-term="norm">norms</span> of that setting. The benchmark turns that idea into data (profiles of remembered <span class="term" data-term="attribute">attributes</span>, tasks with recipients, a share-or-withhold label per pair) and into two numbers (<span class="term" data-term="violation-at-n">Violation@n</span> and <span class="term" data-term="completeness">Completeness</span>). The terms below are grouped in that order: the theory, the memory setup, the dataset, the metrics, and the findings. Each entry points to the paper section that defines the term and to the page of this map that explains it.</div>
+
+  <div class="tldr tech-only"><b>TL;DR —</b> The benchmark's objects, in dependency order: a profile s with attribute set A<sub>s</sub> (key–value facts in nine domains); tasks t, each a recipient plus a purpose, from 49 seed contexts; an oracle G<sup>t</sup><sub>s</sub>(a) ∈ {0, 1} built from unanimous GPT-5 Westin-persona labels; a judge R(y, a) for explicit reveals; and two metrics over them, Violation@n (a per-attribute max over tasks and n samples) and Completeness (a per-task mean). Each entry cites the section that defines it.</div>
+
+  <div class="tldr eli5-only"><b>TL;DR —</b> This page is the word list for the rest of the map. The big idea: a fact about you is not secret or not secret by itself; it depends on who hears it. The words below are how the researchers turned that idea into a test with two scores: how much got told to the wrong person, and how much of what was needed got told at all.</div>
 
   <div class="chips">
     <a class="tag wb" href="#ambiguous">ambiguous pair</a>
@@ -55,13 +60,13 @@
     <a class="tag wb" href="#westin-personas">Westin personas</a>
   </div>
 
-  <p class="lead">The paper is short, and it leans on a handful of words that carry precise meanings: "context" is a social setting, not a context window; "violation" is a worst case per attribute, not an average per message; "necessary" and "inappropriate" exist only for pairs every persona agreed on. Getting these straight is most of the work of reading the results correctly.</p>
+  <p class="lead">The paper is short, and it leans on a handful of words that carry precise meanings: "context" is a social setting, not a <span class="term" data-term="model-context">context window</span>; "violation" is a worst case per attribute, not an average per message; "necessary" and "inappropriate" exist only for pairs every persona agreed on. Getting these straight is most of the work of reading the results correctly.</p>
 
   <h2 id="theory">The theory: privacy as appropriate flow</h2>
   <p>Drawn from <a href="https://arxiv.org/html/2511.14937v1#S1" target="_blank" rel="noopener">§1</a> and <a href="https://arxiv.org/html/2511.14937v1#S2" target="_blank" rel="noopener">§2</a>; explained in depth on <a class="lnk" href="parts/p01-contextual-integrity.html">Part 01</a>.</p>
   <dl class="gloss">
     <dt id="contextual-integrity">Contextual integrity (CI)</dt>
-    <dd>Helen Nissenbaum's account of privacy (2004, formalised with Barth et al. in 2006): a privacy violation is an information flow that breaks the norms of the setting it happens in, not the exposure of something labelled "secret". Breaking a norm makes a flow a prima facie violation; a flow that departs from the norms, or that no norm covers, is then judged by whether it still serves the context's purposes (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/concepts/contextual-integrity.html#heuristic">the CI heuristic</a>). CIMemories takes this as its definition of a leak, which is why the same remembered fact can be fine in one task and a violation in the next. The theory's canonical statement is Nissenbaum's 2009 book <em>Privacy in Context</em>; the paper cites the 2004 article, which the CAPS report treats as superseded (<a class="lnk" href="parts/p01-contextual-integrity.html#flows">Part 01</a> has the note). Paper: <a href="https://arxiv.org/html/2511.14937v1#S1" target="_blank" rel="noopener">§1</a>. Map: <a class="lnk" href="parts/p01-contextual-integrity.html">Part 01</a>, <a class="lnk" href="bridge.html">bridge to the CAPS report</a>.</dd>
+    <dd>Helen Nissenbaum's account of privacy (2004, formalised with Barth et al. in 2006): a privacy violation is an information flow that breaks the norms of the setting it happens in, not the exposure of something labelled "secret". Breaking a norm makes a flow a prima facie violation; a flow that departs from the norms, or that no norm covers, is then judged by whether it still serves the context's purposes (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/concepts/contextual-integrity.html#heuristic">the CI heuristic</a>). CIMemories takes this as its definition of a leak, which is why the same remembered fact can be fine in one task and a violation in the next. The theory's canonical statement is Nissenbaum's 2009 book <em>Privacy in Context</em>; the paper cites the 2004 article, which the CAPS report treats as superseded (<a class="lnk" href="parts/p01-contextual-integrity.html#flows">Part 01</a> has the note). Paper: <a href="https://arxiv.org/html/2511.14937v1#S1" target="_blank" rel="noopener">§1</a>. Map: <a class="lnk" href="parts/p01-contextual-integrity.html">Part 01</a>, <a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/guide/bridge.html">bridge to the CAPS report</a>.</dd>
 
     <dt id="information-flow">Information flow</dt>
     <dd>The unit CI reasons about: a piece of information about someone moving from a sender to a recipient for some purpose. In the benchmark, the flow is the assistant writing one remembered <a class="lnk" href="#attribute">attribute</a> into a message addressed to a task's <a class="lnk" href="#recipient">recipient</a>. The paper's conclusion frames the whole benchmark as testing whether assistants "appropriately control information flow". Paper: <a href="https://arxiv.org/html/2511.14937v1#S7" target="_blank" rel="noopener">§7</a>. Map: <a class="lnk" href="parts/p01-contextual-integrity.html">Part 01</a>.</dd>
@@ -176,6 +181,9 @@
       <details><summary>Answer</summary><p>Ambiguous pairs: any where the Westin personas disagreed or the labeller abstained (§4.1.2). The scores therefore measure behaviour on clear-cut cases only, the "more egregious" ones the authors chose to focus on.</p></details></li>
   </ol>
 
+  <h2 id="definitions">Definitions</h2>
+  <div data-terms-list></div>
+
   <h2 id="further">Further reading, verified</h2>
   <ul class="readings">
     <li><a href="https://arxiv.org/html/2511.14937v1#S3" target="_blank" rel="noopener">CIMemories §3</a>: the notation, REVEAL, and Definitions 3.1&ndash;3.2 that most of these terms come from.</li>
@@ -191,5 +199,6 @@
 <footer>Original explanation of CIMemories (arXiv:2511.14937v1), FAIR at Meta. The paper is &copy; its authors; this page links and explains, it does not copy. Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.</footer>
 <!-- Private comments mode, inert unless ?annotate=1 (see assets/annotate.js in idvorkin-ai-tools.github.io) -->
 <script src="https://idvorkin-ai-tools.github.io/assets/annotate.js" defer></script>
+<script src="https://idvorkin-ai-tools.github.io/assets/terms.js" defer></script>
 </body>
 </html>

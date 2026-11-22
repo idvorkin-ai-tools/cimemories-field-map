@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="paper.css" />
+<script>try{var m=localStorage.getItem('aitools-mode')||localStorage.getItem('llm-judges-mode');if(m==='tech'||m==='eli5')document.documentElement.setAttribute('data-'+m,'on')}catch(e){}</script>
 </head>
 <body>
 <header class="bar"><div class="bar-in">
@@ -42,12 +43,12 @@
   </section>
 
   <h2 id="what-it-shows">What the dials show</h2>
-  <p><b>Samples multiply exposures.</b> Violation@n is a worst case: a fact counts as leaked if it appears in any sample of any task where it was inappropriate (<a class="lnk" href="parts/p04-measuring.html#violation">Part 04</a>). If a fact is exposed <i>eK</i> times per sample and <i>T</i> samples are drawn, it survives all <i>eKT</i> exposures with probability (1&nbsp;&minus;&nbsp;<i>p</i>)<sup><i>eKT</i></sup>. Everything else on this page follows from that one line. Move <i>T</i> from 1 to 5 and watch the whole curve lift; that is the gap between Figure 2's 9.6% and 25.1%.</p>
+  <p><b>Samples multiply exposures.</b> <span class="term" data-term="violation-at-n">Violation@n</span> is a worst case: a fact counts as leaked if it appears in any sample of any task where it was inappropriate (<a class="lnk" href="parts/p04-measuring.html#violation">Part 04</a>). If a fact is exposed <i>eK</i> times per sample and <i>T</i> samples are drawn, it survives all <i>eKT</i> exposures with probability (1&nbsp;&minus;&nbsp;<i>p</i>)<sup><i>eKT</i></sup>. Everything else on this page follows from that one line. Move <i>T</i> from 1 to 5 and watch the whole curve lift; that is the gap between Figure 2's 9.6% and 25.1%.</p>
   <p><b>Independence gives a concave curve, and the paper's first point sits below it.</b> With every fact alike, the model cannot go from 0.1% at one task to 9.6% at forty: forty times the exposure gives at most forty times the leakage when <i>p</i> is small, and the curve bends down, not up. Try the first experiment above. The honest reading is that the paper's single-task point is not an average task: which tasks a user runs matters as much as how many, and the paper does not say how its forty are ordered (<a class="lnk" href="parts/p05-composition.html#multitask">Part 05</a>). A benchmark of your own should randomise task order or report the spread.</p>
   <p><b>A leak-prone minority explains the ceiling.</b> Lower <i>f</i> and the curve flattens toward <i>f</i>: no matter how many tasks run, facts that never leak never leak. The Table 1 ticks on the right edge are eight models' Violation@5 over a full task set. Under this model each tick is a lower bound on that model's <i>f</i>: at least that share of a user's at-risk facts are the kind that leaks. Qwen-3 32B's 69.14% means more than two thirds of a user's facts leaked at least once in five draws over about 46 tasks (45.7 on average, Table 2). The paper does not estimate <i>f</i>; the dial is a way to think about what the number implies.</p>
 
   <h2 id="memory-dial">The other dial: more memory</h2>
-  <p>Figure 2 varies tasks with memory fixed. <a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.F5" target="_blank" rel="noopener">Figure 5</a> does the reverse on five profiles: the facts a task needs stay in memory and inappropriate ones are added from zero. Violations rise while completeness stays flat. The paper prints the trend, not the values, so the panel below is the shape only, driven by the model above.</p>
+  <p>Figure 2 varies tasks with memory fixed. <a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.F5" target="_blank" rel="noopener">Figure 5</a> does the reverse on five profiles: the facts a task needs stay in memory and inappropriate ones are added from zero. Violations rise while <span class="term" data-term="completeness">completeness</span> stays flat. The paper prints the trend, not the values, so the panel below is the shape only, driven by the model above.</p>
   <section class="cx cx-mem" aria-label="Memory dial">
     <label class="cx-s"><span class="cx-k">Inappropriate facts in memory <em>m</em></span><input type="range" id="m" min="0" max="140" value="84" aria-describedby="m-v"><span class="cx-v mono" id="m-v"></span><span class="cx-h">Table 2: 83.7 &plusmn; 31.5 not-to-share facts per context. The needed facts are held fixed, as in Figure 5.</span></label>
     <svg id="mchart" class="dg" viewBox="0 0 400 150" role="img" aria-labelledby="mchart-t"><title id="mchart-t">Expected number of leaked facts rising linearly with inappropriate facts in memory while completeness stays flat; the shape of Figure 5, not its values</title></svg>
@@ -55,7 +56,10 @@
   </section>
   <p>The flat line is the part to notice. Extra inappropriate facts buy nothing for the task, so completeness does not move, while each one is another draw against <i>p</i>. An assistant whose memory grows for months is walking up the x-axis of this panel. <a class="lnk" href="parts/p09-builders.html#growth">For builders, lesson 5</a> draws the conclusion: scope what memory a task can see.</p>
 
-  <div class="callout">The model on this page is a reading aid with four knobs; the paper's data are the three Figure 2 points, the Figure 5 trend and the Table 1 column. For the arithmetic as the paper states it, see <a class="lnk" href="parts/p04-measuring.html#arithmetic">Part 04</a>; for the measured curves, <a class="lnk" href="parts/p05-composition.html">Part 05</a>; for how this maps onto the CAPS report's "leakage that accumulates" problem, the <a class="lnk" href="bridge.html">bridge page</a>. Back to the <a class="lnk" href="index.html#benchmark">map</a>.</div>
+  <h2 id="definitions">Definitions</h2>
+  <div data-terms-list></div>
+
+  <div class="callout">The model on this page is a reading aid with four knobs; the paper's data are the three Figure 2 points, the Figure 5 trend and the Table 1 column. For the arithmetic as the paper states it, see <a class="lnk" href="parts/p04-measuring.html#arithmetic">Part 04</a>; for the measured curves, <a class="lnk" href="parts/p05-composition.html">Part 05</a>; for how this maps onto the CAPS report's "leakage that accumulates" problem, the <a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/guide/bridge.html">bridge page</a>. Back to the <a class="lnk" href="index.html#benchmark">map</a>.</div>
 </main>
 <footer>An explorable for the CIMemories field map (arXiv:2511.14937, ICLR 2026). The model curves are the map's; the Figure 2 points and Table 1 values are the paper's. Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.</footer>
 <script>
@@ -160,5 +164,6 @@ draw();
 </script>
 <!-- Private comments mode, inert unless ?annotate=1 (see assets/annotate.js in idvorkin-ai-tools.github.io) -->
 <script src="https://idvorkin-ai-tools.github.io/assets/annotate.js" defer></script>
+<script src="https://idvorkin-ai-tools.github.io/assets/terms.js" defer></script>
 </body>
 </html>
