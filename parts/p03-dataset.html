@@ -74,7 +74,7 @@
   <blockquote class="q off">the myth of the average user (Biselli et al., 2022) implies that individuals often do no agree with each other, and that integrity labels instead follow a distribution.<span class="cite">— CIMemories, <a href="https://arxiv.org/html/2511.14937v1#S4.SS1.SSS2" target="_blank" rel="noopener">§4.1.2</a></span></blockquote>
   <p>The authors handle both problems the same way. They model the distribution of answers, then keep only the pairs where it has a single value. In practice:</p>
   <ol class="outline">
-    <li><b>One labeller, three viewpoints.</b> GPT-5 labels the pairs while role-playing each of the <a class="lnk" href="../glossary.html#westin-personas">Westin personas</a>: the privacy fundamentalist, the pragmatic and the unconcerned. These come from decades of survey work summarized by <a class="lnk" href="https://www.cs.cmu.edu/~ponguru/CMU-ISRI-05-138.pdf" target="_blank" rel="noopener">Kumaraguru and Cranor</a>. The paper justifies using a model by citing earlier findings that LLMs tend to agree with humans, or be more conservative than them, when judging what is private (ConfAide, PrivacyLens).</li>
+    <li><b>One labeller, three viewpoints.</b> GPT-5 labels the pairs while role-playing each of the <a class="lnk" href="../glossary.html#westin-personas">Westin personas</a>: the privacy fundamentalist, the pragmatic and the unconcerned. These come from decades of survey work summarized by <a class="lnk" href="https://www.cs.cmu.edu/~ponguru/CMU-ISRI-05-138.pdf" target="_blank" rel="noopener">Kumaraguru and Cranor</a>. The paper justifies using a model by citing earlier findings that LLMs tend to agree with humans, or be more conservative than them, when judging what is private (ConfAIde, PrivacyLens).</li>
     <li><b>Ten samples per persona.</b> Each persona is sampled 10 times, which gives a distribution of answers per pair for each persona. The labeller may abstain when unsure.</li>
     <li><b>Mix by population share.</b> The three per-persona distributions are combined using Westin's priors, i.e. how common each persona is in the surveys. The paper does not print the prior weights.</li>
     <li><b>Keep only zero-entropy pairs.</b> A pair gets a binary label only if the mixed distribution has no entropy, meaning every persona gives the same answer. All other pairs, including any where the labeller abstained, are marked <a class="lnk" href="../glossary.html#ambiguous">ambiguous</a> and dropped from the scores.</li>
@@ -121,7 +121,7 @@
     <li><a href="https://www.cs.cmu.edu/~ponguru/CMU-ISRI-05-138.pdf" target="_blank" rel="noopener">Kumaraguru &amp; Cranor, "Privacy Indexes: A Survey of Westin's Studies"</a> (CMU-ISRI-05-138, 2005), the source of the three personas and their priors.</li>
     <li><a href="https://doi.org/10.56553/popets-2022-0126" target="_blank" rel="noopener">Biselli et al., "On the Challenges of Developing a Concise Questionnaire to Identify Privacy Personas"</a> (PoPETs 2022), cited for the "myth of the average user".</li>
     <li><a href="https://arxiv.org/abs/2508.10925" target="_blank" rel="noopener">gpt-oss-120b &amp; gpt-oss-20b model card</a> (arXiv:2508.10925), the profile generator.</li>
-    <li><a href="https://arxiv.org/abs/2310.17884" target="_blank" rel="noopener">ConfAide</a> (arXiv:2310.17884) and <a href="https://arxiv.org/abs/2409.00138" target="_blank" rel="noopener">PrivacyLens</a> (arXiv:2409.00138), the earlier work behind the claim that LLMs label privacy about as well as humans or more conservatively.</li>
+    <li><a href="https://arxiv.org/abs/2310.17884" target="_blank" rel="noopener">ConfAIde</a> (arXiv:2310.17884) and <a href="https://arxiv.org/abs/2409.00138" target="_blank" rel="noopener">PrivacyLens</a> (arXiv:2409.00138), the earlier work behind the claim that LLMs label privacy about as well as humans or more conservatively.</li>
     <li><a href="https://github.com/facebookresearch/CIMemories" target="_blank" rel="noopener">facebookresearch/CIMemories</a> and <a href="https://huggingface.co/datasets/facebook/CIMemories" target="_blank" rel="noopener">the Hugging Face dataset</a>: the raw profiles, and the script that regenerates the labels (CC BY-NC 4.0).</li>
   </ul>
 
@@ -129,6 +129,6 @@
 </main>
 <footer>Original explanation of CIMemories (arXiv:2511.14937v1), FAIR at Meta. The paper is &copy; its authors; this page links and explains, it does not copy. Part of <a href="https://idvorkin-ai-tools.github.io/">the field maps</a>.</footer>
 <!-- Private comments mode, inert unless ?annotate=1 (see assets/annotate.js in idvorkin-ai-tools.github.io) -->
-<script src="https://idvorkin-ai-tools.github.io/assets/annotate.js" data-branch="field-map" defer></script>
+<script src="https://idvorkin-ai-tools.github.io/assets/annotate.js" defer></script>
 </body>
 </html>

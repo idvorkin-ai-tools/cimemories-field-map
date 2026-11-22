@@ -51,12 +51,12 @@
     <div class="fx-secrecy" id="secrecy"></div>
 
     <h2 id="norms-h"><a class="lnk" href="glossary.html#norm">Norms</a> of <span id="norms-ctx"></span></h2>
-    <p class="fx-note">Read top to bottom; the first norm that matches the flow decides it. If none matches, nothing in this context sanctions the flow, and under contextual integrity that makes it a violation. This list is the piece nobody has for real contexts: a repository of norms an agent could look up is itself an open problem in the CAPS report (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/policy-engines.html#op-6-3" target="_blank" rel="noopener">OP 6.3</a>, <a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/governance.html#op-12-2" target="_blank" rel="noopener">OP 12.2</a>); here the map wrote twelve by hand for three contexts.</p>
+    <p class="fx-note">Read top to bottom; the first norm that matches the flow decides it. If none matches, nothing in this context sanctions the flow. That is a gap, not yet a violation: CI's decision heuristic sends a flow no norm covers on to evaluation, asking whether it serves the context's purposes (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/concepts/contextual-integrity.html#heuristic">Case 3</a>). This list is the piece nobody has for real contexts: a repository of norms an agent could look up is itself an open problem in the CAPS report (<a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/policy-engines.html#op-6-3" target="_blank" rel="noopener">OP 6.3</a>, <a class="lnk" href="https://idvorkin-ai-tools.github.io/agentic-privacy-field-map/problems/governance.html#op-12-2" target="_blank" rel="noopener">OP 12.2</a>); here the map wrote twelve by hand for three contexts.</p>
     <ol class="fx-norms" id="norms"></ol>
   </section>
 
   <h2 id="cimemories">How CIMemories uses this</h2>
-  <p>In <a class="lnk" href="parts/p03-dataset.html">CIMemories</a> four of the five parameters are fixed. The <b>sender</b> is always the assistant writing for the user, the <b>subject</b> is always the user, the <b>information type</b> is one remembered <a class="lnk" href="glossary.html#attribute">attribute</a>, and the <b>transmission principle</b> is the same for every flow: the message shares what the task needs, at the user's request. Only the <a class="lnk" href="glossary.html#task">task</a> varies, and it brings the recipient and the purpose. That is where the explorer above and the benchmark part ways: the principle chips you can flip up there (in confidence, volunteered, sold) are the theory's, and the benchmark never varies them, which is why the CAPS report's survey of benchmarks codes its transmission principles as "Simple" (<a class="lnk" href="bridge.html#appendix-d">bridge page</a>). So every (attribute, task) pair gets its own <a class="lnk" href="glossary.html#ci-label">label</a>, and the label is a norm judgment made once, outside the model.</p>
+  <p>In <a class="lnk" href="parts/p03-dataset.html">CIMemories</a> three of the five parameters are fixed. The <b>sender</b> is always the assistant writing for the user, the <b>subject</b> is always the user, and the <b>transmission principle</b> is the same for every flow: the message shares what the task needs, at the user's request. Two vary: the <b>information type</b> is one remembered <a class="lnk" href="glossary.html#attribute">attribute</a>, and the <a class="lnk" href="glossary.html#task">task</a> brings the recipient and the purpose. That is where the explorer above and the benchmark part ways: the principle chips you can flip up there (in confidence, volunteered, sold) are the theory's, and the benchmark never varies them, which is why the CAPS report's survey of benchmarks codes its transmission principles as "Simple" (<a class="lnk" href="bridge.html#appendix-d">bridge page</a>). So every (attribute, task) pair gets its own <a class="lnk" href="glossary.html#ci-label">label</a>, and the label is a norm judgment made once, outside the model.</p>
   <p>Below are real memory statements and real task contexts from the public release, two of the ten synthetic people. The release ships no labels: the evaluation scripts regenerate them by asking GPT-5 to answer as three privacy personas (<a class="lnk" href="parts/p03-dataset.html#labels">Part 03</a>). So the labelling here is yours to do. Pick a fact and a task, decide, and watch your own label grid fill in.</p>
 
   <div class="fx-cim">
@@ -68,7 +68,7 @@
     <div class="scroll"><table class="kv fx-grid" id="m-grid"></table></div>
     <p class="fx-note" id="m-tally" aria-live="polite"></p>
   </div>
-  <p>A handful of decisions is enough to see the paper's idea: no row of your grid wants to be all green or all red, so no fixed "private" flag on a fact can be right. GPT-5 answers the same question for about 147 facts and 46 tasks per person, ten times as each of three personas, and a pair is scored only when all thirty answers agree. The model under test then has to get those cells right without ever seeing them. Revealing a withhold cell counts toward <a class="lnk" href="glossary.html#violation-at-n">Violation@n</a>, and leaving out a share cell costs <a class="lnk" href="glossary.html#completeness">completeness</a> (<a class="lnk" href="parts/p06-results.html">Part 06</a>).</p>
+  <p>A handful of decisions is enough to see the paper's idea: no row of your grid wants to be all green or all red, so no fixed "private" flag on a fact can be right. GPT-5 answers the same question for about 147 facts and 45.7 (≈46) tasks per person, ten times as each of three personas, and a pair is scored only when all thirty answers agree. The model under test then has to get those cells right without ever seeing them. Revealing a withhold cell counts toward <a class="lnk" href="glossary.html#violation-at-n">Violation@n</a>, and leaving out a share cell costs <a class="lnk" href="glossary.html#completeness">completeness</a> (<a class="lnk" href="parts/p06-results.html">Part 06</a>).</p>
 
   <div class="callout">Rosa, her norms and her contexts in the top half are the map's illustration. The facts and tasks in the bottom half are a sample of the <a class="lnk" href="https://huggingface.co/datasets/facebook/CIMemories" target="_blank" rel="noopener">facebook/CIMemories</a> release (synthetic people; CC BY-NC 4.0, non-commercial), reproduced with attribution; the labels are whatever you decide. More: <a class="lnk" href="parts/p01-contextual-integrity.html">contextual integrity</a>, <a class="lnk" href="parts/p04-measuring.html">how the paper scores leaks</a>, <a class="lnk" href="composition-explorer.html">how leaks add up with use</a>, <a class="lnk" href="parts/p09-builders.html#granularity">filter facts, not topics</a>, and the <a class="lnk" href="bridge.html">bridge to the CAPS report</a>. Back to the <a class="lnk" href="index.html#idea">map</a>.</div>
 </main>
@@ -163,12 +163,13 @@ function render(){
   var flip = '';
   if (prev && lastChange){
     var changed = lastChange.length === 1 ? 'You changed the ' + NAME[lastChange[0]] : 'You changed ' + lastChange.map(function(p){ return 'the ' + NAME[p]; }).join(', ');
-    if (prev.ok !== ok) flip = '<div class="fx-flip">' + esc(changed) + '. The verdict flipped from ' + (prev.ok ? 'appropriate to violation' : 'violation to appropriate') + '.</div>';
+    if (prev.ok !== ok || prev.gap !== (d.i < 0)) flip = '<div class="fx-flip">' + esc(changed) + '. The verdict flipped from ' + (prev.ok ? 'appropriate' : prev.gap ? 'a gap' : 'violation') + ' to ' + (ok ? 'appropriate' : d.i < 0 ? 'a gap' : 'violation') + '.</div>';
     else if (prev.t !== d.n.t) flip = '<div class="fx-flip same">' + esc(changed) + '. Same verdict, but a different norm decides it now.</div>';
     else flip = '<div class="fx-flip same">' + esc(changed) + '. Nothing moved: the deciding norm does not test that parameter.</div>';
   }
-  $('verdict').className = 'fx-verdict ' + (ok ? 'ok' : 'bad');
-  $('verdict').innerHTML = '<div class="fx-v">' + (ok ? 'Appropriate flow' : 'Violation') + '</div>' +
+  var gap = d.i < 0;
+  $('verdict').className = 'fx-verdict ' + (ok ? 'ok' : gap ? 'gap' : 'bad');
+  $('verdict').innerHTML = '<div class="fx-v">' + (ok ? 'Appropriate flow' : gap ? 'No norm covers it: a gap to evaluate' : 'Violation') + '</div>' +
     '<div class="fx-why">Decided by ' + (d.i >= 0 ? 'norm ' + (d.i + 1) : 'the default') + ': ' + esc(d.n.t) +
     (d.n.keys.length ? ' <span class="fx-tests">It tests: ' + d.n.keys.map(function(k){ return NAME[k]; }).join(', ') + '.</span>' : '') + '</div>' + flip;
 
@@ -176,7 +177,7 @@ function render(){
   var agree = isPub === ok;
   $('secrecy').className = 'fx-secrecy ' + (agree ? 'agree' : 'disagree');
   $('secrecy').innerHTML = '<div><b>A secrecy rule</b> ("public is fine to share, private is not") sees: ' + esc(pub) + ', so it says <em>' + (isPub ? 'share' : 'withhold') + '</em>.</div>' +
-    '<div><b>Contextual integrity</b> says <em>' + (ok ? 'appropriate' : 'violation') + '</em>.</div>' +
+    '<div><b>Contextual integrity</b> says <em>' + (ok ? 'appropriate' : gap ? 'not sanctioned here; evaluate it' : 'violation') + '</em>.</div>' +
     '<div class="fx-agree">' + (agree ? 'They agree here, by coincidence. Change the recipient or the context and watch them split.' : 'They disagree. Whether a fact is secret does not decide the flow; the context’s norm does.') + '</div>';
 
   $('norms-ctx').textContent = P.ctx[x.ctx].split(':')[0].toLowerCase();
@@ -184,7 +185,7 @@ function render(){
     return '<li class="' + (n.ok ? 'allow' : 'forbid') + (i === d.i ? ' hit' : '') + '"><span class="fx-k">' + (n.ok ? 'allows' : 'forbids') + '</span> ' + esc(n.t) +
       ' <span class="fx-tests">tests ' + n.keys.map(function(k){ return NAME[k]; }).join(', ') + '</span></li>';
   }).join('') + '<li class="forbid fallback' + (d.i < 0 ? ' hit' : '') + '"><span class="fx-k">default</span> ' + esc(FALLBACK.t) + '</li>';
-  prev = {ok:ok, t:d.n.t};
+  prev = {ok:ok, gap:d.i < 0, t:d.n.t};
 }
 
 function set(changes){
@@ -277,6 +278,6 @@ fetch('data/pairs.json').then(function(r){ if (!r.ok) throw new Error(r.status);
 })();
 </script>
 <!-- Private comments mode, inert unless ?annotate=1 (see assets/annotate.js in idvorkin-ai-tools.github.io) -->
-<script src="https://idvorkin-ai-tools.github.io/assets/annotate.js" data-branch="field-map" defer></script>
+<script src="https://idvorkin-ai-tools.github.io/assets/annotate.js" defer></script>
 </body>
 </html>

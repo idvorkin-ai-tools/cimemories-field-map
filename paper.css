@@ -220,6 +220,7 @@ fieldset.fx-ctl.fx-key legend::after{content:" \25C2 decides";color:var(--off-br
 .fx-verdict{border-left:3px solid;border-radius:0 10px 10px 0;padding:11px 14px;margin:0 0 14px}
 .fx-verdict.ok,.fx-cim-out.ok{border-color:#5BD68A;background:rgba(91,214,138,.07)}
 .fx-verdict.bad,.fx-cim-out.bad{border-color:var(--crit);background:rgba(229,72,77,.07)}
+.fx-verdict.gap{border-color:var(--off)}
 .fx-v{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:17px}
 .ok .fx-v{color:#5BD68A}.bad .fx-v{color:var(--crit)}
 .fx-why{font-size:14.5px;color:var(--ink-mid);margin-top:3px}
