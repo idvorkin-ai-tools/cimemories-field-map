@@ -66,7 +66,9 @@
       <tr><td>GPT-4o</td><td>nobody (lowest violation)</td></tr>
       <tr><td>GPT-5</td><td>nobody</td></tr>
       <tr><td>Claude-4 Sonnet</td><td>nobody (highest completeness)</td></tr>
-      <tr><td>o3, Gemini 2.5 Flash, Llama-3.3 70B</td><td>GPT-5 (fewer violations <em>and</em> higher completeness)</td></tr>
+      <tr><td>o3</td><td>GPT-5 (fewer violations <em>and</em> higher completeness)</td></tr>
+      <tr><td>Llama-3.3 70B Instruct</td><td>GPT-5, o3</td></tr>
+      <tr><td>Gemini 2.5 Flash</td><td>GPT-5, o3, Llama, Claude</td></tr>
       <tr><td>Qwen-3 32B</td><td>Claude-4 Sonnet (44.44% vs 69.14% violation, 59.07% vs 57.63% completeness)</td></tr>
       <tr><td>Mistral-7B Instruct v0.3</td><td>GPT-5, o3, Gemini, Llama, Claude</td></tr>
     </tbody>
@@ -96,6 +98,10 @@
     </tbody>
   </table></div>
   <p>Three readings, the map's. First, every persona's violation rate is higher than Table 1's, because each persona labels more pairs inappropriate than the three agree on, and the unanimous set is by construction the clearest cases. The fundamentalist, who wants the most withheld, scores the highest violations of the three for every model. Second, the ordering barely moves: GPT-4o leaks least and Qwen-3 32B most under every persona and on the extra profiles, and GPT-5 stays on the frontier. Third, the 60 extra profiles land within a few points of Table 1 (GPT-5 26.2% against 25.08%, GPT-4o 16.7% against 14.82%, Qwen-3 32B 65.1% against 69.14%), which is the first evidence that the 10-profile sample was not an unlucky draw. Appendix C also reports a ConfAIde run: GPT-5 reaches 0% violation there with 42% completeness, so the earlier benchmark no longer separates frontier models on this axis while CIMemories still does.</p>
+
+  <p class="lab-try"><b>Try this</b>Ask who beats Qwen-3 32B, then untick Claude: with its only rival hidden, Qwen joins the frontier. Switch label sets to see every persona push the whole cloud to the right while the dashed frontier keeps GPT-4o and GPT-5.</p>
+  <div class="lab" data-widget="model-scatter"></div>
+  <p>Values from Table 1 and Tables 5&ndash;8 above; Claude-4 Sonnet and Mistral-7B were not run on the 60 extra profiles. "Beaten on both axes" is the map's reading, as in the table under <a class="lnk" href="#tradeoff">the trade-off</a>.</p>
 
   <h2 id="half">Why completeness stalls near half</h2>
   <p>No model reaches 60% completeness. The range is 43.95% to 59.07%. The paper calls this "moderate completeness of around ∼50%" and connects it to <a class="lnk" href="https://arxiv.org/abs/2504.14225" target="_blank" rel="noopener">Jiang et al. 2025</a> (PersonaMem, "Know Me, Respond to Me"), which found that models recall user facts and preferences from long histories only partly when they need them for a task (<a class="lnk" href="https://arxiv.org/html/2511.14937v1#S5.SS2.SSS1" target="_blank" rel="noopener">§5.2.1</a>).</p>
@@ -158,5 +164,8 @@
 <!-- Private comments mode, inert unless ?annotate=1 (see assets/annotate.js in idvorkin-ai-tools.github.io) -->
 <script src="https://idvorkin-ai-tools.github.io/assets/annotate.js" defer></script>
 <script src="https://idvorkin-ai-tools.github.io/assets/terms.js" defer></script>
+<script src="https://idvorkin-ai-tools.github.io/assets/widgets.js" defer></script>
+<script src="../lab/model-scatter.js" defer></script>
+<script src="../widgets/model-scatter.js" defer></script>
 </body>
 </html>
